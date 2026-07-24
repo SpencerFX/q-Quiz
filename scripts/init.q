@@ -1,0 +1,35 @@
+//=============================================================
+// .quiz.init
+//
+// Initialise q-Quiz
+//=============================================================
+.quiz.init:{
+    -1 "";
+    -1 "======================================";
+    -1 " Initialising q-Quiz";
+    -1 "======================================";
+    .quiz.current:`$();
+    .quiz.history:([]
+        question:`symbol$();
+        input:`symbol$();
+        correct:`symbol$();
+        result:`boolean$()
+    );
+    .quiz.loadBanks[];
+    .quiz.bankEasy: raze value each {` sv `.quiz,x,y}[;`easy]each `ipc`syntax`tables`joins;
+    .quiz.bankMedium: raze value each {` sv `.quiz,x,y}[;`medium]each `ipc`syntax`tables`joins;
+    .quiz.bankHard: raze value each {` sv `.quiz,x,y}[;`hard]each `ipc`syntax`tables`joins;
+    -1 "";
+    system "l ./quiz.q";
+    -1 "Loaded.";
+ };
+
+
+.quiz.loadBanks:{
+    listOfDirs:key hsym `$"../banks/";
+    {system"l ../banks/",(string x),"/easy.q"}each listOfDirs;
+    {system"l ../banks/",(string x),"/medium.q"}each listOfDirs;
+    {system"l ../banks/",(string x),"/hard.q"}each listOfDirs;
+ };
+
+.quiz.init[]
