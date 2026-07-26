@@ -16,7 +16,7 @@
         result:`boolean$()
     );
     .quiz.loadBanks[];
-    quizBankList: `adverbs`ipc`syntax`tables`joins;
+    quizBankList: key hsym `$"./banks/";
     .quiz.bankEasy: raze value each {` sv `.quiz,x,y}[;`easy]each quizBankList;
     .quiz.bankMedium: raze value each {` sv `.quiz,x,y}[;`medium]each quizBankList;
     .quiz.bankHard: raze value each {` sv `.quiz,x,y}[;`hard]each quizBankList;
