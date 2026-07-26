@@ -7,8 +7,7 @@
 
 
 .quiz.ask:{[name]
-    quizBank:.quiz.bankEasy,.quiz.bankMedium,.quiz.bankHard;
-    .quiz.bank:quizBank;
+    quizBank:.quiz.bank;
     / Validate question exists
     if[not name in key quizBank;
         '"Unknown question"];
@@ -33,8 +32,7 @@
 
 
 .quiz.answer:{[choice]
-    quizBank:.quiz.bankEasy,.quiz.bankMedium,.quiz.bankHard;
-    .quiz.bank:quizBank;
+    quizBank:.quiz.bank;
     / Make sure a question is active
     if[null .quiz.current;
         '"No active question"];
