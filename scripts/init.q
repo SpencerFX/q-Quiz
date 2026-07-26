@@ -16,9 +16,10 @@
         result:`boolean$()
     );
     .quiz.loadBanks[];
-    .quiz.bankEasy: raze value each {` sv `.quiz,x,y}[;`easy]each `ipc`syntax`tables`joins;
-    .quiz.bankMedium: raze value each {` sv `.quiz,x,y}[;`medium]each `ipc`syntax`tables`joins;
-    .quiz.bankHard: raze value each {` sv `.quiz,x,y}[;`hard]each `ipc`syntax`tables`joins;
+    quizBankList: `ipc`syntax`tables`joins;
+    .quiz.bankEasy: raze value each {` sv `.quiz,x,y}[;`easy]each quizBankList;
+    .quiz.bankMedium: raze value each {` sv `.quiz,x,y}[;`medium]each quizBankList;
+    .quiz.bankHard: raze value each {` sv `.quiz,x,y}[;`hard]each quizBankList;
     .quiz.bank:.quiz.bankEasy,.quiz.bankMedium,.quiz.bankHard;
     -1 "";
     system "l ./scripts/quiz.q";
