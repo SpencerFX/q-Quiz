@@ -1,24 +1,24 @@
 / Function to load in all files
 loadAllEasyAlgorithms:{[dir]
     system"cd ,"dir;
-    filesEasy:key `:./Algorithms/easy/;
-    filesMedium:key `:./Algorithms/medium/;
-    filesHard:key `:./Algorithms/hard/;
-    {system"l ./Algorithms/easy/", x}each string filesEasy;
+    filesEasy:key `:./hackerRank/Algorithms/easy/;
+    filesMedium:key `:./hackerRank/Algorithms/medium/;
+    filesHard:key `:./hackerRank/Algorithms/hard/;
+    {system"l ./hackerRank/Algorithms/easy/", x}each string filesEasy;
  };
 
 loadAllEasyDataStructure:{[dir]
     system"cd ,"dir;
-    filesEasyDS:key `:./DataStructure/easy/;
-    filesMediumDS:key `:./Algorithms/medium/;
-    filesHardDS:key `:./Algorithms/hard/;
-    {system"l ./DataStructure/easy/", x}each string filesEasyDS;
+    filesEasyDS:key `:./hackerRank/DataStructure/easy/;
+    filesMediumDS:key `:./hackerRank/DataStructure/medium/;
+    filesHardDS:key `:./hackerRank/DataStructure/hard/;
+    {system"l ./hackerRank/DataStructure/easy/", x}each string filesEasyDS;
  };
 
 / Function to test all solution functions
 testAllFuncsEasy:{
-    filesEasyString:string each key `:./Algorithms/easy/;
-    filesEasyDsString:string each key `:./DataStructure/easy/;
+    filesEasyString:string each key `:./hackerRank/Algorithms/easy/;
+    filesEasyDsString:string each key `:./hackerRank/DataStructure/easy/;
     funcsToTestAl:`$-2_'filesEasyString;
     funcsToTestDS:`$-2_'filesEasyDsString;
     {checker[x;get x]}each funcsToTestAl;
