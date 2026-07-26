@@ -19,17 +19,18 @@
     .quiz.bankEasy: raze value each {` sv `.quiz,x,y}[;`easy]each `ipc`syntax`tables`joins;
     .quiz.bankMedium: raze value each {` sv `.quiz,x,y}[;`medium]each `ipc`syntax`tables`joins;
     .quiz.bankHard: raze value each {` sv `.quiz,x,y}[;`hard]each `ipc`syntax`tables`joins;
+    .quiz.bank:.quiz.bankEasy,.quiz.bankMedium,.quiz.bankHard;
     -1 "";
-    system "l ./quiz.q";
+    system "l ./scripts/quiz.q";
     -1 "Loaded.";
  };
 
 
 .quiz.loadBanks:{
-    listOfDirs:key hsym `$"../banks/";
-    {system"l ../banks/",(string x),"/easy.q"}each listOfDirs;
-    {system"l ../banks/",(string x),"/medium.q"}each listOfDirs;
-    {system"l ../banks/",(string x),"/hard.q"}each listOfDirs;
+    listOfDirs:key hsym `$"./banks/";
+    {system"l ./banks/",(string x),"/easy.q"}each listOfDirs;
+    {system"l ./banks/",(string x),"/medium.q"}each listOfDirs;
+    {system"l ./banks/",(string x),"/hard.q"}each listOfDirs;
  };
 
 .quiz.init[]

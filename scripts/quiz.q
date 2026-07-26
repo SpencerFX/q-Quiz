@@ -8,7 +8,7 @@
 
 .quiz.ask:{[name]
     quizBank:.quiz.bankEasy,.quiz.bankMedium,.quiz.bankHard;
-    .quiz.bank.quizBank;
+    .quiz.bank:quizBank;
     / Validate question exists
     if[not name in key quizBank;
         '"Unknown question"];
