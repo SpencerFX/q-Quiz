@@ -24,6 +24,8 @@
     .quiz.shuffleBank each key .quiz.bank;
     -1 "";
     system "l ./scripts/quiz.q";
+    system "l ./hackerRank/scripts/init.q";
+    initHackerRank[];
     -1 "Loaded.";
  };
 
