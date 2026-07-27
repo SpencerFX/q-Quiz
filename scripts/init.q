@@ -16,9 +16,10 @@
         result:`boolean$()
     );
     .quiz.loadBanks[];
-    .quiz.bankEasy: raze value each {` sv `.quiz,x,y}[;`easy]each `ipc`syntax`tables`joins;
-    .quiz.bankMedium: raze value each {` sv `.quiz,x,y}[;`medium]each `ipc`syntax`tables`joins;
-    .quiz.bankHard: raze value each {` sv `.quiz,x,y}[;`hard]each `ipc`syntax`tables`joins;
+    banks:key hsym `$"./banks/";
+    .quiz.bankEasy: raze value each {` sv `.quiz,x,y}[;`easy]each banks;
+    .quiz.bankMedium: raze value each {` sv `.quiz,x,y}[;`medium]each banks;
+    .quiz.bankHard: raze value each {` sv `.quiz,x,y}[;`hard]each banks;
     .quiz.bank:.quiz.bankEasy,.quiz.bankMedium,.quiz.bankHard;
     .quiz.shuffleBank each key .quiz.bank;
     -1 "";
