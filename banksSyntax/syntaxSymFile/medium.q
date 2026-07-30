@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------
 // MEDIUM — combining syntax to understand a line/short block
 //--------------------------------------------------------------------
-.quiz.symFilesSyntax.medium:`ensArgs`dpftsArgs`ddShorthand`addcolFlow`enumFuncLogic`allpathsBase`ipcCopyLine`rsyncBackup`compactPathBuild`symTypeFilter`gcCall`countRatioCheck`fileLikeFilter!
+.quiz.syntaxSymFile.medium:`ensArgs`dpftsArgs`ddShorthand`addcolFlow`enumFuncLogic`allpathsBase`ipcCopyLine`rsyncBackup`compactPathBuild`symTypeFilter`gcCall`countRatioCheck`fileLikeFilter!
     (
     `question`answers`correct!(
         "What do the three arguments to .Q.ens[dir;table;enum] represent?";

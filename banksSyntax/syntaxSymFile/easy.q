@@ -11,7 +11,7 @@
 //--------------------------------------------------------------------
 // EASY — reading individual syntax elements
 //--------------------------------------------------------------------
-.quiz.symFilesSyntax.easy:`enumOperator`enumExtendOperator`uAttrSyntax`castVsExtend`typeCheck20h`qEnArgs`getSymFile`dpftKeyArg`pSharpZippedError`jFuncEncode`xFuncDecode`gSharpLossThread`qpReturnVals!
+.quiz.syntaxSymFile.easy:`enumOperator`enumExtendOperator`uAttrSyntax`castVsExtend`typeCheck20h`qEnArgs`getSymFile`dpftKeyArg`pSharpZippedError`jFuncEncode`xFuncDecode`gSharpLossThread`qpReturnVals!
     (
     `question`answers`correct!(
         "In the expression e:`x$p, what operator is being used and what does it do?";

@@ -6,7 +6,7 @@
 // Difficulty : Easy
 //
 //====================================================================
-.quiz.intradayWritedown.easy:`purpose`twoSolutions`standardArchitecture`intradayWrite`freeMemory`temporaryDirectory`maxRows`updFunction`endOfDay`tickerplant`rdb`hdb`timerWrite`wqPurpose`disksort`partedAttribute`queryLimitation`recentData`writeTables`memoryBenefit!
+.quiz.intradayWD.easy:`purpose`twoSolutions`standardArchitecture`intradayWrite`freeMemory`temporaryDirectory`maxRows`updFunction`endOfDay`tickerplant`rdb`hdb`timerWrite`wqPurpose`disksort`partedAttribute`queryLimitation`recentData`writeTables`memoryBenefit!
     (
     `question`answers`correct!(
         "What is the primary purpose of intraday writedown?";

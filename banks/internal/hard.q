@@ -6,8 +6,7 @@
 // Difficulty : Hard
 //
 //====================================================================
-.quiz.internal.hard:
-`parseVsEval`serializeCompress`compressSerialize`parseTree`tokenization`binaryTransport`roundTrip`runtime`dynamicExecution`interpreter`compressionWorkflow`parseOptimization`serializationLimitations`ipcPipeline`parseErrors`memoryRepresentation`byteStreams`dynamicCode`lowLevelApis`executionModel!
+.quiz.internal.hard:`parseVsEval`serializeCompress`compressSerialize`parseTree`tokenization`binaryTransport`roundTrip`runtime`dynamicExecution`interpreter`compressionWorkflow`parseOptimization`serializationLimitations`ipcPipeline`parseErrors`memoryRepresentation`byteStreams`dynamicCode`lowLevelApis`executionModel!
     (
     `question`answers`correct!(
         "Which sequence correctly sends a compressed q object across IPC and reconstructs it on the receiving side?";

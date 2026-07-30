@@ -6,7 +6,7 @@
 // Difficulty : Medium
 //
 //====================================================================
-.quiz.intradayWritedown.medium:`appendLogic`maxrowsLogic`timerApproach`disksortPurpose`temporaryTables`queryPerformance`memoryWindow`wrtbls`minmaxRows`lasttime`partitionedWrite`integerPartitions`enumeration`appendHdb`genQuery`unEnum`partedVsSorted`eodProcessing`wqLimitations`partitionBenefits!
+.quiz.intradayWD.medium:`appendLogic`maxrowsLogic`timerApproach`disksortPurpose`temporaryTables`queryPerformance`memoryWindow`wrtbls`minmaxRows`lasttime`partitionedWrite`integerPartitions`enumeration`appendHdb`genQuery`unEnum`partedVsSorted`eodProcessing`wqLimitations`partitionBenefits!
     (
     `question`answers`correct!(
         "Why does the modified upd function in w.q enumerate data before writing it to disk?";

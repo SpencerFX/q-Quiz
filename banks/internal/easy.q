@@ -6,8 +6,7 @@
 // Difficulty : Easy
 //
 //====================================================================
-.quiz.internal.easy:
-`serialize`deserialize`compress`decompress`workspace`gc`version`typeCode`parse`tokenize`loadLibrary`dynamicLibrary`sslRandom`systemCommand`internalPrefix`negativeBang`ipc`binaryData`reserved`documentation!
+.quiz.internal.easy:`serialize`deserialize`compress`decompress`workspace`gc`version`typeCode`parse`tokenize`loadLibrary`dynamicLibrary`sslRandom`systemCommand`internalPrefix`negativeBang`ipc`binaryData`reserved`documentation!
     (
     `question`answers`correct!(
         "Which internal function serializes q data into a byte vector?";

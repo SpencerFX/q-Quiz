@@ -6,8 +6,7 @@
 // Difficulty : Medium
 //
 //====================================================================
-.quiz.internal.medium:
-`serializeIPC`deserializeIPC`parseTree`tokenizeVsParse`compressionPipeline`binaryTransport`serializationType`compressionOrder`parseExecution`byteVector`ipcUsage`parseResult`compressionInput`interpreter`internalNumbers`binaryPersistence`parseErrors`deserializeInput`builtins`runtime!
+.quiz.internal.medium:`serializeIPC`deserializeIPC`parseTree`tokenizeVsParse`compressionPipeline`binaryTransport`serializationType`compressionOrder`parseExecution`byteVector`ipcUsage`parseResult`compressionInput`interpreter`internalNumbers`binaryPersistence`parseErrors`deserializeInput`builtins`runtime!
     (
     `question`answers`correct!(
         "Which pair of internal functions is commonly used to send q objects over IPC?";

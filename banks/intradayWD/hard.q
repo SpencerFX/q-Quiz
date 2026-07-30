@@ -6,7 +6,7 @@
 // Difficulty : Hard
 //
 //====================================================================
-.quiz.intradayWritedown.hard:`eodBottleneck`disksortOptimization`partitionedArchitecture`integerPartitionReason`lasttimeOptimization`genQueryOptimization`memoryStructure`writeToTmp`appendHdbPipeline`queryStrategy`partedAttribute`symEnumeration`bulkUpdates`qchkPurpose`wqRecovery`timerTradeoff`eodParallelism`partitionPerformance`writecountLogic`overallTradeoffs!
+.quiz.intradayWD.hard:`eodBottleneck`disksortOptimization`partitionedArchitecture`integerPartitionReason`lasttimeOptimization`genQueryOptimization`memoryStructure`writeToTmp`appendHdbPipeline`queryStrategy`partedAttribute`symEnumeration`bulkUpdates`qchkPurpose`wqRecovery`timerTradeoff`eodParallelism`partitionPerformance`writecountLogic`overallTradeoffs!
     (
     `question`answers`correct!(
         "Why is disksort the primary bottleneck during end-of-day processing in w.q?";

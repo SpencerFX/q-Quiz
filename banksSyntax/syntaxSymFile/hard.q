@@ -1,7 +1,7 @@
 //--------------------------------------------------------------------
 // HARD — full snippets / choosing the correct syntax
 //--------------------------------------------------------------------
-.quiz.symFilesSyntax.hard:`singleThreadCore`domainCountGuard`unenumReenumLines`multithreadSymFiles`allsymsMemIntensive`gcPlacement`countRatioPurpose`pointOfNoReturn`peachRewriteLine`compoundAnymapFilter`symtFileEach`copyBetweenDbGuid`encodeMaxLenArg!
+.quiz.syntaxSymFile.hard:`singleThreadCore`domainCountGuard`unenumReenumLines`oldSymRationale`multithreadSymFiles`allsymsMemIntensive`gcPlacement`countRatioPurpose`pointOfNoReturn`peachRewriteLine`compoundAnymapFilter`symtFileEach`copyBetweenDbGuid`encodeMaxLenArg!
     (
     `question`answers`correct!(
         "Which line from the single-threaded rewrite correctly creates a fresh, empty sym file before re-enumeration begins?";
