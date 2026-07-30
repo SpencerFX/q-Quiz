@@ -16,11 +16,6 @@
         result:`boolean$()
     );
     .quiz.loadBanks[];
-    banks:key hsym `$"./banks/";
-    .quiz.bankEasy: raze value each {` sv `.quiz,x,y}[;`easy]each banks;
-    .quiz.bankMedium: raze value each {` sv `.quiz,x,y}[;`medium]each banks;
-    .quiz.bankHard: raze value each {` sv `.quiz,x,y}[;`hard]each banks;
-    .quiz.bank:.quiz.bankEasy,.quiz.bankMedium,.quiz.bankHard;
     .quiz.shuffleBank each key .quiz.bank;
     -1 "";
     system "l ./scripts/quiz.q";
@@ -35,6 +30,11 @@
     {system"l ./banks/",(string x),"/easy.q"}each listOfDirs;
     {system"l ./banks/",(string x),"/medium.q"}each listOfDirs;
     {system"l ./banks/",(string x),"/hard.q"}each listOfDirs;
+    banks:key hsym `$"./banks/";
+    .quiz.bankEasy: raze value each {` sv `.quiz,x,y}[;`easy]each banks;
+    .quiz.bankMedium: raze value each {` sv `.quiz,x,y}[;`medium]each banks;
+    .quiz.bankHard: raze value each {` sv `.quiz,x,y}[;`hard]each banks;
+    .quiz.bank:.quiz.bankEasy,.quiz.bankMedium,.quiz.bankHard;
  };
 
 
