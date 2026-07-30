@@ -3,7 +3,6 @@
 // q-Quiz
 //
 // Topic      : RDB Intraday Writedown Solutions — Syntax Focus
-// Source     : "RDB Intraday writedown solutions" by Colm McCarthy
 // Difficulty : Easy / Medium / Hard
 //
 //====================================================================

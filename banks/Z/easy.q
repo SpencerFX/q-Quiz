@@ -2,267 +2,202 @@
 //
 // q-Quiz
 //
-// Topic      : .Q Internals
+// Topic      : .z Internals
 // Difficulty : Easy
 //
 //====================================================================
-.quiz.Q.easy:`Qdpft`Qen`Qpar`Qchk`Qview`Qind`Qid`Qty`Qfmt`Qopt`Qfc`Qcn`Qhost`Qaddr`Qx`Qs1`Qs`Qw`Qgc`Qres!
+.quiz.z.easy:`zD`zT`zP`zN`zts`zpc`zpo`zw`zh`zi`zo`zl`za`ze`zd!
     (
     `question`answers`correct!(
-        "Which .Q function is commonly used to write a partitioned table to disk?";
+        "Which .z variable returns the current date?";
 
         `a`b`c`d!(
-            ".Q.dpft";
-            ".Q.en";
-            ".Q.chk";
-            ".Q.gc"
+            ".z.D";
+            ".z.T";
+            ".z.P";
+            ".z.N"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "What is the primary purpose of .Q.en?";
+        "Which .z variable returns the current time?";
 
         `a`b`c`d!(
-            "Enumerate symbols against a sym file";
-            "Encrypt a table";
-            "Sort a table";
-            "Compress a table"
+            ".z.T";
+            ".z.D";
+            ".z.P";
+            ".z.N"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which .Q function constructs the path to a partitioned table?";
+        "Which .z variable returns the current timestamp?";
 
         `a`b`c`d!(
-            ".Q.par";
-            ".Q.view";
-            ".Q.gc";
-            ".Q.ind"
+            ".z.P";
+            ".z.D";
+            ".z.T";
+            ".z.N"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "What does .Q.chk primarily do?";
+        "Which .z variable returns the current timespan since midnight?";
 
         `a`b`c`d!(
-            "Ensures partitioned database consistency";
-            "Checks IPC connections";
-            "Validates syntax";
-            "Compacts memory"
+            ".z.N";
+            ".z.P";
+            ".z.D";
+            ".z.T"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which .Q function is commonly used to create an in-memory view of a table?";
+        "Which .z callback is executed whenever a timer fires?";
 
         `a`b`c`d!(
-            ".Q.view";
-            ".Q.en";
-            ".Q.par";
-            ".Q.fc"
+            ".z.ts";
+            ".z.pc";
+            ".z.po";
+            ".z.pg"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which .Q function returns the indices that satisfy a condition?";
+        "Which .z callback is invoked when an IPC connection is opened?";
 
         `a`b`c`d!(
-            ".Q.ind";
-            ".Q.id";
-            ".Q.ty";
-            ".Q.chk"
+            ".z.po";
+            ".z.pc";
+            ".z.ts";
+            ".z.ps"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "What is the purpose of .Q.id?";
+        "Which .z callback is invoked when an IPC connection is closed?";
 
         `a`b`c`d!(
-            "Generate or retrieve unique identifiers";
-            "Return process memory";
-            "Create dictionaries";
-            "Read compressed files"
+            ".z.pc";
+            ".z.po";
+            ".z.ts";
+            ".z.pg"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which .Q function returns information about datatypes?";
+        "What information does .z.w return?";
 
         `a`b`c`d!(
-            ".Q.ty";
-            ".Q.par";
-            ".Q.gc";
-            ".Q.addr"
+            "Workspace (memory) statistics";
+            "The current working directory";
+            "The current process ID";
+            "The current timer interval"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which .Q utility is commonly used for formatting values as strings?";
+        "Which .z variable contains the handle of the current IPC connection while processing a request?";
 
         `a`b`c`d!(
-            ".Q.fmt";
-            ".Q.en";
-            ".Q.chk";
-            ".Q.host"
+            ".z.w";
+            ".z.h";
+            ".z.i";
+            ".z.o"
+        );
+
+        `b
+    );
+
+    `question`answers`correct!(
+        "Which .z variable identifies the process handle for stdin/stdout?";
+
+        `a`b`c`d!(
+            ".z.h";
+            ".z.o";
+            ".z.l";
+            ".z.D"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which .Q function helps parse command-line options?";
+        "Which .z variable stores the process start time?";
 
         `a`b`c`d!(
-            ".Q.opt";
-            ".Q.dpft";
-            ".Q.gc";
-            ".Q.view"
+            ".z.i";
+            ".z.P";
+            ".z.N";
+            ".z.T"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which .Q utility is commonly used when reading CSV files?";
+        "Which .z variable returns the operating system name?";
 
         `a`b`c`d!(
-            ".Q.fc";
-            ".Q.en";
-            ".Q.id";
-            ".Q.addr"
+            ".z.o";
+            ".z.l";
+            ".z.a";
+            ".z.w"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "What does .Q.cn primarily return?";
+        "Which .z variable indicates whether q is running in 32-bit or 64-bit mode?";
 
         `a`b`c`d!(
-            "Column names";
-            "Connection handles";
-            "Compression levels";
-            "CPU count"
+            ".z.l";
+            ".z.o";
+            ".z.i";
+            ".z.h"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which .Q function returns the current hostname?";
+        "Which .z variable returns the IP address of the current client connection?";
 
         `a`b`c`d!(
-            ".Q.host";
-            ".Q.addr";
-            ".Q.gc";
-            ".Q.chk"
+            ".z.a";
+            ".z.w";
+            ".z.P";
+            ".z.N"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which .Q function returns the machine's IP address information?";
+        "Which .z variable contains the command-line arguments used to start the current q process?";
 
         `a`b`c`d!(
-            ".Q.addr";
-            ".Q.host";
-            ".Q.id";
-            ".Q.opt"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Which .Q variable is commonly used by tickerplant processes to identify subscribers?";
-
-        `a`b`c`d!(
-            ".Q.x";
-            ".Q.id";
-            ".Q.cn";
-            ".Q.ty"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Which .Q function formats timestamps into ISO-style strings?";
-
-        `a`b`c`d!(
-            ".Q.s1";
-            ".Q.gc";
-            ".Q.chk";
-            ".Q.dpft"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Which .Q function is a more general string formatting helper?";
-
-        `a`b`c`d!(
-            ".Q.s";
-            ".Q.en";
-            ".Q.par";
-            ".Q.view"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Which .Q function reports workspace or memory usage information?";
-
-        `a`b`c`d!(
-            ".Q.w";
-            ".Q.chk";
-            ".Q.host";
-            ".Q.cn"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Which .Q function requests garbage collection?";
-
-        `a`b`c`d!(
-            ".Q.gc";
-            ".Q.en";
-            ".Q.par";
-            ".Q.addr"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Which .Q utility is commonly used to inspect runtime resource usage?";
-
-        `a`b`c`d!(
-            ".Q.res";
-            ".Q.fc";
-            ".Q.dpft";
-            ".Q.id"
+            ".z.d";
+            ".z.x";
+            ".z.z";
+            ".z.l"
         );
 
         `a

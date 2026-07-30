@@ -3,7 +3,6 @@
 // q-Quiz
 //
 // Topic      : Socket Sharding with kdb+ and Linux — Syntax Focus
-// Source     : "Socket sharding with kdb+ and Linux" by Marcus Clarke
 // Difficulty : Easy / Medium / Hard
 //
 //====================================================================

@@ -2,270 +2,205 @@
 //
 // q-Quiz
 //
-// Topic      : .Q Internals
+// Topic      : .z Internals
 // Difficulty : Hard
 //
 //====================================================================
-.quiz.Q.hard:`qdpftWorkflow`qparUsage`qchkPurpose`qenPersistence`qunenPersistence`qdpftSym`qdpftPartition`qparConstruction`qchkMissingTables`qenHdb`qunenRead`qdpftVsSave`qchkTiming`qparResult`qenConsistency`qunenWhen`qdpftSchema`qchkMetadata`qparHandle`workflow!
+.quiz.z.hard:`zPGLifecycle`zWHandle`zTSOrdering`zPORecovery`zPCDisconnect`zExitCleanup`zDynamicTimer`zFileReload`zDateRollover`zAsyncCallbacks`zCommandLine`zEval`zHandlerOverride`zClockSelection`zProductionBestPractice!
     (
     `question`answers`correct!(
-        "What is the primary advantage of using .Q.dpft instead of manually writing tables to disk?";
+    "Why is .z.P generally preferred over .z.p when persisting timestamps to disk?";
 
-        `a`b`c`d!(
-            "It automatically partitions, enumerates symbols and writes a splayed table";
-            "It compresses every column";
-            "It creates a tickerplant log";
-            "It sorts every table by time"
-        );
+    `a`b`c`d!(
+        ".z.P always returns UTC timestamps";
+        ".z.P is formatted consistently for serialization and logging";
+        ".z.P executes faster than .z.p";
+        ".z.P automatically compresses timestamps"
+    );
 
-        `a
+    `b
     );
 
     `question`answers`correct!(
-        "Which .Q function is commonly used to construct the path to a partition within a partitioned database?";
+    "What is the main purpose of saving the original .z.w before overriding it?";
 
-        `a`b`c`d!(
-            ".Q.par";
-            ".Q.dpft";
-            ".Q.chk";
-            ".Q.en"
-        );
+    `a`b`c`d!(
+        "To restore the original callback behavior when required";
+        "To reduce memory usage";
+        "To improve IPC throughput";
+        "To preserve command-line arguments"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "In the expression .Q.dpft[`:.;d;`sym;] what does the third argument represent?";
+    "Which statement about .z.ts is TRUE?";
 
-        `a`b`c`d!(
-            "The column used for the parted attribute";
-            "The partition directory";
-            "The compression algorithm";
-            "The sort order"
-        );
+    `a`b`c`d!(
+        "It executes synchronously within the q event loop";
+        "It executes in a separate operating-system thread";
+        "It interrupts running q expressions";
+        "It only executes once after startup"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "Why is .Q.en typically called before persisting data into an HDB?";
+    "In production systems, why is .z.po commonly overridden?";
 
-        `a`b`c`d!(
-            "To enumerate symbols against the database sym file";
-            "To compress symbol columns";
-            "To reorder partitions";
-            "To validate schemas"
-        );
+    `a`b`c`d!(
+        "To implement automatic recovery or initialization after loading";
+        "To improve table compression";
+        "To control garbage collection";
+        "To change today's date"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "What is the purpose of .Q.un when reading historical data?";
+    "Which callback is typically used to clean up resources when an IPC client disconnects unexpectedly?";
 
-        `a`b`c`d!(
-            "To convert enumerated symbols back into ordinary symbols";
-            "To remove duplicate rows";
-            "To unpack compressed blocks";
-            "To rebuild partitions"
-        );
+    `a`b`c`d!(
+        ".z.pc";
+        ".z.pg";
+        ".z.ts";
+        ".z.exit"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "Which .Q function ensures that every partition contains the required table structure?";
+    "Why should production applications override .z.exit carefully?";
 
-        `a`b`c`d!(
-            ".Q.chk";
-            ".Q.par";
-            ".Q.dpft";
-            ".Q.en"
-        );
+    `a`b`c`d!(
+        "It often performs final persistence and resource cleanup";
+        "It changes the system clock";
+        "It controls timer frequency";
+        "It initializes command-line arguments"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "When appending a newly created partition manually, when should .Q.chk usually be executed?";
+    "What happens if system\"t\" changes while the process is running?";
 
-        `a`b`c`d!(
-            "After the partition has been written";
-            "Before any tables are written";
-            "Before enumeration";
-            "After every individual column write"
-        );
+    `a`b`c`d!(
+        "Future .z.ts invocations use the new interval";
+        ".z.ts stops permanently";
+        "Only newly connected clients see the change";
+        "Nothing changes until restart"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "What does .Q.par primarily return?";
+    "Which callback is frequently used by development tools to automatically reload modified source files?";
 
-        `a`b`c`d!(
-            "The filesystem path for a partition/table";
-            "A partition number";
-            "The partition count";
-            "A partition attribute"
-        );
+    `a`b`c`d!(
+        ".z.ts";
+        ".z.pg";
+        ".z.pc";
+        ".z.exit"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "Why is enumeration important before writing historical data?";
+    "Why do many production systems compare .z.D with a stored date during timer execution?";
 
-        `a`b`c`d!(
-            "It ensures symbols share a common integer mapping across partitions";
-            "It alphabetically sorts symbols";
-            "It compresses symbol values";
-            "It creates the sym file automatically"
-        );
+    `a`b`c`d!(
+        "To detect day rollover and trigger end-of-day processing";
+        "To synchronize system clocks";
+        "To enumerate symbols";
+        "To monitor IPC latency"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "What problem can occur if .Q.en is skipped before writing an HDB?";
+    "Which callback executes when an asynchronous IPC message is received?";
 
-        `a`b`c`d!(
-            "Symbol columns may not match the HDB enumeration";
-            "Compression will fail";
-            "The partition cannot be queried";
-            "Time columns lose precision"
-        );
+    `a`b`c`d!(
+        ".z.ps";
+        ".z.pg";
+        ".z.pc";
+        ".z.ts"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "Which statement best describes the relationship between .Q.en and .Q.un?";
+    "What information is typically obtained from .z.X?";
 
-        `a`b`c`d!(
-            "They perform opposite operations";
-            "They are interchangeable";
-            "Both enumerate symbols";
-            "Both create partitions"
-        );
+    `a`b`c`d!(
+        "Command-line arguments supplied at startup";
+        "Current IPC handles";
+        "Memory usage";
+        "Workspace statistics"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "Which workflow correctly persists an in-memory table into a partitioned HDB?";
+    "Why can overriding .z.pg be dangerous?";
 
-        `a`b`c`d!(
-            ".Q.en → .Q.dpft";
-            ".Q.dpft → .Q.en";
-            ".Q.chk → .Q.en";
-            ".Q.par → .Q.en"
-        );
+    `a`b`c`d!(
+        "It intercepts every synchronous IPC request";
+        "It disables timers";
+        "It changes database partitions";
+        "It prevents serialization"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "What does .Q.chk add when a partition is missing a table?";
+    "Which clock should generally be used when measuring elapsed execution time?";
 
-        `a`b`c`d!(
-            "An empty table with the correct schema";
-            "A compressed version";
-            "A tickerplant log";
-            "A sym attribute"
-        );
+    `a`b`c`d!(
+        ".z.N";
+        ".z.T";
+        ".z.D";
+        ".z.P"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "Which .Q function is most commonly used when constructing custom end-of-day logic?";
+    "Why do many frameworks wrap existing .z callbacks instead of replacing them entirely?";
 
-        `a`b`c`d!(
-            ".Q.dpft";
-            ".Q.un";
-            ".Q.enlist";
-            ".Q.f"
-        );
+    `a`b`c`d!(
+        "To preserve existing behavior while extending functionality";
+        "To improve compression";
+        "To reduce symbol enumeration";
+        "To avoid creating dictionaries"
+    );
 
-        `a
+    `a
     );
 
     `question`answers`correct!(
-        "What is the return type of .Q.par?";
+    "Which practice is generally considered safest when customizing .z callbacks?";
 
-        `a`b`c`d!(
-            "A filesystem handle";
-            "A table";
-            "A dictionary";
-            "A symbol list"
-        );
-
-        `a
+    `a`b`c`d!(
+        "Save the original callback and delegate to it when appropriate";
+        "Delete all existing callbacks";
+        "Overwrite every callback at startup";
+        "Call .z.ts directly instead"
     );
 
-    `question`answers`correct!(
-        "Why is .Q.un generally unnecessary inside an HDB itself?";
-
-        `a`b`c`d!(
-            "The HDB is designed to work directly with enumerated symbols";
-            "Symbols are never enumerated";
-            "The HDB automatically compresses symbols";
-            "Enumeration only exists in RDBs"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Which .Q function depends on knowing the HDB root directory?";
-
-        `a`b`c`d!(
-            ".Q.en";
-            ".Q.chk";
-            ".Q.un";
-            ".Q.f"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "In custom persistence code, .Q.par is often used because it:";
-
-        `a`b`c`d!(
-            "Avoids manually constructing filesystem paths";
-            "Automatically writes tables";
-            "Enumerates symbols";
-            "Applies attributes"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Which combination of .Q functions is most commonly found together during HDB maintenance?";
-
-        `a`b`c`d!(
-            ".Q.dpft and .Q.chk";
-            ".Q.un and .Q.par";
-            ".Q.en and .Q.un only";
-            ".Q.par and .Q.f"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "A production HDB loader writes data using .Q.dpft and then immediately calls .Q.chk. Why?";
-
-        `a`b`c`d!(
-            "To ensure the database metadata and table structure remain consistent";
-            "To compress the new partition";
-            "To enumerate symbols twice";
-            "To remove duplicate partitions"
-        );
-
-        `a
+    `a
     )
  );
 //====================================================================

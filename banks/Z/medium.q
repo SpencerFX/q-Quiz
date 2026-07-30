@@ -2,267 +2,202 @@
 //
 // q-Quiz
 //
-// Topic      : .Q Internals
+// Topic      : .z Internals
 // Difficulty : Medium
 //
 //====================================================================
-.quiz.Q.medium:`QdpftProcess`QenPurpose`QparResult`QchkFunction`QviewBehavior`QindUsage`QidGeneration`QtyDetection`QfmtOutput`QoptParse`QfcCSV`QcnCasting`QhostDiscovery`QaddrSockets`QxCompression`QsSerialization`QwWorkspace`QgcCleanup`QresTiming`Qnamespace!
+.quiz.z.medium:`zpg`zps`zpw`zpi`zpoConnection`zpcConnection`zTimer`zTimestamp`zHandle`zClientAddress`zExit`zDateTime`zCallbacks`zIPC`zStartup!
     (
     `question`answers`correct!(
-        "What is the primary purpose of .Q.dpft?";
+        "Which callback should be overridden to intercept synchronous IPC requests?";
 
         `a`b`c`d!(
-            "Write partitioned tables to an HDB partition";
-            "Compress tables";
-            "Create enumerations";
-            "Load splayed tables"
+            ".z.pg";
+            ".z.ps";
+            ".z.po";
+            ".z.pc"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Why is .Q.en commonly used before writing data to disk?";
+        "Which callback processes asynchronous IPC messages?";
 
         `a`b`c`d!(
-            "To enumerate symbols against an existing sym file";
-            "To encrypt the data";
-            "To compress the table";
-            "To remove duplicate rows"
+            ".z.ps";
+            ".z.pg";
+            ".z.ts";
+            ".z.pc"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "What does .Q.par return?";
+        "Which callback is used to authenticate incoming IPC connections?";
 
         `a`b`c`d!(
-            "The filesystem location of a partition";
-            "The current partition count";
-            "The partition attribute";
-            "A list of dates"
+            ".z.pw";
+            ".z.pg";
+            ".z.po";
+            ".z.pc"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "When is .Q.chk typically executed?";
+        "What should .z.pw return after successful authentication?";
 
         `a`b`c`d!(
-            "After adding new partitions or tables to an HDB";
-            "Before every select";
-            "When compressing data";
-            "Before serialization"
+            "1b";
+            "The username";
+            "The password";
+            "The client handle"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which statement best describes .Q.view?";
+        "Which callback executes immediately after a successful IPC connection is established?";
 
         `a`b`c`d!(
-            "It creates a virtual table from another table";
-            "It loads CSV files";
-            "It compresses partitions";
-            "It creates dictionaries"
+            ".z.po";
+            ".z.pc";
+            ".z.pg";
+            ".z.ps"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which function is commonly used to locate row indices satisfying a condition?";
+        "Which callback executes after an IPC connection has been closed?";
 
         `a`b`c`d!(
-            ".Q.ind";
-            ".Q.par";
-            ".Q.chk";
-            ".Q.gc"
+            ".z.pc";
+            ".z.po";
+            ".z.pw";
+            ".z.pg"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "What kind of value does .Q.id typically generate?";
+        "How is .z.ts normally triggered?";
 
         `a`b`c`d!(
-            "A unique identifier";
-            "A partition number";
-            "A compressed byte vector";
-            "A timestamp list"
+            "By setting the timer using system\"t ...\"";
+            "Whenever an IPC message arrives";
+            "Whenever memory usage changes";
+            "After every insert"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "What is the purpose of .Q.ty?";
+        "During execution of .z.pg, which variable identifies the requesting client?";
 
         `a`b`c`d!(
-            "Determine the datatype of an object";
-            "Convert symbols to strings";
-            "Compress objects";
-            "Sort tables"
+            ".z.w";
+            ".z.h";
+            ".z.a";
+            ".z.i"
+        );
+
+        `b
+    );
+
+    `question`answers`correct!(
+        "Which .z variable would typically be logged alongside .z.pg requests for auditing remote clients?";
+
+        `a`b`c`d!(
+            ".z.a";
+            ".z.T";
+            ".z.N";
+            ".z.o"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Why would a developer use .Q.fmt?";
+        "Which callback is typically overridden to perform periodic maintenance tasks?";
 
         `a`b`c`d!(
-            "To produce formatted textual output";
-            "To serialize objects";
-            "To enumerate symbols";
-            "To partition tables"
+            ".z.ts";
+            ".z.pg";
+            ".z.ps";
+            ".z.po"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which task is .Q.opt primarily associated with?";
+        "Which combination is commonly used to timestamp incoming IPC requests?";
 
         `a`b`c`d!(
-            "Parsing command-line options";
-            "Optimizing joins";
-            "Compressing files";
-            "Sorting columns"
+            ".z.P and .z.h";
+            ".z.D and .z.N";
+            ".z.w and .z.a";
+            ".z.l and .z.o"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "What is a common use for .Q.fc?";
+        "Which callback should NOT normally contain long-running computations because it delays synchronous IPC responses?";
 
         `a`b`c`d!(
-            "Reading or writing delimited text files";
-            "Compressing byte streams";
-            "Applying attributes";
-            "Generating UUIDs"
+            ".z.pg";
+            ".z.pc";
+            ".z.po";
+            ".z.pw"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which description best matches .Q.cn?";
+        "What is the primary purpose of .z.exit?";
 
         `a`b`c`d!(
-            "Convert data between compatible representations";
-            "Connect to IPC handles";
-            "Compress namespaces";
-            "Create partitions"
+            "Execute cleanup logic before the process terminates";
+            "Authenticate IPC users";
+            "Schedule timer events";
+            "Reload the HDB"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "What information does .Q.host typically provide?";
+        "Which category best describes most .z symbols?";
 
         `a`b`c`d!(
-            "The hostname of the current machine";
-            "The current q version";
-            "The current partition";
-            "The current namespace"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Which networking task is .Q.addr associated with?";
-
-        `a`b`c`d!(
-            "Working with socket/IP addresses";
-            "Generating UUIDs";
-            "Compressing IPC";
-            "Enumerating symbols"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "The helper .Q.x is most closely related to:";
-
-        `a`b`c`d!(
+            "Runtime variables and callback hooks";
             "Compression utilities";
-            "SQL parsing";
-            "Partition management";
-            "CSV loading"
+            "Database administration commands";
+            "Functional SQL helpers"
         );
 
         `a
     );
 
     `question`answers`correct!(
-        "Which .Q function family is associated with serialization helpers?";
+        "Why are .z callbacks heavily used in tickerplant and RDB architectures?";
 
         `a`b`c`d!(
-            ".Q.s";
-            ".Q.par";
-            ".Q.gc";
-            ".Q.chk"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "What is the purpose of .Q.w?";
-
-        `a`b`c`d!(
-            "Return information about workspace or memory usage";
-            "Write partitioned tables";
-            "Generate UUIDs";
-            "Compress files"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Why might .Q.gc be called explicitly?";
-
-        `a`b`c`d!(
-            "To encourage garbage collection after releasing large objects";
-            "To compress memory";
-            "To reload the HDB";
-            "To enumerate symbols"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "Which helper would be useful when benchmarking execution time?";
-
-        `a`b`c`d!(
-            ".Q.res";
-            ".Q.par";
-            ".Q.host";
-            ".Q.opt"
-        );
-
-        `a
-    );
-
-    `question`answers`correct!(
-        "What is the primary purpose of the .Q namespace?";
-
-        `a`b`c`d!(
-            "Provide built-in utility functions supporting the q runtime";
-            "Contain user-defined functions";
-            "Store system variables";
-            "Implement SQL keywords"
+            "They allow applications to react automatically to runtime events";
+            "They improve compression ratios";
+            "They replace qSQL";
+            "They automatically partition databases"
         );
 
         `a

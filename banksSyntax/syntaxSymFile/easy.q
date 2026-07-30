@@ -3,7 +3,6 @@
 // q-Quiz
 //
 // Topic      : Working with Sym Files — Syntax Focus
-// Source     : "Working with sym files" by Paula Clarke
 // Difficulty : Easy / Medium / Hard
 //
 //====================================================================
