@@ -1,5 +1,5 @@
 / Table to store results in memory
-results: ([] problem:`symbol$(); pass:`boolean$(); actual:(); expected:(); startTime:`timestamp$(); endTime:`timestamp$(); category:`$(); difficulty:`$());
+resultsHackerRank: ([] problem:`symbol$(); pass:`boolean$(); actual:(); expected:(); startTime:`timestamp$(); endTime:`timestamp$(); category:`$(); difficulty:`$());
 
 / Function to check for success
 checker:{[problemName; function]
@@ -13,7 +13,8 @@ checker:{[problemName; function]
     pass: actual = expected;
     $[min min pass; show"Your solution works!"; show"Please try again."];
     et:.z.p;
-    insert[`results; (problemName; min min pass; enlist actual; enlist expected; st; et; cat;difficulty)];
+    insert[`resultsHackerRank; (problemName; min min pass; enlist actual; enlist expected; st; et; cat;difficulty)];
+    /insert[`.quiz.history; (problemName; `$" " sv string actual; `$" " sv string actual; min min pass)];
  };
 
 .checker.ref.dict: (!) . flip raze 2 cut
