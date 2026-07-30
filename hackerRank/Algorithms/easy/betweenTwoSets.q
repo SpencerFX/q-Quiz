@@ -1,76 +1,84 @@
-/Question Info ===============================================
-/
-Between Two Sets
-
-There are two arrays of integers, a and b.
-
-We say that an integer x is between the two arrays if:
-- All elements in array a are factors of x
-- x is a factor of all elements in array b
-
-Task:
-- Determine how many integers satisfy these conditions
-- Return the count of such integers
-
-Example:
-a = 2 4
-b = 16 32 96
-
-Valid integers:
-x = 4, 8, 16
-
-Check:
-- For a:
-    2 divides x and 4 divides x
-- For b:
-    x divides 16, 32, and 96
-
-Result:
-3
-
-Function Description:
-getTotalX takes:
-  - a: array of integers
-  - b: array of integers
-
-Returns:
-  - integer count of valid integers
-
-Input Format:
-- First line: two integers n and m (sizes of arrays a and b)
-- Second line: n space-separated integers (array a)
-- Third line: m space-separated integers (array b)
-
-Output Format:
-- Return a single integer representing the count of valid integers
-
-Constraints:
-- 1 ≤ n, m ≤ 10
-- 1 ≤ a[i], b[j] ≤ 100
-
-Notes:
-- A brute-force approach:
-    - Iterate x from max(a) to min(b)
-    - Check:
-        all x mod a[i] = 0
-        all b[j] mod x = 0
-- Optimized approach:
-    - Compute LCM of array a
-    - Compute GCD of array b
-    - Count multiples of LCM that evenly divide GCD
-
-Goal:
-- Identify all integers satisfying both factor conditions
-- Implement efficiently using number theory where possible
-\
-/=============================================================
-
-
-/ Input Info ==================================================
-input1:2 4;
-input2:16 32 96;
-/ =============================================================
-
+.quiz.hackerRank.algorithms.betweenTwoSets.info:{
+    -1 "/Question Info ===============================================";
+    -1 "/";
+    -1 "Between Two Sets";
+    -1 "";
+    -1 "There are two arrays of integers, a and b.";
+    -1 "";
+    -1 "We say that an integer x is between the two arrays if:";
+    -1 "- Every element in array a is a factor of x";
+    -1 "- x is a factor of every element in array b";
+    -1 "";
+    -1 "Task:";
+    -1 "- Determine how many integers satisfy both conditions";
+    -1 "- Return the count of those integers";
+    -1 "";
+    -1 "Example:";
+    -1 "a = 2 4";
+    -1 "b = 16 32 96";
+    -1 "";
+    -1 "Valid integers:";
+    -1 "4";
+    -1 "8";
+    -1 "16";
+    -1 "";
+    -1 "Check:";
+    -1 "- For array a:";
+    -1 "    2 divides x";
+    -1 "    4 divides x";
+    -1 "- For array b:";
+    -1 "    x divides 16";
+    -1 "    x divides 32";
+    -1 "    x divides 96";
+    -1 "";
+    -1 "Result:";
+    -1 "3";
+    -1 "";
+    -1 "Function Description:";
+    -1 "getTotalX takes:";
+    -1 "  - a: array of integers";
+    -1 "  - b: array of integers";
+    -1 "";
+    -1 "Returns:";
+    -1 "  - integer count of valid integers";
+    -1 "";
+    -1 "Input Format:";
+    -1 "- First line: two integers n and m (sizes of arrays a and b)";
+    -1 "- Second line: n space-separated integers (array a)";
+    -1 "- Third line: m space-separated integers (array b)";
+    -1 "";
+    -1 "Output Format:";
+    -1 "- Return a single integer representing the count of valid integers";
+    -1 "";
+    -1 "Constraints:";
+    -1 "- 1 <= n, m <= 10";
+    -1 "- 1 <= a[i], b[j] <= 100";
+    -1 "";
+    -1 "Notes:";
+    -1 "- Brute-force approach:";
+    -1 "    Iterate x from max(a) to min(b)";
+    -1 "    Check:";
+    -1 "        all x mod a[i] = 0";
+    -1 "        all b[j] mod x = 0";
+    -1 "";
+    -1 "- Optimized approach:";
+    -1 "    Compute the LCM of array a";
+    -1 "    Compute the GCD of array b";
+    -1 "    Count multiples of the LCM that evenly divide the GCD";
+    -1 "";
+    -1 "Goal:";
+    -1 "- Identify every integer satisfying both factor conditions";
+    -1 "- Implement an efficient solution using number theory";
+    -1 "/";
+    -1 "/=============================================================";
+    -1 "";
+    -1 "/ Input Info ==================================================";
+    -1 "/";
+    -1 "a:2 4;";
+    -1 "b:16 32 96;";
+    -1 "/";
+    -1 "/=============================================================";
+ };
 
 / Solution Info ===============================================
 / betweenTwoSets[input1; input2]

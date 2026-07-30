@@ -1,62 +1,70 @@
-/Question Info ===============================================
-/
-Birthday Cake Candles
-
-You are in charge of the cake for a child's birthday. The cake has
-candles, and each candle has a height.
-
-The child can only blow out the tallest candles.
-
-Your task is to determine how many candles are the tallest.
-
-Task:
-- Identify the maximum height among the candles
-- Count how many candles have that height
-- Return that count
-
-Example:
-candles = 4 4 1 3
-
-Tallest height = 4
-Count = 2
-
-Result:
-2
-
-Function Description:
-birthdayCakeCandles takes:
-  - candles: array of integers representing candle heights
-
-Returns:
-  - integer count of the tallest candles
-
-Input Format:
-- First line: integer n (number of candles)
-- Second line: n space-separated integers representing heights
-
-Output Format:
-- Return a single integer representing the count of tallest candles
-
-Constraints:
-- 1 ≤ n ≤ 10^5
-- 1 ≤ candles[i] ≤ 10^7
-
-Notes:
-- A simple approach:
-    maxHeight = max(candles)
-    count = number of occurrences of maxHeight
-- Efficient solution should run in O(n)
-
-Goal:
-- Correctly identify the maximum value
-- Count its frequency efficiently
-\
-/=============================================================
-
-
-/ Input Info ==================================================
-input: 4 4 1 3f;
-/ =============================================================
+.quiz.hackerRank.algorithms.birthdayCakeCandles.info:{
+    -1 "/Question Info ===============================================";
+    -1 "/";
+    -1 "Birthday Cake Candles";
+    -1 "";
+    -1 "You are in charge of the birthday cake.";
+    -1 "";
+    -1 "The cake has several candles, each with a given height.";
+    -1 "";
+    -1 "The child can only blow out the tallest candles.";
+    -1 "";
+    -1 "Task:";
+    -1 "- Find the tallest candle height";
+    -1 "- Count how many candles have that height";
+    -1 "- Return that count";
+    -1 "";
+    -1 "Example:";
+    -1 "candles = 4 4 1 3";
+    -1 "";
+    -1 "Tallest height:";
+    -1 "4";
+    -1 "";
+    -1 "Tallest candles:";
+    -1 "4 4";
+    -1 "";
+    -1 "Count:";
+    -1 "2";
+    -1 "";
+    -1 "Result:";
+    -1 "2";
+    -1 "";
+    -1 "Function Description:";
+    -1 "birthdayCakeCandles takes:";
+    -1 "  - candles: array of integers representing candle heights";
+    -1 "";
+    -1 "Returns:";
+    -1 "  - integer count of the tallest candles";
+    -1 "";
+    -1 "Input Format:";
+    -1 "- First line: integer n (number of candles)";
+    -1 "- Second line: n space-separated integers (candle heights)";
+    -1 "";
+    -1 "Output Format:";
+    -1 "- Return a single integer representing the number of tallest candles";
+    -1 "";
+    -1 "Constraints:";
+    -1 "- 1 <= n <= 10^5";
+    -1 "- 1 <= candles[i] <= 10^7";
+    -1 "";
+    -1 "Notes:";
+    -1 "- Find the maximum height:";
+    -1 "    maxHeight = max candles";
+    -1 "- Count how many candles equal maxHeight";
+    -1 "- The solution should run in O(n) time";
+    -1 "";
+    -1 "Goal:";
+    -1 "- Correctly identify the tallest candle";
+    -1 "- Count how many candles share that maximum height";
+    -1 "/";
+    -1 "/=============================================================";
+    -1 "";
+    -1 "/ Input Info ==================================================";
+    -1 "/";
+    -1 "candles:4 4 1 3;";
+    -1 "/";
+    -1 "/=============================================================";
+ };
 
 
 / Solution Info ===============================================
