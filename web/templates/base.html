@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>{% block title %}q Quiz{% endblock %}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static',filename='style.css') }}">
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+
+        q-Quiz
+
+    </div>
+
+</header>
+
+<div class="page">
+
+{% block content %}
+
+{% endblock %}
+
+</div>
+
+<script src="{{ url_for('static',filename='quiz.js') }}"></script>
+
+</body>
+
+</html>

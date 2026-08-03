@@ -16,7 +16,7 @@
         result:`boolean$()
     );
     .quiz.loadBanks[];
-    /.quiz.loadBanksSyntax[];
+    .quiz.loadBanksSyntax[];
     .quiz.shuffleBank each key .quiz.bank;
     -1 "";
     system "l ./scripts/quiz.q";

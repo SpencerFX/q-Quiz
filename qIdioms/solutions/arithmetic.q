@@ -1,4 +1,4 @@
-.inputs.arithmetic.easy: (!) . flip raze 2 cut
+.solutions.arithmetic.easy: (!) . flip raze 2 cut
     (
         (`sumAVector; enlist 1 2 3 4 5);
         (`sumColumnsMatrix; enlist 1+3 4#til 12);
@@ -31,13 +31,13 @@
         (`productOverSubsets;(1+3 4#til 12;4 3#1 0)) 
     );
 
-.inputs.algorithms.medium: (!) . flip raze 2 cut
+.solutions.algorithms.medium: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)
     );
 
-.inputs.algorithms.hard: (!) . flip raze 2 cut
+.solutions.algorithms.hard: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)
