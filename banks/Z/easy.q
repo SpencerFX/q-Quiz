@@ -6,7 +6,7 @@
 // Difficulty : Easy
 //
 //====================================================================
-.quiz.z.easy:`zD`zT`zP`zN`zts`zpc`zpo`zw`zh`zi`zo`zl`za`ze`zd!
+.quiz.Z.easy:`zD`zT`zP`zN`zts`zpc`zpo`zw`zh`zi`zo`zl`za`ze`zd!
     (
     `question`answers`correct!(
         "Which .z variable returns the current date?";

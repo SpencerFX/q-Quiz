@@ -6,7 +6,7 @@
 // Difficulty : Medium
 //
 //====================================================================
-.quiz.z.medium:`zpg`zps`zpw`zpi`zpoConnection`zpcConnection`zTimer`zTimestamp`zHandle`zClientAddress`zExit`zDateTime`zCallbacks`zIPC`zStartup!
+.quiz.Z.medium:`zpg`zps`zpw`zpi`zpoConnection`zpcConnection`zTimer`zTimestamp`zHandle`zClientAddress`zExit`zDateTime`zCallbacks`zIPC`zStartup!
     (
     `question`answers`correct!(
         "Which callback should be overridden to intercept synchronous IPC requests?";
