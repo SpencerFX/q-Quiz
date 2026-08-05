@@ -1,25 +1,31 @@
 .solutions.rank.easy: (!) . flip raze 2 cut
     (
-    (`depth;enlist 3);
-    (`depth;enlist "the quick brown fox");
-    (`depth;enlist ("the";"quick";"brown";"fox"));
-    (`depth;enlist ("the  ";"quick";"brown";"fox  "));
-    (`shape;enlist 2 3 4#til 24);
-    (`shape;enlist ("the";"quick";"brown";"fox"));
-    (`shape;enlist ("the  ";"quick";"brown";"fox  "));
-    (`shape;enlist "the quick brown fox");
-    (`shape;enlist 3);
-    (`first;enlist enlist 3);
-    (`razeOver;enlist 2 3 4#til 24);
-    (`matrixColumn;(3 4#til 12;0));
+    (`depth;3);
+    (`depth;1);
+    (`depth;1);
+    (`depth;2);
+    (`shape;2 3 4);
+    (`shape;,4);
+    (`shape;4 5);
+    (`shape;,19);
+    (`shape;`long$());
+    (`first;3);
+    (`razeOver;til 24);
+    (`matrixColumn;0 4 8);
     (`oneRowMatrix;enlist 2 3 5 7 11);
-    (`oneColumnMatrix;enlist 34 31 51 29 35 17 89);
-    (`twoColumnMatrix;("abcd";"efgh"));
-    (`twoColumnFromVector;enlist "abcdefghi");
-    (`repeatRows;("abcd";3));
-    (`repeatColumns;(4;"abc"));
-    (`diagonalMatrix;enlist 5 9 6 7 2);
-    (`increaseRankFromVector;(("abcd";"efgh");"ijkl"))
+    (`oneColumnMatrix;(34;31;51;29;35;17;89));
+    (`twoColumnMatrix;("ae";"bf";"cg";"dh"));
+    (`twoColumnFromVector;("ab";"cd";"ef";"gh";"i "));
+    (`repeatRows;("abcd";"abcd";"abcd"));
+    (`repeatColumns;("aaaa";"bbbb";"cccc"));
+    (`diagonalMatrix;(
+        5 0 0 0 0;
+        0 9 0 0 0;
+        0 0 6 0 0;
+        0 0 0 7 0;
+        0 0 0 0 2
+    ));
+    (`increaseRankFromVector;enlist "ijkl")
     );
 
 .solutions.rank.medium: (!) . flip raze 2 cut

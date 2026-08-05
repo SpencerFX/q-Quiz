@@ -1,38 +1,21 @@
-.solutions.castingAndRepresentation: (!) . flip raze 2 cut
+.solutions.castingAndRepresentation.easy: (!) . flip raze 2 cut
     (
-        (`binaryFromInteger; enlist 20);
-
-        (`integerFromBinary; enlist 1 0 0 1 1 1 0 1);
-
-        (`hexadecimalFromInteger; enlist 300);
-
-        (`decimalDigitsFromInteger; enlist 123456789);
-
-        (`hexadecimalFromDecimalCharacters; enlist "GOLDEN");
-
-        (`integerBase10_100_1000; enlist 123456789);
-
-        (`integerInBaseY; (16;256));
-
-        (`integerFromHexadecimal; enlist ("ff";"a9";"8ac";"ffff"));
-
-        (`vectorFromDate; enlist 19980522);
-
-        (`integerFromDate; enlist .z.d);
-
-        (`numberFromString; enlist "1998 51");
-
-        (`numberFromStringDefault; ("";"-1"));
-
-        (`numericCodesFromString; enlist " aA0");
-
-        (`integerFromRoman; enlist "MCMIX");
-
-        (`numbersFromTextMatrix;
-            enlist 4 3#" 1 12 0.5");
-
-        (`numbersFromEvaluatingRowsOfTextMatrix;
-            enlist 2 5#"1+2 41+3 6")
+    (`binaryFromInteger; enlist 1 0 1 0 0);
+    (`integerFromBinary; enlist 157);
+    (`hexadecimalFromInteger; enlist "12c");
+    (`decimalDigitsFromInteger; enlist 1 2 3 4 5 6 7 8 9);
+    (`hexadecimalFromDecimalCharacters; enlist " 47 4f 4c 44 45 4e");
+    (`integerBase10_100_1000; enlist 4 56 789);
+    (`integerInBaseY; enlist 1 0 0);
+    (`integerFromHexadecimal; enlist 255 169 2220 65535);
+    (`vectorFromDate; enlist 1998 5 22);
+    (`integerFromDate; enlist "I"$string .z.d except ".");
+    (`numberFromString; enlist 1998 51);
+    (`numberFromStringDefault; enlist -1);
+    (`numericCodesFromString; enlist 32 97 65 48);
+    (`integerFromRoman; enlist 1909);
+    (`numbersFromTextMatrix; enlist 1 12 0 0.5);
+    (`numbersFromEvaluatingRowsOfTextMatrix; enlist (3 5;4 7))
     );
 
 .solutions.castingAndRepresentation.medium: (!) . flip raze 2 cut

@@ -1,14 +1,23 @@
 .solutions.geometry.easy: (!) . flip raze 2 cut
     (
-    (`degreesFromDegreesAndMinutes; enlist 60 30);
-    (`degreesFromRadians; enlist 0.5);
-    (`radiansFromDegrees; enlist 28.64788975654116);
-    (`nauticalMilesFromRadians; enlist 0.5);
-    (`greatCircleDistance; (0.5 0.75;1.0 1.5));
-    (`areaOfTriangleWithSides; enlist 3 4 5);
-    (`complementaryAngle; enlist 0.25);
-    (`rotationMatrixCounterClockwise; enlist 0.25);
-    (`contourLevels; (-5;-100 0 10 100 1000 10000))
+    (`degreesFromDegreesAndMinutes;
+        enlist 60.5);
+    (`degreesFromRadians;
+        enlist 28.64788975654116);
+    (`radiansFromDegrees;
+        enlist 0.5);
+    (`nauticalMilesFromRadians;
+        enlist 1718.873385392469);
+    (`greatCircleDistance;
+        enlist 0.7371511506399156);
+    (`areaOfTriangleWithSides;
+        enlist 6f);
+    (`complementaryAngle;
+        enlist 1.3207963267948966);
+    (`rotationMatrixCounterClockwise;
+        enlist ((0.9689124217106447;-0.24740395925452294);(0.24740395925452294;0.9689124217106447)));
+    (`contourLevels;
+        enlist -100)
     );
 
 .solutions.geometry.medium: (!) . flip raze 2 cut

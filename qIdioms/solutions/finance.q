@@ -1,25 +1,57 @@
 .solutions.finance.easy: (!) . flip raze 2 cut
     (
-        (`presentValueCashFlows; (0.1 0.1 1.1; 1 2 3; 0.9));
-        (`futureValueCashFlows; (10 15 20 25; 5));
-        (`compoundInterest; (1 2 3; 100 200 300 400; 0.5 1 1.5 2));
-        (`annuityCoefficient; (10 15 20 25; 8 9 10 15));
-        (`fifoStockDecrement; (5; 1 2 3 4 5));
-        (`payback; (1000; 0; 0.05; 200 300 400 200));
-        (`paybackEndOfPeriod; (1000; 1; 0.05; 200 300 400 200));
-        (`paybackVariableRates; (1000; 0; 0.05 0.04 0.06 0.05; 200 300 400 200));
-        (`paybackVariableRatesEndOfPeriod; (1000; 1; 0.05 0.04 0.06 0.05; 200 300 400 200));
-        (`roundNearestInteger; enlist 4.5 3.21 80.9 -2.4 -9.6);
-        (`roundNearestEvenInteger; enlist 0.9 1 2.5 3.1 -0.2 -1.9);
-        (`roundHalfToEven; enlist 23.6 40.5 3.2 -14.02 3.5 4.5);
-        (`roundTwoDecimalPlaces; enlist 3.1414 2.71828 -12.66666);
-        (`roundToNDecimals; (3; 3.3256789));
-        (`roundLargeNumberNDecimals; (2; 123123123123.123123));
-        (`roundNearestMultiple; (100; 12));
-        (`roundNearestCurrencyMultiple; (11.50; 0.12));
-        (`roundSmallMagnitudesToZero; (1e-4 -1e-8 -1e-12 1e-16; 1e-9));
-        (`roundSummandsSet1; (1; 42.35 38.45 19.20));
-        (`roundSummandsSet2; (1; 42.65 37.60 19.75))
+    (`presentValueCashFlows;
+        enlist 0.9729);
+    (`futureValueCashFlows;
+        enlist 74.11375);
+    (`compoundInterest;
+        enlist
+        (
+            100.5 101 101.51 101 102.01 103.03 101.5 103.02 104.57 102 104.04 106.12;
+            201 202 203.02 202 204.02 206.06 203 206.04 209.14 204 208.08 212.24;
+            301.5 303.01 304.52 303 306.03 309.09 304.5 309.07 313.7 306 312.12 318.36;
+            402 404.01 406.03 404 408.04 412.12 406 412.09 418.27 408 416.16 424.48
+        ));
+    (`annuityCoefficient;
+        enlist
+        (
+            0.149 0.156 0.163 0.199;
+            0.117 0.124 0.131 0.171;
+            0.102 0.11 0.117 0.16;
+            0.0937 0.102 0.11 0.155
+        ));
+    (`fifoStockDecrement;
+        enlist 0 0 1 4 5);
+    (`payback;
+        enlist 840 567 175.35 -25.8825);
+    (`paybackEndOfPeriod;
+        enlist 850 592.5 222.125 33.23125);
+    (`paybackVariableRates;
+        enlist 840 561.6 171.296 -30.1392);
+    (`paybackVariableRatesEndOfPeriod;
+        enlist 850 584 219.04 29.992);
+    (`roundNearestInteger;
+        enlist 5 3 81 -2 -10);
+    (`roundNearestEvenInteger;
+        enlist 0 2 2 4 0 -2);
+    (`roundHalfToEven;
+        enlist 24 40 3 -14 4 4);
+    (`roundTwoDecimalPlaces;
+        enlist 3.14 2.72 -12.67);
+    (`roundToNDecimals;
+        enlist 3.326);
+    (`roundLargeNumberNDecimals;
+        enlist 123123123123.12);
+    (`roundNearestMultiple;
+        enlist 96);
+    (`roundNearestCurrencyMultiple;
+        enlist 11.52);
+    (`roundSmallMagnitudesToZero;
+        enlist 0.0001 -1e-08 0 0);
+    (`roundSummandsSet1;
+        enlist 42 39 19);
+    (`roundSummandsSet2;
+        enlist 43 37 20)
     );
 
 .solutions.algorithms.medium: (!) . flip raze 2 cut

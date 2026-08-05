@@ -1,20 +1,20 @@
 .solutions.polynomials.easy: (!) . flip raze 2 cut
     (
-    (`polynomialWithRoots;enlist 1 -6 8);
-    (`polynomialWithRoots;enlist 2 4);
-    (`polynomialWithRoots;enlist 1 2);
-    (`polynomialWithRoots;enlist 1 2 3);
-    (`polynomialProduct;((1 2 1);1 3 3 1));
-    (`polynomialDerivative;enlist 1 2 3 4 5);
-    (`evaluateAscendingPolynomial;((-1 0 2);4 0 5 1));
-    (`bestLinearFitCoefficients;(64 70 77 82 92 107 125 143 165 189f;56 60 66 70 78 88 102 118 136 155f));
-    (`bestLinearFitPredictedValues;(64 70 77 82 92 107 125 143 165 189f;56 60 66 70 78 88 102 118 136 155f));
-    (`exponentialFitCoefficients;(64 70 77 82 92 107 125 143 165 189;56 60 66 70 78 88 102 118 136 155));
-    (`exponentialFitPredictedValues;(64 70 77 82 92;56 60 66 70 78));
-    (`polynomialFit;(3;64 70 77 82 92 107 125 143 165 189;(5*(64 70 77 82 92 107 125 143 165 189) xexp 3)+(-1*(64 70 77 82 92 107 125 143 165 189) xexp 2)+(4*(64 70 77 82 92 107 125 143 165 189))+182));
-    (`extrapolatedPolynomialValue;((-1 0 1);1 0 1f;10));
-    (`momentOfVector;(44 77 48 24 28 36 17 49;2));
-    (`momentOfVector;(44 77 48 24 28 36 17 49;3))
+    (`polynomialWithRoots;1 -3 -46 48);
+    (`polynomialWithRoots;1 -6 8);
+    (`polynomialWithRoots;1 -3 2);
+    (`polynomialWithRoots;1 -6 11 -6);
+    (`polynomialProduct;1 5 10 10 5 1);
+    (`polynomialDerivative;4 6 6 4);
+    (`evaluateAscendingPolynomial;-8 1 43);
+    (`bestLinearFitCoefficients;4.587803 0.7927486);
+    (`bestLinearFitPredictedValues;55.32371 60.08021 65.62945 69.59319 77.52068 89.41191 103.6814 117.9509 135.3913 154.4173);
+    (`exponentialFitCoefficients;35.2829 1.68768);
+    (`exponentialFitPredictedValues;56.10745 60.28622 65.55641 69.60062 78.45289);
+    (`polynomialFit;5 -1 4 182f);
+    (`extrapolatedPolynomialValue;100f);
+    (`momentOfVector;309.2344);
+    (`momentOfVector;3889.934)
     );
 
 .solutions.polynomials.medium: (!) . flip raze 2 cut

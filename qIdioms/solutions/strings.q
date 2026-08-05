@@ -1,20 +1,20 @@
-.solutions.strings.easy: (!) . flip raze 2 cut
+.solutions.strings.easy: (!). flip raze 2 cut
     (
-    (`alphabeticLess;("a";"b"));
-    (`alphabeticGreater;("a";"b"));
-    (`removeBlanks;enlist " bcde bc");
-    (`removeTrailingBlanks;enlist "trailing blanks    ");
-    (`removeLeadingBlanks;enlist "  phrase 267  ");
-    (`removeLeadingTrailingBlanks;enlist "   abcd e  fg   ");
-    (`collapseMultipleBlanks;enlist "a    b       c    d");
-    (`moveBlanksToEnd;enlist "sign if i cant");
-    (`rightJustify;enlist "trailing blanks   ");
-    (`centerText;("1234567890";16));
-    (`insertSpaces;enlist "wider");
-    (`conditionalText;enlist 0b);
-    (`removeLeadingZeros;enlist "00002345600345000");
-    (`removePunctuation;("oh! no, stop it. you will?";",;:.!?"));
-    (`firstWord;enlist "twas brillig and the slith")
+    (`alphabeticLess;1b);
+    (`alphabeticGreater;0b);
+    (`removeBlanks;"bcdebc");
+    (`removeTrailingBlanks;"trailing blanks");
+    (`removeLeadingBlanks;"phrase 267  ");
+    (`removeLeadingTrailingBlanks;"abcd e  fg");
+    (`collapseMultipleBlanks;"a b c d");
+    (`moveBlanksToEnd;"significant   ");
+    (`rightJustify;"   trailing blanks");
+    (`centerText;"   1234567890   ");
+    (`insertSpaces;"w i d e r");
+    (`conditionalText;"incorrect");
+    (`removeLeadingZeros;"2345600345000");
+    (`removePunctuation;"oh no stop it you will");
+    (`firstWord;"twas")
     );
 
 .solutions.strings.medium: (!) . flip raze 2 cut

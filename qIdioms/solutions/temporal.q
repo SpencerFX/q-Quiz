@@ -1,28 +1,28 @@
 .solutions.temporal.easy: (!) . flip raze 2 cut
     (
-    (`isLeapYear;enlist 1900 1901 1904 1999 2000 2100);
-    (`daysInMonth;((7;1996)));
-    (`daysInLeapFebruary;((2;1996)));
-    (`daysInNonLeapFebruary;((2;1997)));
-    (`ascendingDateFormat;enlist 2019.01.01);
-    (`twelveHourClock;enlist 01:58:57);
-    (`americanDateFormat;enlist 2018.09.15)
+    (`isLeapYear;enlist 0 0 1 0 1 0b);
+    (`daysInMonth;enlist 31);
+    (`daysInLeapFebruary;enlist 29);
+    (`daysInNonLeapFebruary;enlist 28);
+    (`ascendingDateFormat;enlist "01/01/2019");
+    (`twelveHourClock;enlist "01:58:57 AM");
+    (`americanDateFormat;enlist "9/15/2018")
     );
 
 .solutions.temporal.medium: (!) . flip raze 2 cut
     (
-    (`daysAcrossYears;((2;1900 1904 2000 2100)));
-    (`ascendingDateFormatting;enlist .z.p);
-    (`twelveHourClockPM;enlist 13:59:59);
-    (`americanDateFormatting;enlist .z.d);
-    (`leapYearVector;enlist 1996 + til 10)
+    (`daysAcrossYears;enlist 28 29 29 28);
+    (`ascendingDateFormatting;enlist "01/08/2026");
+    (`twelveHourClockPM;enlist "01:59:59 PM");
+    (`americanDateFormatting;enlist "8/1/2026");
+    (`leapYearVector;enlist 1 0 0 0 1 0 0 0 1 0b)
     );
 
 .solutions.temporal.hard: (!) . flip raze 2 cut
     (
-    (`monthLengthsOverYears;((1 2 3 4 5 6 7 8 9 10 11 12;2020)));
-    (`multipleDateFormatting;enlist 2020.01.01 2021.06.15 2024.12.31);
-    (`multipleTimeFormatting;enlist 00:00:00 11:59:59 12:00:00 23:59:59);
-    (`leapYearRange;enlist 1800 + til 500);
-    (`mixedDateTimeFormatting;enlist .z.p)
+    (`monthLengthsOverYears;enlist 31 29 31 30 31 30 31 31 30 31 30 31);
+    (`multipleDateFormatting;enlist ("01/01/2020";"15/06/2021";"31/12/2024"));
+    (`multipleTimeFormatting;enlist ("12:00:00 AM";"11:59:59 AM";"12:00:00 PM";"11:59:59 PM"));
+    (`leapYearRange;enlist {0=mod[;2] sum 0=x mod\:4 100 400} each 1800 + til 500);
+    (`mixedDateTimeFormatting;enlist ("01/08/2026";"01:00:00 PM"))
     );

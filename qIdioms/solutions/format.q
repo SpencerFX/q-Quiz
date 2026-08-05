@@ -1,19 +1,62 @@
 .solutions.format.easy: (!) . flip raze 2 cut
     (
-    (`formattedIntegers; enlist 14 13 9 74 55);
-    (`countOfFormat; enlist 12.345);
-    (`leadingZerosPositiveIntegers; (3;12 10 1 26 9 26 26 37 20 29));
-    (`numberOfDecimals; enlist 1.4321 1.21 10f);
-    (`numberOfDecimalsMaximum; (1.4321 1.21 10f;3));
-    (`positionsNonNegativeInteger; enlist 0 13 523 16008);
-    (`positionsInteger; enlist 1234 -1234 0 7 12345678);
-    (`timeFromInteger; enlist 121129);
-    (`dateFromInteger; enlist 20190507);
-    (`indexingPlottingCharacters; enlist 1200);
-    (`histogram; enlist 8 3 11 9 9 4 6 6 3 3 9 7 9);
-    (`barChartIntegerList; enlist 2 5 7 4 9 3 6);
-    (`horizontalBarChartIntegers; enlist 2 8 5 6 3 1 7 7 10 4);
-    (`horizontalBarChartNormalized; (2 8 5 6 3 1 7 7 10 4;5))
+    (`formattedIntegers;
+        enlist ("14";"13";"09";"74";"55"));
+    (`countOfFormat;
+        enlist 6);
+    (`leadingZerosPositiveIntegers;
+        enlist ("012";"010";"001";"026";"009";"026";"026";"037";"020";"029"));
+    (`numberOfDecimals;
+        enlist 4 2 0);
+    (`numberOfDecimalsMaximum;
+        enlist 3 2 0);
+    (`positionsNonNegativeInteger;
+        enlist 1 2 3 5);
+    (`positionsInteger;
+        enlist 4 5 1 1 8);
+    (`timeFromInteger;
+        enlist "12:11:29");
+    (`dateFromInteger;
+        enlist "2019/05/07");
+    (`indexingPlottingCharacters;
+        enlist "distribution of primes to 1200");
+    (`histogram;
+        enlist ("        *  ";"  *     *  ";"  *  *  *  ";"  ** **** *"));
+    (`barChartIntegerList;
+        enlist
+            ("    X  ";
+             "    X  ";
+             "  X X  ";
+             "  X X X";
+             " XX X X";
+             " XXXX X";
+             " XXXXXX";
+             "XXXXXXX";
+             "XXXXXXX"));
+    (`horizontalBarChartIntegers;
+        enlist
+            ("XX        ";
+             "XXXXXXXX  ";
+             "XXXXX     ";
+             "XXXXXX    ";
+             "XXX       ";
+             "X         ";
+             "XXXXXXX   ";
+             "XXXXXXX   ";
+             "XXXXXXXXXX";
+             "XXXX      "));
+    (`horizontalBarChartNormalized;
+        enlist
+            ("X    ";
+             "XXXX ";
+             "XX   ";
+             "XXX  ";
+             "X    ";
+             "     ";
+             "XXX  ";
+             "XXX  ";
+             "XXXXX";
+             "XX   "))
     );
 
 .solutions.format.medium: (!) . flip raze 2 cut
