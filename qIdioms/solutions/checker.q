@@ -9,12 +9,14 @@ checkIdiom:{[problemName; function]
     cat:`$("." vs string category)2;
     input:(value category) problemName;
     expected: (value .idiom.ref.dict category) problemName;
-    actual: function . input;
+    actual: .[function;input;{"Error with ",x}];
+    $[1 < count actual; actual: `$" " sv string actual; actual: `$string actual];
+    $[1 < count expected; expected: `$" " sv string expected; expected: `$string expected];
     pass: actual = expected;
     $[min min pass; show"Your solution works!"; show"Please try again."];
     et:.z.p;
     insert[`resultsIdioms; (problemName; min min pass; enlist actual; enlist expected; st; et; cat;difficulty)];
-    insert[`.quiz.history; (problemName; `$" " sv string actual; `$" " sv string actual; min min pass;`Idioms)];
+    insert[`.quiz.history; (problemName; actual; expected; min min pass;`Idioms)];
  };
 
 topics:`arithmetic`castingAndRepresentation`execution`finance`find`flags`format`geometry`indexes`math`matrixes`miscellaneous`partsItems`polynomials`rank`shape`sort`statistics`strings`temporal`tests`text;

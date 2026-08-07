@@ -9,12 +9,14 @@ checker:{[problemName; function]
     cat:`$("." vs string category)2;
     input:(value category) problemName;
     expected: (value .checker.ref.dict category) problemName;
-    actual: function . input;
+    actual: .[function;input;{"Error with ",x}];
+    $[1 < count actual; actual: `$" " sv string actual; actual: `$string actual];
+    $[1 < count expected; expected: `$" " sv string expected; expected: `$string expected];
     pass: actual = expected;
     $[min min pass; show"Your solution works!"; show"Please try again."];
     et:.z.p;
     insert[`resultsHackerRank; (problemName; min min pass; enlist actual; enlist expected; st; et; cat;difficulty)];
-    insert[`.quiz.history; (problemName; `$" " sv string actual; `$" " sv string actual; min min pass;`HackerRank)];
+    insert[`.quiz.history; (problemName; actual; expected; min min pass;`HackerRank)];
  };
 
 .checker.ref.dict: (!) . flip raze 2 cut

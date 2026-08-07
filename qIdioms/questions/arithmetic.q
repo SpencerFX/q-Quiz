@@ -16,7 +16,7 @@
     -1 "";
     -1 "Sum a vector using input: .inputs.arithmetic.easy.sumAVector";
     -1 "Input: ", -3!.inputs.arithmetic.easy`sumAVector;
-    /-1 "Expected Output: ", -3!.solutions.arithmetic.easy`sumAVector
+    -1 "Expected Output: ", -3!.solutions.arithmetic.easy`sumAVector
  };
 
 .qidiom.arithmetic.sumColumnsMatrix:{[]
