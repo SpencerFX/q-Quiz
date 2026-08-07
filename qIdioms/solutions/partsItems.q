@@ -4,12 +4,12 @@
     (`itemsFromFlags;((3 4 8 2 5 6 9 4 5 4);1 1 0 0 0 1 0 0 1 1));
     (`itemsFromLengths;((3 4 8 2 5 6 9 4 5 4);1 4 3 1 1));
     (`startFlagsFromLengths;enlist raze (signum 1 2 3 4 5),'((1 2 3 4 5)-1)#'0i);
-    (`endFlagsFromLengths;enlist @[sum 1 2 3 4 5#0;-1+sums 1 2 3 4 5;:;1]);
+    (`endFlagsFromLengths;1 0 1 0 0 1 0 0 0 1 0 0 0 0 1);
     (`startIndexesFromFlags;enlist where 1 0 1 0 0 0 1 0 1 1);
     (`startIndexesFromLengths;enlist sums -1 _ 0,2 3 1 5);
     (`endIndexesFromLengths;enlist -1+sums 4 7 13 15 20);
     (`fieldStartIndexes;{[x;y]where 0=(til x*y)mod y}[5;3]);
-    (`fieldEndIndexes;{[x;y]-1+sums x#y}[5;3]);
+    (`fieldEndIndexes;{[x;y](neg 1)+sums x#y}[5;3]);
     (`lengthsFromStartIndexes;enlist 1_deltas where 1 0 1 0 0 1 0 0 0 1 0,1);
     (`reverseEachPart;("thequickbrownfox";3 5 5 3));
     (`rotateEachPart;((1 0 1 0 0 1 1 0 0 0);"abcdefghij"));

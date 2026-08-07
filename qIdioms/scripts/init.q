@@ -1,22 +1,22 @@
 / Function to load in all files
-loadAllInputs:{[]
+loadAllIdiomInputs:{[]
     filesInputs:key `:./qIdioms/inputs/;
     {system"l ./qIdioms/inputs/",string x} each filesInputs;
  };
 
-loadAllSolutions:{[]
+loadAllIdiomSolutions:{[]
     filesSolutions:key `:./qIdioms/solutions/;
     {system"l ./qIdioms/solutions/",string x} each filesSolutions;
  };
 
-loadAllQuestions:{[]
+loadAllIdiomQuestions:{[]
     filesQuestions:key `:./qIdioms/questions/;
     {system"l ./qIdioms/questions/",string x} each filesQuestions;
  };
 
-initHackerRank:{[]
+initQIdioms:{[]
     system"l ./qIdioms/scripts/phrases.q";
-    loadAllInputs[];
-    loadAllSolutions[];
-    loadAllQuestions[];
+    loadAllIdiomInputs[];
+    loadAllIdiomSolutions[];
+    loadAllIdiomQuestions[];
  };

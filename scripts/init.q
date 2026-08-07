@@ -21,7 +21,9 @@
     -1 "";
     system "l ./scripts/quiz.q";
     system "l ./hackerRank/scripts/init.q";
+    system "l ./qIdioms/scripts/init.q";
     initHackerRank[];
+    initQIdioms[];
     -1 "Loaded.";
  };
 

@@ -9,7 +9,7 @@
     (`integerInBaseY; enlist 1 0 0);
     (`integerFromHexadecimal; enlist 255 169 2220 65535);
     (`vectorFromDate; enlist 1998 5 22);
-    (`integerFromDate; enlist "I"$string .z.d except ".");
+    (`integerFromDate; enlist "I"$raze "." vs (string .z.d));
     (`numberFromString; enlist 1998 51);
     (`numberFromStringDefault; enlist -1);
     (`numericCodesFromString; enlist 32 97 65 48);

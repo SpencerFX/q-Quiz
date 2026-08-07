@@ -41,8 +41,8 @@
     (`countOnes;
         enlist 4);
     (`lengthsOfGroupsOfOnes;
-        enlist 3 4 1)
-            (`firstOne;
+        enlist 3 4 1);
+    (`firstOne;
         enlist 2);
     (`firstOneAfterIndex;
         enlist 4);

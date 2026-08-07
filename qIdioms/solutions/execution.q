@@ -9,7 +9,7 @@
     (`efficientExecutionRepeatedValues;
         enlist 10 20 30 20 30 20 10);
     (`errorToStopExecution;
-        enlist `'stop);
+        enlist `$"'stop");
     (`executeRowsCharacterMatrix;
         enlist 4 9);
     (`sumNumbersCharacterMatrix;

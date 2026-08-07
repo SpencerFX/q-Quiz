@@ -31,8 +31,8 @@
     (`conditionalTranspose;((2 3#til 6);1));
     (`transposePlanes;enlist 2 3 4#1+til 24);
     (`treeFromDepthValue;((0 1 2 2 1 1);0 1 2 3 4 5));
-    (`depthFromTree;enlist (0;(1;,2;,3);,4;,5));
-    (`valueFromTree;enlist (0;(1;,2;,3);,4;,5))
+    (`depthFromTree;enlist (0;(1; 2;3); 4; 5));
+    (`valueFromTree;enlist (0;(1; 2; 3); 4; 5))
     );
 
 .inputs.shape.medium: (!) . flip raze 2 cut

@@ -14,7 +14,7 @@
     -1 "";
     -1 "Left justify variable-length fields into fixed-width columns, using input: .inputs.text.easy.leftJustifyFields";
     -1 "Input: ",-3!.inputs.text.easy`leftJustifyFields;
-    /-1 "Expected Output: ",-3!.solution.text.easy`leftJustifyFields
+    /-1 "Expected Output: ",-3!.solutions.text.easy`leftJustifyFields
  };
 
 .qidiom.text.rightJustifyFields:{[]
@@ -25,7 +25,7 @@
     -1 "";
     -1 "Right justify variable-length fields into fixed-width columns, using input: .inputs.text.easy.rightJustifyFields";
     -1 "Input: ",-3!.inputs.text.easy`rightJustifyFields;
-    /-1 "Expected Output: ",-3!.solution.text.easy`rightJustifyFields
+    /-1 "Expected Output: ",-3!.solutions.text.easy`rightJustifyFields
  };
 
 .qidiom.text.collapseDuplicateCharacters:{[]
@@ -36,7 +36,7 @@
     -1 "";
     -1 "Collapse repeated occurrences of a character in a string, using input: .inputs.text.easy.collapseDuplicateCharacters";
     -1 "Input: ",-3!.inputs.text.easy`collapseDuplicateCharacters;
-    /-1 "Expected Output: ",-3!.solution.text.easy`collapseDuplicateCharacters
+    /-1 "Expected Output: ",-3!.solutions.text.easy`collapseDuplicateCharacters
  };
 
 .qidiom.text.commaSeparatedList:{[]
@@ -47,7 +47,7 @@
     -1 "";
     -1 "Convert a list of strings into a comma-separated string, using input: .inputs.text.easy.commaSeparatedList";
     -1 "Input: ",-3!.inputs.text.easy`commaSeparatedList;
-    /-1 "Expected Output: ",-3!.solution.text.easy`commaSeparatedList
+    /-1 "Expected Output: ",-3!.solutions.text.easy`commaSeparatedList
  };
 
 .qidiom.text.rowsStartingWith:{[]
@@ -58,7 +58,7 @@
     -1 "";
     -1 "Find rows beginning with a specified prefix, using input: .inputs.text.easy.rowsStartingWith";
     -1 "Input: ",-3!.inputs.text.easy`rowsStartingWith;
-    /-1 "Expected Output: ",-3!.solution.text.easy`rowsStartingWith
+    /-1 "Expected Output: ",-3!.solutions.text.easy`rowsStartingWith
  };
 
 .qidiom.text.rowsDifferentFrom:{[]
@@ -69,7 +69,7 @@
     -1 "";
     -1 "Find rows containing characters different from a specified value, using input: .inputs.text.easy.rowsDifferentFrom";
     -1 "Input: ",-3!.inputs.text.easy`rowsDifferentFrom;
-    /-1 "Expected Output: ",-3!.solution.text.easy`rowsDifferentFrom
+    /-1 "Expected Output: ",-3!.solutions.text.easy`rowsDifferentFrom
  };
 
 .qidiom.text.frameCharacterMatrix:{[]
@@ -80,7 +80,7 @@
     -1 "";
     -1 "Draw a border around a character matrix, using input: .inputs.text.easy.frameCharacterMatrix";
     -1 "Input: ",-3!.inputs.text.easy`frameCharacterMatrix;
-    /-1 "Expected Output: ",-3!.solution.text.easy`frameCharacterMatrix
+    /-1 "Expected Output: ",-3!.solutions.text.easy`frameCharacterMatrix
  };
 
 .qidiom.text.insertStarsAfterEquals:{[]
@@ -91,7 +91,7 @@
     -1 "";
     -1 "Insert a fixed number of '*' characters after every '=' symbol, using input: .inputs.text.easy.insertStarsAfterEquals";
     -1 "Input: ",-3!.inputs.text.easy`insertStarsAfterEquals;
-    /-1 "Expected Output: ",-3!.solution.text.easy`insertStarsAfterEquals
+    /-1 "Expected Output: ",-3!.solutions.text.easy`insertStarsAfterEquals
  };
 
 .qidiom.text.matrixFromFlaggedParts:{[]
@@ -102,7 +102,7 @@
     -1 "";
     -1 "Split text into a padded character matrix using start flags, using input: .inputs.text.easy.matrixFromFlaggedParts";
     -1 "Input: ",-3!.inputs.text.easy`matrixFromFlaggedParts;
-    /-1 "Expected Output: ",-3!.solution.text.easy`matrixFromFlaggedParts
+    /-1 "Expected Output: ",-3!.solutions.text.easy`matrixFromFlaggedParts
  };
 
 .qidiom.text.removeDuplicateRows:{[]
@@ -113,7 +113,7 @@
     -1 "";
     -1 "Remove duplicate rows from a character list, using input: .inputs.text.easy.removeDuplicateRows";
     -1 "Input: ",-3!.inputs.text.easy`removeDuplicateRows;
-    /-1 "Expected Output: ",-3!.solution.text.easy`removeDuplicateRows
+    /-1 "Expected Output: ",-3!.solutions.text.easy`removeDuplicateRows
  };
 
 .qidiom.text.collapseWhitespace:{[]
@@ -124,7 +124,7 @@
     -1 "";
     -1 "Collapse repeated whitespace into single blanks, using input: .inputs.text.easy.collapseWhitespace";
     -1 "Input: ",-3!.inputs.text.easy`collapseWhitespace;
-    /-1 "Expected Output: ",-3!.solution.text.easy`collapseWhitespace
+    /-1 "Expected Output: ",-3!.solutions.text.easy`collapseWhitespace
  };
 
 .qidiom.text.removeBlankRows:{[]
@@ -135,7 +135,7 @@
     -1 "";
     -1 "Remove blank rows from a character matrix, using input: .inputs.text.easy.removeBlankRows";
     -1 "Input: ",-3!.inputs.text.easy`removeBlankRows;
-    /-1 "Expected Output: ",-3!.solution.text.easy`removeBlankRows
+    /-1 "Expected Output: ",-3!.solutions.text.easy`removeBlankRows
  };
 
 .qidiom.text.removeLeadingBlankRows:{[]
@@ -146,7 +146,7 @@
     -1 "";
     -1 "Remove leading blank rows from a character matrix, using input: .inputs.text.easy.removeLeadingBlankRows";
     -1 "Input: ",-3!.inputs.text.easy`removeLeadingBlankRows;
-    /-1 "Expected Output: ",-3!.solution.text.easy`removeLeadingBlankRows
+    /-1 "Expected Output: ",-3!.solutions.text.easy`removeLeadingBlankRows
  };
 
 .qidiom.text.removeTrailingBlankRows:{[]
@@ -157,7 +157,7 @@
     -1 "";
     -1 "Remove trailing blank rows from a character matrix, using input: .inputs.text.easy.removeTrailingBlankRows";
     -1 "Input: ",-3!.inputs.text.easy`removeTrailingBlankRows;
-    /-1 "Expected Output: ",-3!.solution.text.easy`removeTrailingBlankRows
+    /-1 "Expected Output: ",-3!.solutions.text.easy`removeTrailingBlankRows
  };
 
 .qidiom.text.removeBlankColumns:{[]
@@ -168,7 +168,7 @@
     -1 "";
     -1 "Remove blank columns from a character matrix, using input: .inputs.text.easy.removeBlankColumns";
     -1 "Input: ",-3!.inputs.text.easy`removeBlankColumns;
-    /-1 "Expected Output: ",-3!.solution.text.easy`removeBlankColumns
+    /-1 "Expected Output: ",-3!.solutions.text.easy`removeBlankColumns
  };
 
 .qidiom.text.removeLeadingBlankColumns:{[]
@@ -179,7 +179,7 @@
     -1 "";
     -1 "Remove leading blank columns from a character matrix, using input: .inputs.text.easy.removeLeadingBlankColumns";
     -1 "Input: ",-3!.inputs.text.easy`removeLeadingBlankColumns;
-    /-1 "Expected Output: ",-3!.solution.text.easy`removeLeadingBlankColumns
+    /-1 "Expected Output: ",-3!.solutions.text.easy`removeLeadingBlankColumns
  };
 
 .qidiom.text.removeTrailingBlankColumns:{[]
@@ -190,7 +190,7 @@
     -1 "";
     -1 "Remove trailing blank columns from a character matrix, using input: .inputs.text.easy.removeTrailingBlankColumns";
     -1 "Input: ",-3!.inputs.text.easy`removeTrailingBlankColumns;
-    /-1 "Expected Output: ",-3!.solution.text.easy`removeTrailingBlankColumns
+    /-1 "Expected Output: ",-3!.solutions.text.easy`removeTrailingBlankColumns
  };
 
 .qidiom.text.appendEmptyRow:{[]
@@ -201,7 +201,7 @@
     -1 "";
     -1 "Append an empty row to a character matrix, using input: .inputs.text.easy.appendEmptyRow";
     -1 "Input: ",-3!.inputs.text.easy`appendEmptyRow;
-    /-1 "Expected Output: ",-3!.solution.text.easy`appendEmptyRow
+    /-1 "Expected Output: ",-3!.solutions.text.easy`appendEmptyRow
  };
 
 .qidiom.text.insertEmptyRow:{[]
@@ -212,7 +212,7 @@
     -1 "";
     -1 "Insert an empty row into a character matrix, using input: .inputs.text.easy.insertEmptyRow";
     -1 "Input: ",-3!.inputs.text.easy`insertEmptyRow;
-    /-1 "Expected Output: ",-3!.solution.text.easy`insertEmptyRow
+    /-1 "Expected Output: ",-3!.solutions.text.easy`insertEmptyRow
  };
 
 //==================== Medium ====================

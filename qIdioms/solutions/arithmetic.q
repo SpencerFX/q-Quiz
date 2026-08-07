@@ -26,7 +26,7 @@
     (`vectorCrossProduct;4 28 46 -27 -41 39 45 3 -19 -58);
     (`alternatingProduct;1.875);
     (`directMatrixProduct;((1 2 3 4;2 4 6 8;5 6 7 8;10 12 14 16);(3 6 9 12;4 8 12 16;15 18 21 24;20 24 28 32);(5 10 15 20;6 12 18 24;25 30 35 40;30 36 42 48)));
-    (`matrixProduct;(22f 28f; 49f 64f));
+    (`matrixProduct;(22 28f; 49 64f));
     (`dotProduct;550);
     (`productOverSubsets;(3 8 3;35 48 35;99 120 99))
     );

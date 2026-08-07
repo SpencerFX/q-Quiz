@@ -5,9 +5,9 @@
     (`depth;1);
     (`depth;2);
     (`shape;2 3 4);
-    (`shape;,4);
+    (`shape;enlist 4);
     (`shape;4 5);
-    (`shape;,19);
+    (`shape;enlist 19);
     (`shape;`long$());
     (`first;3);
     (`razeOver;til 24);

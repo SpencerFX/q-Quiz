@@ -51,11 +51,11 @@
     );
     (`largeAscending;enlist asc 1000?10000);
     (`largeUnique;enlist distinct 2000?5000);
-    (`largeBinary;enlist 1000?0b 1b);
+    (`largeBinary;enlist 1000?01b);
     (`largeSymmetricMatrix;
         enlist {
-            m:x x#x*x?100;
+            m:25 25#25*25?100;
             m|flip m
-        }[25]
+        }
     )
     );
