@@ -1,24 +1,24 @@
 .solutions.indexes.easy: (!) . flip raze 2 cut
     (
     (`allIndexesOfVector;
-        enlist til 10);
+         til 10);
     (`yWideSublists;
-        enlist (0 1 2;1 2 3;2 3 4;3 4 5));
+         (0 1 2;1 2 3;2 3 4;3 4 5));
     (`sublistsOfLengthStartingAt;
-        enlist (4 5 6;5 6 7;6 7 8;7 8 9;8 9 10));
+         (4 5 6;5 6 7;6 7 8;7 8 9;8 9 10));
     (`allPairsOfTil;
-        enlist (0 0 0 0 1 1 1 1 2 2 2 2;0 1 2 3 0 1 2 3 0 1 2 3));
+         (0 0 0 0 1 1 1 1 2 2 2 2;0 1 2 3 0 1 2 3 0 1 2 3));
     (`indexesOfArray;
-        enlist
+        
             (0 0 0 0 0 0 1 1 1 1 1 1;
              0 0 1 1 2 2 0 0 1 1 2 2;
              0 1 0 1 0 1 0 1 0 1 0 1));
     (`scatteredIndexing;
-        enlist "atw");
+         "atw");
     (`raveledIndexFromGeneralIndex;
-        enlist 19);
+         enlist 19);
     (`indexArbitraryRankArray;
-        enlist
+        
             (60 61 62 63 64;
              65 66 67 68 69;
              70 71 72 73 74;

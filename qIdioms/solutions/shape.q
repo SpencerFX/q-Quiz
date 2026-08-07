@@ -2,9 +2,9 @@
     (
     (`conformTableRows;4 3#1 2 3 4 5 6 7 8 9 0 0 0);
     (`conformTableColumns;4 5#9 9 0 0 0 9 9 0 0 0 9 9 0 0 0 9 9 0 0 0);
-    (`emptyVectorBoolean;0#0b);
-    (`emptyVectorFloat;0#0.0);
-    (`listFromAtom;42);
+    (`emptyVectorBoolean;enlist 0#0b);
+    (`emptyVectorFloat;enlist 0#0.0);
+    (`listFromAtom;enlist 42);
     (`listFromList;42 43);
     (`cyclicRepetitions;"abcdabcdabcd");
     (`arrayWithShapeRows;("abcd";"abcd";"abcd"));
@@ -14,14 +14,14 @@
     (`fillToLength;"quizzzzzz");
     (`appendEmptyRowChars;("ab";"cd";"ef";"  "));
     (`appendEmptyRowMatrix;(0 1 2 3;4 5 6 7;8 9 10 11;0 0 0 0));
-    (`countItemsVector;4);
-    (`countItemsList;3);
-    (`countCells;24);
-    (`countAtoms;5);
+    (`countItemsVector;enlist 4);
+    (`countItemsList;enlist 3);
+    (`countCells;enlist 24);
+    (`countAtoms;enlist 5);
     (`firstAtom;"T");
-    (`countRows;2);
-    (`countColumns;7);
-    (`countLastDimension;678);
+    (`countRows;enlist 2);
+    (`countColumns;enlist 7);
+    (`countLastDimension;enlist 678);
     (`allAxes;0 1 2 3);
     (`dropRows;(6 7 8;9 10 11;12 13 14;15 16 17));
     (`dropColumns;(2 3;6 7;10 11));

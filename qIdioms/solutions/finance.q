@@ -5,7 +5,6 @@
     (`futureValueCashFlows;
         enlist 74.11375);
     (`compoundInterest;
-        enlist
         (
             100.5 101 101.51 101 102.01 103.03 101.5 103.02 104.57 102 104.04 106.12;
             201 202 203.02 202 204.02 206.06 203 206.04 209.14 204 208.08 212.24;
@@ -13,7 +12,6 @@
             402 404.01 406.03 404 408.04 412.12 406 412.09 418.27 408 416.16 424.48
         ));
     (`annuityCoefficient;
-        enlist
         (
             0.149 0.156 0.163 0.199;
             0.117 0.124 0.131 0.171;
@@ -21,23 +19,23 @@
             0.0937 0.102 0.11 0.155
         ));
     (`fifoStockDecrement;
-        enlist 0 0 1 4 5);
+         0 0 1 4 5);
     (`payback;
-        enlist 840 567 175.35 -25.8825);
+         840 567 175.35 -25.8825);
     (`paybackEndOfPeriod;
-        enlist 850 592.5 222.125 33.23125);
+         850 592.5 222.125 33.23125);
     (`paybackVariableRates;
-        enlist 840 561.6 171.296 -30.1392);
+         840 561.6 171.296 -30.1392);
     (`paybackVariableRatesEndOfPeriod;
-        enlist 850 584 219.04 29.992);
+         850 584 219.04 29.992);
     (`roundNearestInteger;
-        enlist 5 3 81 -2 -10);
+         5 3 81 -2 -10);
     (`roundNearestEvenInteger;
-        enlist 0 2 2 4 0 -2);
+         0 2 2 4 0 -2);
     (`roundHalfToEven;
-        enlist 24 40 3 -14 4 4);
+         24 40 3 -14 4 4);
     (`roundTwoDecimalPlaces;
-        enlist 3.14 2.72 -12.67);
+         3.14 2.72 -12.67);
     (`roundToNDecimals;
         enlist 3.326);
     (`roundLargeNumberNDecimals;
@@ -47,11 +45,11 @@
     (`roundNearestCurrencyMultiple;
         enlist 11.52);
     (`roundSmallMagnitudesToZero;
-        enlist 0.0001 -1e-08 0 0);
+         0.0001 -1e-08 0 0);
     (`roundSummandsSet1;
-        enlist 42 39 19);
+         42 39 19);
     (`roundSummandsSet2;
-        enlist 43 37 20)
+         43 37 20)
     );
 
 .solutions.algorithms.medium: (!) . flip raze 2 cut

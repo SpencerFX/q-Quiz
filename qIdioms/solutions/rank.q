@@ -1,9 +1,9 @@
 .solutions.rank.easy: (!) . flip raze 2 cut
     (
-    (`depth;3);
-    (`depth;1);
-    (`depth;1);
-    (`depth;2);
+    (`depth;enlist 3);
+    (`depth;enlist 1);
+    (`depth;enlist 1);
+    (`depth;enlist 2);
     (`shape;2 3 4);
     (`shape;enlist 4);
     (`shape;4 5);
@@ -12,7 +12,7 @@
     (`first;3);
     (`razeOver;til 24);
     (`matrixColumn;0 4 8);
-    (`oneRowMatrix;enlist 2 3 5 7 11);
+    (`oneRowMatrix; 2 3 5 7 11);
     (`oneColumnMatrix;(34;31;51;29;35;17;89));
     (`twoColumnMatrix;("ae";"bf";"cg";"dh"));
     (`twoColumnFromVector;("ab";"cd";"ef";"gh";"i "));
@@ -25,7 +25,7 @@
         0 0 0 7 0;
         0 0 0 0 2
     ));
-    (`increaseRankFromVector;enlist "ijkl")
+    (`increaseRankFromVector; "ijkl")
     );
 
 .solutions.rank.medium: (!) . flip raze 2 cut
@@ -44,14 +44,14 @@
 
 .solutions.rank.hard: (!) . flip raze 2 cut
     (
-    (`depth;enlist (2 2 2#til 8;2 2 2#8+til 8));
-    (`shape;enlist (2 2 2#til 8;2 2 2#8+til 8));
-    (`flattenArray;enlist 2 2 3#til 12);
+    (`depth; (2 2 2#til 8;2 2 2#8+til 8));
+    (`shape; (2 2 2#til 8;2 2 2#8+til 8));
+    (`flattenArray; 2 2 3#til 12);
     (`increaseRank;((2 2 2#til 8);42));
-    (`matrixDiagonal;enlist 1 4 9 16 25 36);
+    (`matrixDiagonal; 1 4 9 16 25 36);
     (`matrixColumn;(6 4#til 24;2));
     (`repeatRows;("rank";8));
     (`repeatColumns;(8;"abcd"));
-    (`twoColumnFromVector;enlist "abcdefghijklmnop");
-    (`oneColumnMatrix;enlist 100 200 300 400 500 600)
+    (`twoColumnFromVector; "abcdefghijklmnop");
+    (`oneColumnMatrix; 100 200 300 400 500 600)
     );

@@ -1,6 +1,6 @@
 .solutions.matrixes.easy: (!) . flip raze 2 cut
     (
-    (`matrixCell;9);
+    (`matrixCell;enlist 9);
     (`applyToDimension1;15 18 21 24);
     (`truthTable;(00001111b;00110011b;01010101b));
     (`upperTriangularMatrix;(11111b;01111b;00111b;00011b;00001b));
@@ -47,7 +47,7 @@
         1000b
     ));
     (`firstColumnAsMatrix;(0;4;8));
-    (`twoByTwoDeterminant;1);
+    (`twoByTwoDeterminant;enlist 1);
     (`shurSum;(2 4;8 10));
     (`shurProduct;(1 4;15 24))
     );

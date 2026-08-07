@@ -12,7 +12,7 @@
     (`exponentialFitCoefficients;35.2829 1.68768);
     (`exponentialFitPredictedValues;56.10745 60.28622 65.55641 69.60062 78.45289);
     (`polynomialFit;5 -1 4 182f);
-    (`extrapolatedPolynomialValue;100f);
+    (`extrapolatedPolynomialValue;enlist 100f);
     (`momentOfVector;309.2344);
     (`momentOfVector;3889.934)
     );

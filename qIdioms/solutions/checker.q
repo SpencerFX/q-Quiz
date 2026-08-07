@@ -4,7 +4,7 @@ resultsIdioms: ([] problem:`symbol$(); pass:`boolean$(); actual:(); expected:();
 / Function to check for success
 checkIdiom:{[problemName; function]
     st:.z.p;
-    category:confirmCategory problemName;
+    category:confirmIdiomCategory problemName;
     difficulty:`$("." vs string category)3;
     cat:`$("." vs string category)2;
     input:(value category) problemName;
@@ -28,7 +28,7 @@ topics:`arithmetic`castingAndRepresentation`execution`finance`find`flags`format`
     easy,medium,hard
  }[];
 
-confirmCategory:{[problemName]
+confirmIdiomCategory:{[problemName]
     mapDict: (key .idiom.ref.dict)!{x in key value y}[problemName;]each key .idiom.ref.dict;
     inputTopCheck: first where mapDict = 1b
  };

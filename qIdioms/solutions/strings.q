@@ -1,7 +1,7 @@
 .solutions.strings.easy: (!). flip raze 2 cut
     (
-    (`alphabeticLess;1b);
-    (`alphabeticGreater;0b);
+    (`alphabeticLess;enlist 1b);
+    (`alphabeticGreater;enlist 0b);
     (`removeBlanks;"bcdebc");
     (`removeTrailingBlanks;"trailing blanks");
     (`removeLeadingBlanks;"phrase 267  ");
