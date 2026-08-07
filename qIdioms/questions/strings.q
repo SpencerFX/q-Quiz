@@ -14,7 +14,7 @@
     -1 "";
     -1 "Compare two strings alphabetically using less-than ordering, using input: .inputs.strings.easy.alphabeticLess";
     -1 "Input: ",-3!.inputs.strings.easy`alphabeticLess;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`alphabeticLess
+    -1 "Expected Output: ",-3!.solutions.strings.easy`alphabeticLess
  };
 
 .qidiom.strings.alphabeticGreater:{[]
@@ -25,7 +25,7 @@
     -1 "";
     -1 "Compare two strings alphabetically using greater-than ordering, using input: .inputs.strings.easy.alphabeticGreater";
     -1 "Input: ",-3!.inputs.strings.easy`alphabeticGreater;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`alphabeticGreater
+    -1 "Expected Output: ",-3!.solutions.strings.easy`alphabeticGreater
  };
 
 .qidiom.strings.removeBlanks:{[]
@@ -36,7 +36,7 @@
     -1 "";
     -1 "Remove all blank characters from a string, using input: .inputs.strings.easy.removeBlanks";
     -1 "Input: ",-3!.inputs.strings.easy`removeBlanks;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`removeBlanks
+    -1 "Expected Output: ",-3!.solutions.strings.easy`removeBlanks
  };
 
 .qidiom.strings.removeTrailingBlanks:{[]
@@ -47,7 +47,7 @@
     -1 "";
     -1 "Remove trailing blank characters from a string, using input: .inputs.strings.easy.removeTrailingBlanks";
     -1 "Input: ",-3!.inputs.strings.easy`removeTrailingBlanks;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`removeTrailingBlanks
+    -1 "Expected Output: ",-3!.solutions.strings.easy`removeTrailingBlanks
  };
 
 .qidiom.strings.removeLeadingBlanks:{[]
@@ -58,7 +58,7 @@
     -1 "";
     -1 "Remove leading blank characters from a string, using input: .inputs.strings.easy.removeLeadingBlanks";
     -1 "Input: ",-3!.inputs.strings.easy`removeLeadingBlanks;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`removeLeadingBlanks
+    -1 "Expected Output: ",-3!.solutions.strings.easy`removeLeadingBlanks
  };
 
 .qidiom.strings.removeLeadingTrailingBlanks:{[]
@@ -69,7 +69,7 @@
     -1 "";
     -1 "Trim both leading and trailing blanks from a string, using input: .inputs.strings.easy.removeLeadingTrailingBlanks";
     -1 "Input: ",-3!.inputs.strings.easy`removeLeadingTrailingBlanks;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`removeLeadingTrailingBlanks
+    -1 "Expected Output: ",-3!.solutions.strings.easy`removeLeadingTrailingBlanks
  };
 
 .qidiom.strings.collapseMultipleBlanks:{[]
@@ -80,7 +80,7 @@
     -1 "";
     -1 "Collapse consecutive blanks into a single blank, using input: .inputs.strings.easy.collapseMultipleBlanks";
     -1 "Input: ",-3!.inputs.strings.easy`collapseMultipleBlanks;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`collapseMultipleBlanks
+    -1 "Expected Output: ",-3!.solutions.strings.easy`collapseMultipleBlanks
  };
 
 .qidiom.strings.moveBlanksToEnd:{[]
@@ -91,7 +91,7 @@
     -1 "";
     -1 "Move all blank characters to the end of a string, using input: .inputs.strings.easy.moveBlanksToEnd";
     -1 "Input: ",-3!.inputs.strings.easy`moveBlanksToEnd;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`moveBlanksToEnd
+    -1 "Expected Output: ",-3!.solutions.strings.easy`moveBlanksToEnd
  };
 
 .qidiom.strings.rightJustify:{[]
@@ -102,7 +102,7 @@
     -1 "";
     -1 "Right justify a string within its field, using input: .inputs.strings.easy.rightJustify";
     -1 "Input: ",-3!.inputs.strings.easy`rightJustify;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`rightJustify
+    -1 "Expected Output: ",-3!.solutions.strings.easy`rightJustify
  };
 
 .qidiom.strings.centerText:{[]
@@ -113,7 +113,7 @@
     -1 "";
     -1 "Center a string within a specified width, using input: .inputs.strings.easy.centerText";
     -1 "Input: ",-3!.inputs.strings.easy`centerText;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`centerText
+    -1 "Expected Output: ",-3!.solutions.strings.easy`centerText
  };
 
 .qidiom.strings.insertSpaces:{[]
@@ -124,7 +124,7 @@
     -1 "";
     -1 "Insert spaces between the characters of a string, using input: .inputs.strings.easy.insertSpaces";
     -1 "Input: ",-3!.inputs.strings.easy`insertSpaces;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`insertSpaces
+    -1 "Expected Output: ",-3!.solutions.strings.easy`insertSpaces
  };
 
 .qidiom.strings.conditionalText:{[]
@@ -135,7 +135,7 @@
     -1 "";
     -1 "Return text conditionally based on a boolean value, using input: .inputs.strings.easy.conditionalText";
     -1 "Input: ",-3!.inputs.strings.easy`conditionalText;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`conditionalText
+    -1 "Expected Output: ",-3!.solutions.strings.easy`conditionalText
  };
 
 .qidiom.strings.removeLeadingZeros:{[]
@@ -146,7 +146,7 @@
     -1 "";
     -1 "Remove leading zero characters from a numeric string, using input: .inputs.strings.easy.removeLeadingZeros";
     -1 "Input: ",-3!.inputs.strings.easy`removeLeadingZeros;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`removeLeadingZeros
+    -1 "Expected Output: ",-3!.solutions.strings.easy`removeLeadingZeros
  };
 
 .qidiom.strings.removePunctuation:{[]
@@ -157,7 +157,7 @@
     -1 "";
     -1 "Remove punctuation characters from a string, using input: .inputs.strings.easy.removePunctuation";
     -1 "Input: ",-3!.inputs.strings.easy`removePunctuation;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`removePunctuation
+    -1 "Expected Output: ",-3!.solutions.strings.easy`removePunctuation
  };
 
 .qidiom.strings.firstWord:{[]
@@ -168,7 +168,7 @@
     -1 "";
     -1 "Extract the first word from a string, using input: .inputs.strings.easy.firstWord";
     -1 "Input: ",-3!.inputs.strings.easy`firstWord;
-    /-1 "Expected Output: ",-3!.solutions.strings.easy`firstWord
+    -1 "Expected Output: ",-3!.solutions.strings.easy`firstWord
  };
 
 //==================== Medium ====================

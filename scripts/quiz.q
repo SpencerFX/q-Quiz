@@ -81,6 +81,37 @@
     first 1?remaining
  };
 
+
+.quiz.askIdiom:{[]
+    topic:first 1?1_key .qidiom;
+    questionName: first 1?key (1 _ .qidiom topic);
+    questionFunc: ` sv `.qidiom,topic,questionName;
+    (value questionFunc)[];
+    show"questionName is ",string questionName;
+    .idiom.questName:questionName;
+ };
+
+
+.quiz.answerIdiom:{[func]
+    checkIdiom[.idiom.questName;func]
+ };
+
+
+.quiz.askHackerRank:{[]
+    topic:first 1?1_key .hackerRank;
+    questionName: first 1?key (1 _ hackerRank topic);
+    questionFunc: ` sv `.hackerRank,topic,questionName;
+    (value questionFunc)[];
+    show"questionName is ",string questionName;
+    .hackerRank.questName:questionName;
+ };
+
+
+.quiz.answerHackerRank:{[func]
+    checker[.hackerRank.questName;func]
+ };
+
+
 ask:.quiz.ask;
 answer:.quiz.answer;
 question:.quiz.next;

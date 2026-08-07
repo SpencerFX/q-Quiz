@@ -24,6 +24,7 @@
     system "l ./qIdioms/scripts/init.q";
     initHackerRank[];
     initQIdioms[];
+    .quiz.loadResults[];
     -1 "Loaded.";
  };
 
@@ -74,5 +75,14 @@
     @[`.quiz.bank; question; :; .quiz.shuffleQuestion[.quiz.bank question]];
  };
 
+.quiz.loadResults:{[]
+    if[`tab in key `:./results; load `:./results/tab];
+    .quiz.history:tab;
+ };
+
+.quiz.save:{{}
+    tab:.quiz.history;
+    save `:./results/tab;
+ };
 
 .quiz.init[]

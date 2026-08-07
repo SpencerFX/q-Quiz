@@ -3,7 +3,7 @@
     (`formattedIntegers;
          ("14";"13";"09";"74";"55"));
     (`countOfFormat;
-         enlist 6);
+         6);
     (`leadingZerosPositiveIntegers;
          ("012";"010";"001";"026";"009";"026";"026";"037";"020";"029"));
     (`numberOfDecimals;
