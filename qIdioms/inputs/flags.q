@@ -43,13 +43,13 @@
         (`selectItemsFlagged; (2 3 4#1+til 24; 1 0 0 1))
     );
 
-.inputs.algorithms.medium: (!) . flip raze 2 cut
+.inputs.flags.medium: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)
     );
 
-.inputs.algorithms.hard: (!) . flip raze 2 cut
+.inputs.flags.hard: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)

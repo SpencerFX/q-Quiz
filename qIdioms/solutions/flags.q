@@ -84,13 +84,13 @@
         enlist (1 4 5 8 9 12;13 16 17 20 21 24))
     );
 
-.solutions.algorithms.medium: (!) . flip raze 2 cut
+.solutions.flags.medium: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)
     );
 
-.solutions.algorithms.hard: (!) . flip raze 2 cut
+.solutions.flags.hard: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)

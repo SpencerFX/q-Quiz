@@ -69,13 +69,13 @@
             ("abcd";"ijkl"))
     );
 
-.solutions.algorithms.medium: (!) . flip raze 2 cut
+.solutions.find.medium: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)
     );
 
-.solutions.algorithms.hard: (!) . flip raze 2 cut
+.solutions.find.hard: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)

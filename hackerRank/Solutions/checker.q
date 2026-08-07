@@ -14,7 +14,7 @@ checker:{[problemName; function]
     $[min min pass; show"Your solution works!"; show"Please try again."];
     et:.z.p;
     insert[`resultsHackerRank; (problemName; min min pass; enlist actual; enlist expected; st; et; cat;difficulty)];
-    /insert[`.quiz.history; (problemName; `$" " sv string actual; `$" " sv string actual; min min pass)];
+    insert[`.quiz.history; (problemName; `$" " sv string actual; `$" " sv string actual; min min pass;`HackerRank)];
  };
 
 .checker.ref.dict: (!) . flip raze 2 cut

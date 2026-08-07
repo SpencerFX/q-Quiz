@@ -22,13 +22,13 @@
         (`roundSummandsSet2; (1; 42.65 37.60 19.75))
     );
 
-.inputs.algorithms.medium: (!) . flip raze 2 cut
+.inputs.finance.medium: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)
     );
 
-.inputs.algorithms.hard: (!) . flip raze 2 cut
+.inputs.finance.hard: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)

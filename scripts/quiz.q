@@ -2,7 +2,8 @@
     question:`symbol$();
     input:`symbol$();
     correct:`symbol$();
-    result:`boolean$()
+    result:`boolean$();
+    questionType:`symbol$()
  );
 
 
@@ -46,7 +47,8 @@
         (.quiz.current;
          choice;
          correct;
-         choice=correct)];
+         choice=correct;
+         `MultipleChoice)];
     / Display result
     if[choice=correct;
         -1 "Correct!";

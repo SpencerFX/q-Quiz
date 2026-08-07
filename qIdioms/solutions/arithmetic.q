@@ -31,13 +31,13 @@
     (`productOverSubsets;(3 8 3;35 48 35;99 120 99))
     );
 
-.solutions.algorithms.medium: (!) . flip raze 2 cut
+.solutions.arithmetic.medium: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)
     );
 
-.solutions.algorithms.hard: (!) . flip raze 2 cut
+.solutions.arithmetic.hard: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)

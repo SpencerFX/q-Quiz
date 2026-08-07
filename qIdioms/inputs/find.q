@@ -34,13 +34,13 @@
         (`rowsStartingWithCharacters; (("abcd";"efgh";"ijkl";"mnop"); "ai"))
     );
 
-.inputs.algorithms.medium: (!) . flip raze 2 cut
+.inputs.find.medium: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)
     );
 
-.inputs.algorithms.hard: (!) . flip raze 2 cut
+.inputs.find.hard: (!) . flip raze 2 cut
     (
         (`a; `);
         (`b; `)

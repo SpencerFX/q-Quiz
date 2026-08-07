@@ -8,25 +8,25 @@ checkIdiom:{[problemName; function]
     difficulty:`$("." vs string category)3;
     cat:`$("." vs string category)2;
     input:(value category) problemName;
-    expected: (value .checker.ref.dict category) problemName;
+    expected: (value .idiom.ref.dict category) problemName;
     actual: function . input;
     pass: actual = expected;
     $[min min pass; show"Your solution works!"; show"Please try again."];
     et:.z.p;
     insert[`resultsIdioms; (problemName; min min pass; enlist actual; enlist expected; st; et; cat;difficulty)];
+    insert[`.quiz.history; (problemName; `$" " sv string actual; `$" " sv string actual; min min pass;`Idioms)];
  };
 
-.checker.ref.dict: (!) . flip raze 2 cut
-    (
-        (`.inputs.algorithms.easy; `.solutions.algorithms.easy);
-        (`.inputs.algorithms.medium; `.solutions.algorithms.medium);
-        (`.inputs.algorithms.hard; `.solutions.algorithms.hard);
-        (`.inputs.dataStructures.easy; `.solutions.dataStructures.easy);
-        (`.inputs.dataStructures.medium; `.solutions.dataStructures.medium);
-        (`.inputs.dataStructures.hard; `.solutions.dataStructures.hard)
-    );
+topics:`arithmetic`castingAndRepresentation`execution`finance`find`flags`format`geometry`indexes`math`matrixes`miscellaneous`partsItems`polynomials`rank`shape`sort`statistics`strings`temporal`tests`text;
+
+.idiom.ref.dict: {[]
+    easy:({` sv `.inputs,x,`easy}each topics)!{` sv `.solutions,x,`easy}each topics;
+    medium:({` sv `.inputs,x,`medium}each topics)!{` sv `.solutions,x,`medium}each topics;
+    hard:({` sv `.inputs,x,`hard}each topics)!{` sv `.solutions,x,`hard}each topics;
+    easy,medium,hard
+ }[];
 
 confirmCategory:{[problemName]
-    mapDict: (key .checker.ref.dict)!{x in key value y}[problemName;]each key .checker.ref.dict;
+    mapDict: (key .idiom.ref.dict)!{x in key value y}[problemName;]each key .idiom.ref.dict;
     inputTopCheck: first where mapDict = 1b
  };
