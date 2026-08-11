@@ -81,7 +81,7 @@
  };
 
 .quiz.save:{{}
-    tab:.quiz.history;
+    tab::.quiz.history;
     save `:./results/tab;
  };
 
