@@ -1,81 +1,92 @@
-/Question Info ===============================================
-/
-Breaking the Records
-
-Maria plays a series of games and records her score for each game.
-
-She wants to track how many times she breaks her records for:
-- The highest score
-- The lowest score
-
-At the start:
-- The first score sets both the highest and lowest records
-
-For each subsequent score:
-- If the score is higher than the current maximum, it is a new high record
-- If the score is lower than the current minimum, it is a new low record
-
-Task:
-- Count how many times Maria breaks her high score record
-- Count how many times Maria breaks her low score record
-- Return both counts
-
-Example:
-scores = 10 5 20 20 4 5 2 25 1
-
-Process:
-Start: high = 10, low = 10
-
-5  → new low → lowCount = 1
-20 → new high → highCount = 1
-20 → no change
-4  → new low → lowCount = 2
-5  → no change
-2  → new low → lowCount = 3
-25 → new high → highCount = 2
-1  → new low → lowCount = 4
-
-Result:
-2 4
-
-Function Description:
-breakingRecords takes:
-  - scores: array of integers representing game scores
-
-Returns:
-  - array of two integers:
-      [number of times highest record broken, number of times lowest record broken]
-
-Input Format:
-- First line: integer n (number of games)
-- Second line: n space-separated integers (scores)
-
-Output Format:
-- Return two space-separated integers
-
-Constraints:
-- 1 ≤ n ≤ 1000
-- 0 ≤ scores[i] ≤ 10^8
-
-Notes:
-- Initialize:
-    high = scores[0]
-    low = scores[0]
-- Iterate through the array:
-    if score > high → update high and increment highCount
-    if score < low  → update low and increment lowCount
-- Ignore equal values
-
-Goal:
-- Track record-breaking events correctly
-- Return accurate counts for both high and low records
-\
-/=============================================================
-
-
-/ Input Info ==================================================
-input: 10 5 20 20 4 5 2 25 1;
-/ =============================================================
+//====================================================================
+// Breaking the Records
+//
+// Displays the HackerRank problem statement.
+//
+// Usage:
+//      .quiz.hackerRank.algorithms.breakingTheRecords.info[]
+//====================================================================
+.quiz.hackerRank.algorithms.breakingTheRecords.info:{
+    -1 "/Question Info ===============================================";
+    -1 "/";
+    -1 "Breaking the Records";
+    -1 "";
+    -1 "Maria plays a series of games and records her score for each game.";
+    -1 "";
+    -1 "She wants to track how many times she breaks her records for:";
+    -1 "- The highest score";
+    -1 "- The lowest score";
+    -1 "";
+    -1 "At the start:";
+    -1 "- The first score sets both the highest and lowest records";
+    -1 "";
+    -1 "For each subsequent score:";
+    -1 "- If the score is higher than the current maximum, it is a new high record";
+    -1 "- If the score is lower than the current minimum, it is a new low record";
+    -1 "";
+    -1 "Task:";
+    -1 "- Count how many times Maria breaks her high score record";
+    -1 "- Count how many times Maria breaks her low score record";
+    -1 "- Return both counts";
+    -1 "";
+    -1 "Example:";
+    -1 "scores = 10 5 20 20 4 5 2 25 1";
+    -1 "";
+    -1 "Process:";
+    -1 "Start: high = 10, low = 10";
+    -1 "";
+    -1 "5  -> new low -> lowCount = 1";
+    -1 "20 -> new high -> highCount = 1";
+    -1 "20 -> no change";
+    -1 "4  -> new low -> lowCount = 2";
+    -1 "5  -> no change";
+    -1 "2  -> new low -> lowCount = 3";
+    -1 "25 -> new high -> highCount = 2";
+    -1 "1  -> new low -> lowCount = 4";
+    -1 "";
+    -1 "Result:";
+    -1 "2 4";
+    -1 "";
+    -1 "Function Description:";
+    -1 "breakingRecords takes:";
+    -1 "  - scores: array of integers representing game scores";
+    -1 "";
+    -1 "Returns:";
+    -1 "  - array of two integers:";
+    -1 "      [number of times highest record broken, number of times lowest record broken]";
+    -1 "";
+    -1 "Input Format:";
+    -1 "- First line: integer n (number of games)";
+    -1 "- Second line: n space-separated integers (scores)";
+    -1 "";
+    -1 "Output Format:";
+    -1 "- Return two space-separated integers";
+    -1 "";
+    -1 "Constraints:";
+    -1 "- 1 <= n <= 1000";
+    -1 "- 0 <= scores[i] <= 10^8";
+    -1 "";
+    -1 "Notes:";
+    -1 "- Initialize:";
+    -1 "    high = scores[0]";
+    -1 "    low = scores[0]";
+    -1 "- Iterate through the array:";
+    -1 "    if score > high -> update high and increment highCount";
+    -1 "    if score < low  -> update low and increment lowCount";
+    -1 "- Ignore equal values";
+    -1 "";
+    -1 "Goal:";
+    -1 "- Track record-breaking events correctly";
+    -1 "- Return accurate counts for both high and low records";
+    -1 "/";
+    -1 "/=============================================================";
+    -1 "";
+    -1 "/ Input Info ==================================================";
+    -1 "/";
+    -1 "scores:10 5 20 20 4 5 2 25 1;";
+    -1 "/";
+    -1 "/=============================================================";
+ };
 
 
 / Solution Info ===============================================

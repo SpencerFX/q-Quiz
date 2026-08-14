@@ -25,6 +25,30 @@
  };
 
 
+/ Each problem's statement only exists as -1 "..." print lines inside its
+/ .info function (eg .quiz.hackerRank.algorithms.appleAndOrange.info) -
+/ there's no returned value to fetch over IPC. Rather than rewriting every
+/ .info function across the problem set, read the source file directly and
+/ hand back the raw lines between "info:{" and its closing "};"; web/services.py
+/ regexes out the -1 "..."; wrapper. Relies on every problem file following
+/ that same layout (true for all current problems).
+.web.problemInfoLines:{[problemName]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    category:confirmCategory problemName;
+    if[null category; '"Unknown problem"];
+    difficulty:`$("." vs string category)3;
+    areaFolder:$[(string category) like "*algorithms*"; "Algorithms"; "DataStructure"];
+    path:`$":hackerRank/",areaFolder,"/",string[difficulty],"/",string[problemName],".q";
+    lines:read0 path;
+    startIdx:first where lines like "*info:{*";
+    if[null startIdx; :()];
+    tailLines:(startIdx+1) _ lines;
+    endOffset:first where tailLines like "*};*";
+    if[null endOffset; :()];
+    endOffset#tailLines
+ };
+
+
 .web.judge:{[problemName;codeStr]
     problemName:$[-11h=type problemName; problemName; `$problemName];
     func:@[value; codeStr; {'"Could not parse submission: ",x}];
@@ -85,6 +109,63 @@
 / Full attempt-by-attempt breakdown (both MultipleChoice and HackerRank
 / rows) with running accuracy, for the results dashboard.
 .web.results:{[] .quiz.results[]};
+
+
+//====================================================================
+//
+// AquaQ Challenges (diChallenges) - same shape of wrappers as the
+// HackerRank ones above, reusing confirmDiChallengeKind, .di.ref.dict
+// and .checker.normalise (from hackerRank/Solutions/checker.q, loaded
+// before diChallenges during .quiz.init[]). Returns a single-case
+// "cases" array (caseNo/casePass/caseActual/caseExpected) so the same
+// judge.js rendering code used for HackerRank works unchanged - there's
+// only ever one input per diChallenges problem right now.
+//====================================================================
+
+.web.listDiChallenges:{[]
+    raze {[kind]
+        names:key value .di.ref.dict kind;
+        ([] problem:names; area:count[names]#kind; difficulty:count[names]#`easy)
+     } each key .di.ref.dict
+ };
+
+
+/ diChallenges question files use plain "/ text" comments, not the
+/ .info:{} + -1 "..."; pattern hackerRank/Algorithms files use, so this
+/ can't reuse .web.problemInfoLines' parser - it grabs everything after
+/ the "Question Info" header up to (excluding) "Solution Info".
+.web.diChallengeInfoLines:{[problemName]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    kind:confirmDiChallengeKind problemName;
+    if[null kind; '"Unknown problem"];
+    path:`$":diChallenges/questions/",string[kind],"/",string[problemName],".q";
+    lines:read0 path;
+    startIdx:first where lines like "*Question Info*";
+    if[null startIdx; :()];
+    afterStart:(startIdx+1) _ lines;
+    endOffset:first where afterStart like "*Solution Info*";
+    if[null endOffset; endOffset:count afterStart];
+    endOffset#afterStart
+ };
+
+
+.web.judgeDiChallenge:{[problemName;codeStr]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    func:@[value; codeStr; {'"Could not parse submission: ",x}];
+    kind:confirmDiChallengeKind problemName;
+    if[null kind; '"Unknown problem"];
+    input:.inputs.diChallenges.easy problemName;
+    expected:(value .di.ref.dict kind) problemName;
+    actual:.[func;input;{"Error with ",x}];
+    actualN:.checker.normalise actual;
+    expectedN:.checker.normalise expected;
+    pass:actualN=expectedN;
+    st:.z.p;
+    insert[`resultsDiChallenges; (problemName;pass;enlist actualN;enlist expectedN;st;st;kind;`easy)];
+    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`DiChallenge)];
+    `problem`kind`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
+        (problemName;kind;`easy;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
+ };
 
 
 //====================================================================

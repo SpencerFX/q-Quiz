@@ -1,5 +1,15 @@
+import re
+
 from qclient import QClient
 from models import Problem, JudgeResult, CaseResult
+
+# Matches a q "    -1 "text";" print line from a problem's .info function,
+# capturing the text so the wrapping -1 "...."; can be stripped for display.
+_INFO_LINE = re.compile(r'^\s*-1\s+"(.*)";\s*$')
+
+# diChallenges question files use plain "/ text" comments instead - just
+# strip the leading slash and at most one following space.
+_DI_INFO_LINE = re.compile(r'^/ ?(.*)$')
 
 
 def _decode(value):
@@ -139,6 +149,93 @@ class JudgeService:
             passed=bool(data["pass"]),
             cases=cases
         )
+
+    def get_info(self, problem):
+
+        raw_lines = self.q.execute(".web.problemInfoLines", problem)
+
+        text_lines = []
+
+        for raw_line in raw_lines:
+
+            match = _INFO_LINE.match(_decode(raw_line))
+
+            if match:
+
+                text_lines.append(match.group(1).replace('\\"', '"'))
+
+        return "\n".join(text_lines)
+
+
+class DiChallengeService:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def list_problems(self):
+
+        rows = self.q.execute(".web.listDiChallenges[]")
+
+        return [
+            Problem(
+                problem=_decode(row["problem"]),
+                area=_decode(row["area"]),
+                difficulty=_decode(row["difficulty"])
+            )
+            for row in _rows(rows)
+        ]
+
+    def submit(self, problem, code):
+
+        raw = self.q.execute(".web.judgeDiChallenge", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        cases = [
+            CaseResult(
+                case_no=int(case_no),
+                passed=bool(passed),
+                actual=_decode(actual),
+                expected=_decode(expected)
+            )
+            for case_no, passed, actual, expected in zip(
+                data["caseNo"],
+                data["casePass"],
+                _decode_list(data["caseActual"]),
+                _decode_list(data["caseExpected"])
+            )
+        ]
+
+        return JudgeResult(
+            problem=_decode(data["problem"]),
+            area=_decode(data["kind"]),
+            difficulty=_decode(data["difficulty"]),
+            passed=bool(data["pass"]),
+            cases=cases
+        )
+
+    def get_info(self, problem):
+
+        raw_lines = self.q.execute(".web.diChallengeInfoLines", problem)
+
+        text_lines = []
+
+        for raw_line in raw_lines:
+
+            decoded = _decode(raw_line)
+
+            if decoded.strip() == "":
+
+                text_lines.append("")
+
+                continue
+
+            match = _DI_INFO_LINE.match(decoded)
+
+            text_lines.append(match.group(1) if match else decoded)
+
+        return "\n".join(text_lines)
 
 
 def _decode_entries(table):

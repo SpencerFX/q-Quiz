@@ -1,8 +1,13 @@
 window.addEventListener("DOMContentLoaded",function(){
 
-    if(document.getElementById("problemList")){
+    const list=document.getElementById("problemList");
 
-        loadProblems();
+    if(list){
+
+        loadProblems(
+            list.dataset.apiBase||"/api/problems",
+            list.dataset.linkBase||"/problems"
+        );
 
     }
 
@@ -10,11 +15,15 @@ window.addEventListener("DOMContentLoaded",function(){
 
     if(card){
 
-        loadProblemMeta(card.dataset.problem);
+        const apiBase=card.dataset.apiBase||"/api/problems";
+
+        loadProblemMeta(apiBase,card.dataset.problem);
+
+        loadQuestionInfo(apiBase,card.dataset.problem);
 
         document
             .getElementById("submitCode")
-            .onclick=function(){ submitCode(card.dataset.problem); };
+            .onclick=function(){ submitCode(apiBase,card.dataset.problem); };
 
     }
 
@@ -22,9 +31,33 @@ window.addEventListener("DOMContentLoaded",function(){
 
 
 
-async function loadProblems(){
+async function loadQuestionInfo(apiBase,problem){
 
-    const response=await fetch("/api/problems");
+    const panel=document.getElementById("questionInfo");
+
+    panel.textContent="Loading...";
+
+    const response=await fetch(apiBase+"/"+encodeURIComponent(problem)+"/info");
+
+    const result=await response.json();
+
+    if(!response.ok){
+
+        panel.textContent="Error: "+result.error;
+
+        return;
+
+    }
+
+    panel.textContent=result.info || "No description available for this problem yet.";
+
+}
+
+
+
+async function loadProblems(apiBase,linkBase){
+
+    const response=await fetch(apiBase);
 
     const problems=await response.json();
 
@@ -38,7 +71,7 @@ async function loadProblems(){
 
         row.className="problemRow";
 
-        row.href="/problems/"+encodeURIComponent(p.problem);
+        row.href=linkBase+"/"+encodeURIComponent(p.problem);
 
         const name=document.createElement("span");
 
@@ -62,9 +95,9 @@ async function loadProblems(){
 
 
 
-async function loadProblemMeta(problem){
+async function loadProblemMeta(apiBase,problem){
 
-    const response=await fetch("/api/problems");
+    const response=await fetch(apiBase);
 
     const problems=await response.json();
 
@@ -82,7 +115,7 @@ async function loadProblemMeta(problem){
 
 
 
-async function submitCode(problem){
+async function submitCode(apiBase,problem){
 
     const code=document.getElementById("code").value;
 
@@ -92,7 +125,7 @@ async function submitCode(problem){
 
     const response=await fetch(
 
-        "/api/problems/"+encodeURIComponent(problem)+"/submit",
+        apiBase+"/"+encodeURIComponent(problem)+"/submit",
 
         {
 

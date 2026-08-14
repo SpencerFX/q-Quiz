@@ -8,9 +8,10 @@
 
 {% block content %}
 
-<div class="card"
+<div class="card problemPageCard"
 id="problemCard"
-data-problem="{{ problem }}">
+data-problem="{{ problem }}"
+data-api-base="/api/problems">
 
 <h1>
 
@@ -23,9 +24,21 @@ id="problemMeta">
 
 </p>
 
+<div class="problemColumns">
+
+<div class="problemInfoColumn">
+
+<div id="questionInfo" class="questionInfo">
+
+</div>
+
+</div>
+
+<div class="problemEditorColumn">
+
 <textarea
 id="code"
-rows="14"
+rows="18"
 spellcheck="false"
 placeholder="{[args] ... }"></textarea>
 
@@ -37,6 +50,10 @@ Submit
 </button>
 
 <div id="verdict">
+
+</div>
+
+</div>
 
 </div>
 

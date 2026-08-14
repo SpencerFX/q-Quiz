@@ -4,7 +4,7 @@ from dataclasses import asdict
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 
-from services import QuizService, JudgeService, ProfileService
+from services import QuizService, JudgeService, ProfileService, DiChallengeService
 
 app = Flask(__name__)
 
@@ -15,6 +15,7 @@ app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 quiz = QuizService()
 judge = JudgeService()
 profile = ProfileService()
+aquaq = DiChallengeService()
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "uploads")
 ALLOWED_RESUME_EXTENSIONS = {"pdf", "doc", "docx"}
@@ -89,11 +90,54 @@ def problem_detail(problem):
     return render_template("problem.html", problem=problem)
 
 
+@app.route("/api/problems/<problem>/info")
+def api_problem_info(problem):
+    try:
+        info = judge.get_info(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify({"info": info})
+
+
 @app.route("/api/problems/<problem>/submit", methods=["POST"])
 def api_submit(problem):
     code = request.get_json(force=True).get("code", "")
     try:
         result = judge.submit(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(asdict(result))
+
+
+@app.route("/aquaq")
+def aquaq_list():
+    return render_template("aquaq.html")
+
+
+@app.route("/api/aquaq")
+def api_aquaq_list():
+    return jsonify([p.__dict__ for p in aquaq.list_problems()])
+
+
+@app.route("/aquaq/<problem>")
+def aquaq_detail(problem):
+    return render_template("aquaqProblem.html", problem=problem)
+
+
+@app.route("/api/aquaq/<problem>/info")
+def api_aquaq_info(problem):
+    try:
+        info = aquaq.get_info(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify({"info": info})
+
+
+@app.route("/api/aquaq/<problem>/submit", methods=["POST"])
+def api_aquaq_submit(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = aquaq.submit(problem, code)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
     return jsonify(asdict(result))

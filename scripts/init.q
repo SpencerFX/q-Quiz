@@ -22,8 +22,10 @@
     system "l ./scripts/quiz.q";
     system "l ./hackerRank/scripts/init.q";
     system "l ./qIdioms/scripts/init.q";
+    system "l ./diChallenges/scripts/init.q";
     initHackerRank[];
     initQIdioms[];
+    initDiChallenges[];
     .quiz.loadResults[];
     -1 "Loaded.";
  };
