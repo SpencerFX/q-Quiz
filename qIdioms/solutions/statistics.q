@@ -1,4 +1,4 @@
-.solutions.statistics.easy: flip raze 2 cut
+.solutions.statistics.easy: (!) . flip raze 2 cut
     (
     (`maximum;enlist 7);
     (`nonNegativeMaximum;enlist 0);

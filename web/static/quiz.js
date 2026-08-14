@@ -2,6 +2,8 @@ let currentQuestion=null;
 
 let selectedAnswer=null;
 
+let submitting=false;
+
 
 
 window.onload=function(){
@@ -24,6 +26,26 @@ window.onload=function(){
 
     }
 
+    if(document.getElementById("score")){
+
+        loadResults();
+
+    }
+
+}
+
+
+
+async function loadResults(){
+
+    const response=await fetch("/api/results");
+
+    const data=await response.json();
+
+    document
+        .getElementById("score")
+        .innerText=data.correct+" / "+data.total;
+
 }
 
 
@@ -39,6 +61,14 @@ function startQuiz(){
 async function loadQuestion(){
 
     const response=await fetch("/api/question");
+
+    if(!response.ok){
+
+        window.location="/results";
+
+        return;
+
+    }
 
     const question=await response.json();
 
@@ -103,37 +133,65 @@ async function loadQuestion(){
 
 async function submitAnswer(){
 
-    if(selectedAnswer==null)
+    if(selectedAnswer==null || submitting)
 
         return;
 
-    const response=await fetch(
+    submitting=true;
 
-        "/api/answer",
+    document.getElementById("submitAnswer").disabled=true;
 
-        {
+    const answer=selectedAnswer;
 
-            method:"POST",
+    selectedAnswer=null;
 
-            headers:{
+    let response;
 
-                "Content-Type":"application/json"
+    try{
 
-            },
+        response=await fetch(
 
-            body:JSON.stringify(
+            "/api/answer",
 
-                {
+            {
 
-                    answer:selectedAnswer
+                method:"POST",
 
-                }
+                headers:{
 
-            )
+                    "Content-Type":"application/json"
 
-        }
+                },
 
-    );
+                body:JSON.stringify(
+
+                    {
+
+                        answer:answer
+
+                    }
+
+                )
+
+            }
+
+        );
+
+    }
+
+    finally{
+
+        submitting=false;
+
+        document.getElementById("submitAnswer").disabled=false;
+
+    }
+
+    if(!response.ok){
+
+        return;
+
+    }
 
     const result=await response.json();
 

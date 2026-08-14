@@ -1,5 +1,5 @@
 / Table to store results in memory
-resultsHackerRank: ([] problem:`symbol$(); pass:`boolean$(); actual:(); expected:(); startTime:`timestamp$(); endTime:`timestamp$(); category:`$(); difficulty:`$());
+resultsQuantRank: ([] problem:`symbol$(); pass:`boolean$(); actual:(); expected:(); startTime:`timestamp$(); endTime:`timestamp$(); category:`$(); difficulty:`$());
 
 / Normalise a value the same way regardless of whether it came from a
 / submission or a reference solution, so equality is well-defined.

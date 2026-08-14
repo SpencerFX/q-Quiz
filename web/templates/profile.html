@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Profile
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card profileCard"
+id="profileView">
+
+Loading...
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static',filename='profile-view.js') }}"></script>
+
+{% endblock %}

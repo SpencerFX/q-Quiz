@@ -1,4 +1,4 @@
-.solutions.sort.easy: flip raze 2 cut
+.solutions.sort.easy: (!) . flip raze 2 cut
     (
     (`ordinalRankingDistinct;3 5 1 6 4 0 2);
     (`ordinalRankingShareable;0 6 1 2 2 2 2 7);

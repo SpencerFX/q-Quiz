@@ -1,29 +1,57 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<html>
+{% block title %}
 
-<head>
+q Quiz
 
-<title>q Quiz</title>
+{% endblock %}
 
-</head>
+{% block content %}
 
-<body>
+<div class="card">
 
-<h1>q Quiz</h1>
+<h1>
 
-<p>Welcome.</p>
+q Quiz
+
+</h1>
+
+<p>
+
+Welcome.
+
+</p>
 
 <a href="/quiz">
 
 <button>
 
-Start Quiz
+Multiple Choice
 
 </button>
 
 </a>
 
-</body>
+<a href="/problems">
 
-</html>
+<button>
+
+HackerRank Problems
+
+</button>
+
+</a>
+
+<a href="/results">
+
+<button>
+
+Results
+
+</button>
+
+</a>
+
+</div>
+
+{% endblock %}

@@ -23,6 +23,11 @@
 
     </div>
 
+    <div class="headerRight"
+    id="headerRight">
+
+    </div>
+
 </header>
 
 <div class="page">
@@ -34,6 +39,10 @@
 </div>
 
 <script src="{{ url_for('static',filename='quiz.js') }}"></script>
+
+<script src="{{ url_for('static',filename='profile-nav.js') }}"></script>
+
+{% block scripts %}{% endblock %}
 
 </body>
 

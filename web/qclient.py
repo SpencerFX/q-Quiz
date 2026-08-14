@@ -1,6 +1,11 @@
+import threading
+
 from qpython import qconnection
 
 import config
+
+
+API_SCRIPT = "./web/q/web_api.q"
 
 
 class QClient:
@@ -12,11 +17,23 @@ class QClient:
             port=config.Q_PORT
         )
 
+        self._api_loaded = False
+
+        self._lock = threading.Lock()
+
     def connect(self):
 
         if not self.conn.is_connected():
 
             self.conn.open()
+
+            self._api_loaded = False
+
+        if not self._api_loaded:
+
+            self.conn(f'system "l {API_SCRIPT}"')
+
+            self._api_loaded = True
 
     def close(self):
 
@@ -24,8 +41,15 @@ class QClient:
 
             self.conn.close()
 
-    def execute(self, expression):
+    def execute(self, expression, *parameters):
 
-        self.connect()
+        # The underlying QConnection is a single TCP socket to q. If two
+        # Flask request threads call into it at the same time, their reads
+        # and writes interleave on the wire and corrupt the IPC framing -
+        # the client then decodes garbage (eg a bogus "type" error) instead
+        # of a real response. Serialize access per-connection to prevent it.
+        with self._lock:
 
-        return self.conn(expression)
+            self.connect()
+
+            return self.conn(expression, *parameters)

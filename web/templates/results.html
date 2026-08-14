@@ -8,27 +8,111 @@ Results
 
 {% block content %}
 
-<div class="resultsCard">
+<div class="resultsCard dashboardCard">
 
 <h1>
 
-Quiz Complete
+Results
 
 </h1>
 
-<h2 id="score">
+<div class="kpiRow"
+id="kpiRow">
 
-0 / 0
+</div>
+
+<h2 class="chartTitle">
+
+Accuracy over time
 
 </h2>
+
+<div class="chartContainer"
+id="accuracyChart">
+
+</div>
+
+<h2 class="chartTitle">
+
+Correct vs incorrect
+
+</h2>
+
+<div class="chartLegend">
+
+<span class="legendItem"><span class="legendSwatch swatchGood"></span>&check; Correct</span>
+
+<span class="legendItem"><span class="legendSwatch swatchCritical"></span>&cross; Incorrect</span>
+
+</div>
+
+<div class="chartContainer"
+id="breakdownChart">
+
+</div>
+
+<h2 class="chartTitle">
+
+Attempt history
+
+</h2>
+
+<div class="tableContainer">
+
+<table class="historyTable">
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Question</th>
+
+<th>Type</th>
+
+<th>Result</th>
+
+<th>Running %</th>
+
+</tr>
+
+</thead>
+
+<tbody id="historyTableBody">
+
+</tbody>
+
+</table>
+
+</div>
 
 <button
 onclick="window.location='/'">
 
-Play Again
+Home
 
 </button>
 
 </div>
+
+<div id="chartTooltip"
+class="chartTooltip">
+
+<div class="tipValue">
+
+</div>
+
+<div class="tipTitle">
+
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static',filename='results.js') }}"></script>
 
 {% endblock %}

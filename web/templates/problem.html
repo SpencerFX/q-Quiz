@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{{ problem }}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card"
+id="problemCard"
+data-problem="{{ problem }}">
+
+<h1>
+
+{{ problem }}
+
+</h1>
+
+<p class="meta"
+id="problemMeta">
+
+</p>
+
+<textarea
+id="code"
+rows="14"
+spellcheck="false"
+placeholder="{[args] ... }"></textarea>
+
+<button
+id="submitCode">
+
+Submit
+
+</button>
+
+<div id="verdict">
+
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static',filename='judge.js') }}"></script>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Problems
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+<h1>
+
+Problems
+
+</h1>
+
+<div id="problemList">
+
+Loading...
+
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static',filename='judge.js') }}"></script>
+
+{% endblock %}
