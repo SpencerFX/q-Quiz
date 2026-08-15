@@ -1,16 +1,22 @@
+/ Keyed by the problem's info-namespace segment (eg
+/ .quiz.hackerRank.quant.probability.noWomenAtTableA.info), matching
+/ .inputs.quant.probability.* - not by the reference solution
+/ function's own name (probNoWomen, drawerProbability, ...), which is
+/ what these keys used to be. The two dicts only lined up positionally
+/ before (fragile - a reorder would have silently mismatched input
+/ against the wrong expected value); renaming to a shared key removes
+/ that risk and matches every other section's convention.
 .solutions.quant.probability.easy: (!) . flip raze 2 cut
     (
-        (`probNoWomen; .3991);
-        (`drawerProbability; .6666667);
-        (`probTwoBoys; .3333333)
+        (`noWomenAtTableA; .3991228);
+        (`twoDrawers; .6666667);
+        (`twoChildren; .3333333)
     );
 
-.solutions.quant.probability.medium: (!) . flip raze 2 cut
-    (
-        (`probGame7; .3125)
-    );
+/ Single entry, so written as a plain dict literal - see
+/ quantRank/inputs/inputs.q for why.
+.solutions.quant.probability.medium:
+    enlist[`game7]!enlist .3125;
 
-.solutions.quant.probability.hard: (!) . flip raze 2 cut
-    (
-        (`extinctionProbability; 1f)
-    );
+.solutions.quant.probability.hard:
+    enlist[`amoebaExtinction]!enlist 1f;

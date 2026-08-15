@@ -56,9 +56,17 @@ const TYPE_LABELS={
 
     MultipleChoice:"Multiple Choice",
 
+    MultipleChoiceSyntax:"Multiple Choice - Syntax",
+
     HackerRank:"HackerRank",
 
-    Idioms:"Idioms"
+    Idioms:"Idioms",
+
+    DiChallenge:"AquaQ Challenges",
+
+    Leetcode:"leetcode",
+
+    QuantRank:"quantRank"
 
 };
 
@@ -496,9 +504,17 @@ function renderBreakdownChart(groups){
 
     const yAt=function(v){ return padT+plotH-(plotH*v/maxVal); };
 
-    const barW=24, gap=2, groupGap=96;
+    const barW=24, gap=2;
 
     const groupW=barW*2+gap;
+
+    // Spread groups to fill the available width (capped so a handful
+    // of groups don't drift too far apart), instead of a fixed gap
+    // that pushed wider group counts past the plot area and clipped
+    // the leftmost bars.
+    const groupGap=groups.length>1
+        ? Math.min(96,Math.max(16,(plotW-groups.length*groupW)/(groups.length-1)))
+        :0;
 
     const totalW=groups.length*groupW+(groups.length-1)*groupGap;
 

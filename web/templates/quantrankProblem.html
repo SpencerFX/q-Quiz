@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}{{ problem }}{% endblock %}
+{% block content %}
+<div class="card problemPageCard" id="problemCard" data-problem="{{ problem }}" data-api-base="/api/quantrank">
+<h1>{{ problem }}</h1>
+<p class="meta" id="problemMeta"></p>
+<div class="problemColumns">
+<div class="problemInfoColumn">
+<div id="questionInfo" class="questionInfo"></div>
+</div>
+<div class="problemEditorColumn">
+<textarea id="code" rows="18" spellcheck="false" placeholder="{[args] ... }"></textarea>
+<button id="submitCode">Submit</button>
+<div id="verdict"></div>
+</div>
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static',filename='judge.js') }}"></script>
+{% endblock %}

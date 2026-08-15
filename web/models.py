@@ -45,3 +45,33 @@ class JudgeResult:
     passed: bool
 
     cases: list
+
+
+@dataclass
+class Job:
+
+    id: int
+
+    title: str
+
+    company: str
+
+    country: str
+
+    location: str
+
+    description: str
+
+
+@dataclass
+class LeaderboardEntry:
+
+    place: int
+
+    handle: str
+
+    score: int
+
+    solved: int
+
+    accuracy: float

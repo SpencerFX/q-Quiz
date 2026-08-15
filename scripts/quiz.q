@@ -6,6 +6,14 @@
     questionType:`symbol$()
  );
 
+/ Which multiple-choice bank is currently active - MultipleChoice
+/ (.quiz.bank/.quiz.bankSyntax swap in place, see .web.setQuizMode in
+/ web/q/web_api.q) or MultipleChoiceSyntax. Tags .quiz.history rows so
+/ progress/remaining-question tracking stays scoped to whichever bank
+/ is live, instead of the two banks' answered questions bleeding into
+/ each other.
+.quiz.currentType:`MultipleChoice;
+
 
 .quiz.ask:{[name]
     quizBank:.quiz.bank;
@@ -48,7 +56,7 @@
          choice;
          correct;
          choice=correct;
-         `MultipleChoice)];
+         .quiz.currentType)];
     / Display result
     if[choice=correct;
         -1 "Correct!";

@@ -1,7 +1,7 @@
 import re
 
 from qclient import QClient
-from models import Problem, JudgeResult, CaseResult
+from models import Problem, JudgeResult, CaseResult, Job, LeaderboardEntry
 
 # Matches a q "    -1 "text";" print line from a problem's .info function,
 # capturing the text so the wrapping -1 "...."; can be stripped for display.
@@ -47,6 +47,10 @@ class QuizService:
     def __init__(self):
 
         self.q = QClient()
+
+    def set_mode(self, mode):
+
+        self.q.execute(".web.setQuizMode", mode)
 
     def get_question(self):
 
@@ -234,6 +238,317 @@ class DiChallengeService:
             match = _DI_INFO_LINE.match(decoded)
 
             text_lines.append(match.group(1) if match else decoded)
+
+        return "\n".join(text_lines)
+
+
+class LeetcodeService:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def list_problems(self):
+
+        rows = self.q.execute(".web.listLeetcode[]")
+
+        return [
+            Problem(
+                problem=_decode(row["problem"]),
+                area=_decode(row["area"]),
+                difficulty=_decode(row["difficulty"])
+            )
+            for row in _rows(rows)
+        ]
+
+    def submit(self, problem, code):
+
+        raw = self.q.execute(".web.judgeLeetcode", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        cases = [
+            CaseResult(
+                case_no=int(case_no),
+                passed=bool(passed),
+                actual=_decode(actual),
+                expected=_decode(expected)
+            )
+            for case_no, passed, actual, expected in zip(
+                data["caseNo"],
+                data["casePass"],
+                _decode_list(data["caseActual"]),
+                _decode_list(data["caseExpected"])
+            )
+        ]
+
+        return JudgeResult(
+            problem=_decode(data["problem"]),
+            area=_decode(data["area"]),
+            difficulty=_decode(data["difficulty"]),
+            passed=bool(data["pass"]),
+            cases=cases
+        )
+
+    def get_info(self, problem):
+
+        raw_lines = self.q.execute(".web.leetcodeInfoLines", problem)
+
+        text_lines = []
+
+        for raw_line in raw_lines:
+
+            decoded = _decode(raw_line)
+
+            if decoded.strip() == "":
+
+                text_lines.append("")
+
+                continue
+
+            match = _DI_INFO_LINE.match(decoded)
+
+            text_lines.append(match.group(1) if match else decoded)
+
+        return "\n".join(text_lines)
+
+
+class IdiomService:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def list_problems(self):
+
+        rows = self.q.execute(".web.listIdioms[]")
+
+        return [
+            Problem(
+                problem=_decode(row["problem"]),
+                area=_decode(row["area"]),
+                difficulty=_decode(row["difficulty"])
+            )
+            for row in _rows(rows)
+        ]
+
+    def submit(self, problem, code):
+
+        raw = self.q.execute(".web.judgeIdiom", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        cases = [
+            CaseResult(
+                case_no=int(case_no),
+                passed=bool(passed),
+                actual=_decode(actual),
+                expected=_decode(expected)
+            )
+            for case_no, passed, actual, expected in zip(
+                data["caseNo"],
+                data["casePass"],
+                _decode_list(data["caseActual"]),
+                _decode_list(data["caseExpected"])
+            )
+        ]
+
+        return JudgeResult(
+            problem=_decode(data["problem"]),
+            area=_decode(data["area"]),
+            difficulty=_decode(data["difficulty"]),
+            passed=bool(data["pass"]),
+            cases=cases
+        )
+
+    def get_info(self, problem):
+
+        raw_lines = self.q.execute(".web.idiomInfoLines", problem)
+
+        text_lines = []
+
+        for raw_line in raw_lines:
+
+            match = _INFO_LINE.match(_decode(raw_line))
+
+            if match:
+
+                text_lines.append(match.group(1).replace('\\"', '"'))
+
+        return "\n".join(text_lines)
+
+
+class QuantRankService:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def list_problems(self):
+
+        rows = self.q.execute(".web.listQuantRank[]")
+
+        return [
+            Problem(
+                problem=_decode(row["problem"]),
+                area=_decode(row["area"]),
+                difficulty=_decode(row["difficulty"])
+            )
+            for row in _rows(rows)
+        ]
+
+    def submit(self, problem, code):
+
+        raw = self.q.execute(".web.judgeQuantRank", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        cases = [
+            CaseResult(
+                case_no=int(case_no),
+                passed=bool(passed),
+                actual=_decode(actual),
+                expected=_decode(expected)
+            )
+            for case_no, passed, actual, expected in zip(
+                data["caseNo"],
+                data["casePass"],
+                _decode_list(data["caseActual"]),
+                _decode_list(data["caseExpected"])
+            )
+        ]
+
+        return JudgeResult(
+            problem=_decode(data["problem"]),
+            area=_decode(data["area"]),
+            difficulty=_decode(data["difficulty"]),
+            passed=bool(data["pass"]),
+            cases=cases
+        )
+
+    def get_info(self, problem):
+
+        raw_lines = self.q.execute(".web.quantRankInfoLines", problem)
+
+        text_lines = []
+
+        for raw_line in raw_lines:
+
+            match = _INFO_LINE.match(_decode(raw_line))
+
+            if match:
+
+                text_lines.append(match.group(1).replace('\\"', '"'))
+
+        return "\n".join(text_lines)
+
+
+class JobService:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def list_jobs(self):
+
+        rows = self.q.execute(".web.listJobs[]")
+
+        return [
+            Job(
+                id=int(row["id"]),
+                title=_decode(row["title"]),
+                company=_decode(row["company"]),
+                country=_decode(row["country"]),
+                location=_decode(row["location"]),
+                description=_decode(row["description"])
+            )
+            for row in _rows(rows)
+        ]
+
+
+class LeaderboardService:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def list_entries(self):
+
+        rows = self.q.execute(".web.listLeaderboard[]")
+
+        return [
+            LeaderboardEntry(
+                place=int(row["place"]),
+                handle=_decode(row["handle"]),
+                score=int(row["score"]),
+                solved=int(row["solved"]),
+                accuracy=float(row["accuracy"])
+            )
+            for row in _rows(rows)
+        ]
+
+
+class FundamentalsService:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def list_problems(self):
+
+        rows = self.q.execute(".web.listFundamentals[]")
+
+        return [
+            Problem(
+                problem=_decode(row["problem"]),
+                area=_decode(row["area"]),
+                difficulty=_decode(row["difficulty"])
+            )
+            for row in _rows(rows)
+        ]
+
+    def submit(self, problem, code):
+
+        raw = self.q.execute(".web.judgeFundamentals", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        cases = [
+            CaseResult(
+                case_no=int(case_no),
+                passed=bool(passed),
+                actual=_decode(actual),
+                expected=_decode(expected)
+            )
+            for case_no, passed, actual, expected in zip(
+                data["caseNo"],
+                data["casePass"],
+                _decode_list(data["caseActual"]),
+                _decode_list(data["caseExpected"])
+            )
+        ]
+
+        return JudgeResult(
+            problem=_decode(data["problem"]),
+            area=_decode(data["area"]),
+            difficulty=_decode(data["difficulty"]),
+            passed=bool(data["pass"]),
+            cases=cases
+        )
+
+    def get_info(self, problem):
+
+        raw_lines = self.q.execute(".web.fundamentalsInfoLines", problem)
+
+        text_lines = []
+
+        for raw_line in raw_lines:
+
+            match = _INFO_LINE.match(_decode(raw_line))
+
+            if match:
+
+                text_lines.append(match.group(1).replace('\\"', '"'))
 
         return "\n".join(text_lines)
 

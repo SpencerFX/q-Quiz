@@ -73,6 +73,9 @@
 /* *Solution Info ===============================================*
 /* *probGame7[p]*
 probGame7:{[p]
-    20*p xexp 3*(1-p)xexp 3
+    / q has no operator precedence - it evaluates strictly right to
+    / left, so the unparenthesised form bound "3*(1-p)xexp 3" as one
+    / exponent (p^(3(1-p)^3)) instead of (p^3)*((1-p)^3)
+    20*(p xexp 3)*((1-p)xexp 3)
     };
 /* *=============================================================*/

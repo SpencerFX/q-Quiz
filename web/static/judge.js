@@ -63,33 +63,108 @@ async function loadProblems(apiBase,linkBase){
 
     const list=document.getElementById("problemList");
 
-    list.innerHTML="";
+    const state={area:"all",difficulty:"all"};
 
-    problems.forEach(function(p){
+    function renderList(){
 
-        const row=document.createElement("a");
+        list.innerHTML="";
 
-        row.className="problemRow";
+        const filtered=problems.filter(function(p){
 
-        row.href=linkBase+"/"+encodeURIComponent(p.problem);
+            return (state.area==="all"||p.area===state.area)
+                && (state.difficulty==="all"||p.difficulty===state.difficulty);
 
-        const name=document.createElement("span");
+        });
 
-        name.textContent=p.problem;
+        filtered.forEach(function(p){
 
-        const meta=document.createElement("span");
+            const row=document.createElement("a");
 
-        meta.className="problemMeta";
+            row.className="problemRow";
 
-        meta.textContent=p.area+" / "+p.difficulty;
+            row.href=linkBase+"/"+encodeURIComponent(p.problem);
 
-        row.appendChild(name);
+            const name=document.createElement("span");
 
-        row.appendChild(meta);
+            name.textContent=p.problem;
 
-        list.appendChild(row);
+            const meta=document.createElement("span");
+
+            meta.className="problemMeta";
+
+            meta.textContent=p.area+" / "+p.difficulty;
+
+            row.appendChild(name);
+
+            row.appendChild(meta);
+
+            list.appendChild(row);
+
+        });
+
+    }
+
+    function buildFilterBar(stateKey,values){
+
+        const filterBar=document.createElement("div");
+
+        filterBar.className="filterBar";
+
+        ["all"].concat(values).forEach(function(v){
+
+            const chip=document.createElement("button");
+
+            chip.type="button";
+
+            chip.className="filterChip"+(v===state[stateKey]? " filterChipActive":"");
+
+            chip.textContent=v==="all"? "All":v.charAt(0).toUpperCase()+v.slice(1);
+
+            chip.onclick=function(){
+
+                state[stateKey]=v;
+
+                filterBar.querySelectorAll(".filterChip").forEach(function(c){
+
+                    c.classList.remove("filterChipActive");
+
+                });
+
+                chip.classList.add("filterChipActive");
+
+                renderList();
+
+            };
+
+            filterBar.appendChild(chip);
+
+        });
+
+        list.parentNode.insertBefore(filterBar,list);
+
+    }
+
+    const areas=Array.from(new Set(problems.map(function(p){ return p.area; }))).sort();
+
+    const difficulties=["easy","medium","hard"].filter(function(d){
+
+        return problems.some(function(p){ return p.difficulty===d; });
 
     });
+
+    if(areas.length>1){
+
+        buildFilterBar("area",areas);
+
+    }
+
+    if(difficulties.length>1){
+
+        buildFilterBar("difficulty",difficulties);
+
+    }
+
+    renderList();
 
 }
 

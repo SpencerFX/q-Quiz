@@ -23,9 +23,17 @@
     system "l ./hackerRank/scripts/init.q";
     system "l ./qIdioms/scripts/init.q";
     system "l ./diChallenges/scripts/init.q";
+    system "l ./leetcode/scripts/init.q";
+    system "l ./quantRank/scripts/init.q";
+    system "l ./jobs/jobs.q";
+    system "l ./leaderboard/leaderboard.q";
+    system "l ./fundamentals/scripts/init.q";
     initHackerRank[];
     initQIdioms[];
     initDiChallenges[];
+    initLeetcode[];
+    initQuantRank[];
+    initFundamentals[];
     .quiz.loadResults[];
     -1 "Loaded.";
  };

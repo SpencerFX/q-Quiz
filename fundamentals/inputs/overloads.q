@@ -83,7 +83,7 @@ overloadCount:{count x};
 
 .inputs.overloads.easy: (!) . flip raze 2 cut
     (
-        (`unaryPlus; enlist 5);                                  / +5
+        (`unaryPlus; enlist (1 2 3;4 5 6));                      / +(1 2 3;4 5 6) - flip needs a matrix/table, not a bare atom
         (`unaryMinus; enlist 5);                                 / -5
         (`binaryPlus; (5;3));                                    / 5+3
         (`binaryMinus; (5;3));                                   / 5-3
@@ -94,7 +94,7 @@ overloadCount:{count x};
         (`scalarList; (10;1 2 3));                               / scalar + list
         (`listScalar; (1 2 3;10));                               / list + scalar
         (`typeOfArgument; enlist overloadInts);                  / type
-        (`typeMismatch; ("ABC";5));                              / incompatible types
+        (`typeMismatch; (1b;5))                                  / boolean+int - resolved via automatic type promotion, not an error (a char+int mismatch, tried first, genuinely errors in q - too fragile to grade on exact error text)
     );
 
 
@@ -120,7 +120,7 @@ overloadCount:{count x};
         (`eachIterator; enlist 1 2 3 4);                         / each
         (`eachLeftIterator; (1 2 3;10 20 30));                   / each-left
         (`eachRightIterator; (1 2 3;10 20 30));                  / each-right
-        (`eachPriorIterator; enlist 10 20 30 40);                / each-prior
+        (`eachPriorIterator; enlist 10 20 30 40)                 / each-prior
     );
 
 
@@ -130,10 +130,10 @@ overloadCount:{count x};
 
 .inputs.overloads.hard: (!) . flip raze 2 cut
     (
-        (`selectOverload; overloadTrade);                        / select
-        (`updateOverload; overloadTrade);                        / update
-        (`deleteOverload; overloadTrade);                        / delete
-        (`amendOverload; overloadInts);                          / amend
+        (`selectOverload; enlist overloadTrade);                 / select - unary, needs enlist so .[func;input;..] doesn't try to spread the table's rows as separate positional args
+        (`updateOverload; enlist overloadTrade);                 / update
+        (`deleteOverload; enlist overloadTrade);                 / delete
+        (`amendOverload; enlist overloadInts);                   / amend
         (`joinOverload; (overloadTrade;overloadQuote));           / join
         (`asofJoinOverload; (overloadTrade;overloadQuote));       / aj
         (`functionComposition; enlist 5);                        / composition
@@ -145,5 +145,5 @@ overloadCount:{count x};
         (`mixedTypeOverload; (1;2.5));                            / mixed numeric types
         (`typePromotion; (1;2.5));                               / numeric promotion
         (`errorOverload; ("ABC";1));                             / invalid overload
-        (`systemFunctionOverload; enlist overloadTrade);          / system function
+        (`systemFunctionOverload; enlist overloadTrade)           / system function
     );

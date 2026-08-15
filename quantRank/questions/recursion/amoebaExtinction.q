@@ -88,9 +88,17 @@ extinctionProbability:{[p0;p1;p2]
     a:p2;
     b:p1-1;
     c:p0;
-    d:b*b-4*a*c;
-    r1:(-b-sqrt d)%(2*a);
-    r2:(-b+sqrt d)%(2*a);
-    min r1 r2
+    / q has no operator precedence (strictly right to left), so
+    / unparenthesised "b*b-4*a*c" bound as b*(b-(4*a*c)) instead of
+    / (b*b)-(4*a*c)
+    d:(b*b)-(4*a*c);
+    / q has no monadic "-" (unary negate) - only "neg" does that;
+    / bare "-b" here is parsed as an invalid token, not negation
+    r1:((neg b)-sqrt d)%(2*a);
+    r2:((neg b)+sqrt d)%(2*a);
+    / "min" is aggregate-only in q (reduces one list arg) - there's no
+    / dyadic form, and "min r1 r2" parses as r1 applied/indexed by r2
+    / (juxtaposition) rather than either
+    min(r1;r2)
     };
 /* *=============================================================*/

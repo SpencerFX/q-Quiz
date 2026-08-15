@@ -77,7 +77,11 @@
 
 /* *Solution Info ===============================================*
 /* *probNoWomen[n;w;k]*
+/ C(n,k) via a falling-factorial product; "k _ n-w" (drop) in the
+/ original didn't compute a combination at all - it dropped k items
+/ from a scalar, which is a type error, not C(n-w,k)
+comb:{[n;k] prd[((n-k)+1)+til k] % prd[1+til k]};
 probNoWomen:{[n;w;k]
-    (prd k _ n-w) % prd k _ n
+    comb[n-w;k] % comb[n;k]
     };
 /* *=============================================================*/

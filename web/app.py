@@ -4,7 +4,7 @@ from dataclasses import asdict
 from flask import Flask, render_template, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 
-from services import QuizService, JudgeService, ProfileService, DiChallengeService
+from services import QuizService, JudgeService, ProfileService, DiChallengeService, LeetcodeService, IdiomService, QuantRankService, JobService, FundamentalsService, LeaderboardService
 
 app = Flask(__name__)
 
@@ -16,6 +16,12 @@ quiz = QuizService()
 judge = JudgeService()
 profile = ProfileService()
 aquaq = DiChallengeService()
+leetcode = LeetcodeService()
+qidioms = IdiomService()
+quantrank = QuantRankService()
+jobs = JobService()
+fundamentals = FundamentalsService()
+leaderboard = LeaderboardService()
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "uploads")
 ALLOWED_RESUME_EXTENSIONS = {"pdf", "doc", "docx"}
@@ -36,8 +42,15 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
 @app.route("/quiz")
 def start():
+    mode = "MultipleChoiceSyntax" if request.args.get("mode") == "syntax" else "MultipleChoice"
+    quiz.set_mode(mode)
     return render_template("quiz.html")
 
 
@@ -138,6 +151,162 @@ def api_aquaq_submit(problem):
     code = request.get_json(force=True).get("code", "")
     try:
         result = aquaq.submit(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(asdict(result))
+
+
+@app.route("/leetcode")
+def leetcode_list():
+    return render_template("leetcode.html")
+
+
+@app.route("/api/leetcode")
+def api_leetcode_list():
+    return jsonify([p.__dict__ for p in leetcode.list_problems()])
+
+
+@app.route("/leetcode/<problem>")
+def leetcode_detail(problem):
+    return render_template("leetcodeProblem.html", problem=problem)
+
+
+@app.route("/api/leetcode/<problem>/info")
+def api_leetcode_info(problem):
+    try:
+        info = leetcode.get_info(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify({"info": info})
+
+
+@app.route("/api/leetcode/<problem>/submit", methods=["POST"])
+def api_leetcode_submit(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = leetcode.submit(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(asdict(result))
+
+
+@app.route("/qidioms")
+def qidioms_list():
+    return render_template("qidioms.html")
+
+
+@app.route("/api/qidioms")
+def api_qidioms_list():
+    return jsonify([p.__dict__ for p in qidioms.list_problems()])
+
+
+@app.route("/qidioms/<problem>")
+def qidioms_detail(problem):
+    return render_template("qidiomsProblem.html", problem=problem)
+
+
+@app.route("/api/qidioms/<problem>/info")
+def api_qidioms_info(problem):
+    try:
+        info = qidioms.get_info(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify({"info": info})
+
+
+@app.route("/api/qidioms/<problem>/submit", methods=["POST"])
+def api_qidioms_submit(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = qidioms.submit(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(asdict(result))
+
+
+@app.route("/quantrank")
+def quantrank_list():
+    return render_template("quantrank.html")
+
+
+@app.route("/api/quantrank")
+def api_quantrank_list():
+    return jsonify([p.__dict__ for p in quantrank.list_problems()])
+
+
+@app.route("/quantrank/<problem>")
+def quantrank_detail(problem):
+    return render_template("quantrankProblem.html", problem=problem)
+
+
+@app.route("/api/quantrank/<problem>/info")
+def api_quantrank_info(problem):
+    try:
+        info = quantrank.get_info(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify({"info": info})
+
+
+@app.route("/api/quantrank/<problem>/submit", methods=["POST"])
+def api_quantrank_submit(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = quantrank.submit(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(asdict(result))
+
+
+@app.route("/jobs")
+def jobs_list():
+    return render_template("jobs.html")
+
+
+@app.route("/api/jobs")
+def api_jobs_list():
+    return jsonify([asdict(j) for j in jobs.list_jobs()])
+
+
+@app.route("/leaderboard")
+def leaderboard_list():
+    return render_template("leaderboard.html")
+
+
+@app.route("/api/leaderboard")
+def api_leaderboard_list():
+    return jsonify([asdict(e) for e in leaderboard.list_entries()])
+
+
+@app.route("/fundamentals")
+def fundamentals_list():
+    return render_template("fundamentals.html")
+
+
+@app.route("/api/fundamentals")
+def api_fundamentals_list():
+    return jsonify([p.__dict__ for p in fundamentals.list_problems()])
+
+
+@app.route("/fundamentals/<problem>")
+def fundamentals_detail(problem):
+    return render_template("fundamentalsProblem.html", problem=problem)
+
+
+@app.route("/api/fundamentals/<problem>/info")
+def api_fundamentals_info(problem):
+    try:
+        info = fundamentals.get_info(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify({"info": info})
+
+
+@app.route("/api/fundamentals/<problem>/submit", methods=["POST"])
+def api_fundamentals_submit(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = fundamentals.submit(problem, code)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
     return jsonify(asdict(result))

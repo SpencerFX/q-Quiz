@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}leetcode{% endblock %}
+{% block content %}
+<div class="card">
+<h1>leetcode</h1>
+<div id="problemList" data-api-base="/api/leetcode" data-link-base="/leetcode">Loading...</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static',filename='judge.js') }}"></script>
+{% endblock %}
