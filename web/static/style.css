@@ -54,6 +54,56 @@ header{
 
 }
 
+.headerRightGroup{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.sessionNav{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-size:16px;
+
+    font-weight:normal;
+
+}
+
+.sessionPill{
+
+    background:#2a2a2a;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+}
+
+.sessionLogout{
+
+    color:#999;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+}
+
+.sessionLogout:hover{
+
+    color:white;
+
+}
+
 .registerButton{
 
     margin-top:0;
@@ -161,6 +211,68 @@ button{
     font-size:20px;
 
     cursor:pointer;
+
+}
+
+.skillGrid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+
+    gap:12px;
+
+    margin-top:16px;
+
+}
+
+.skillTile{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    background:#1a1a19;
+
+    border:1px solid #2c2c2a;
+
+    border-radius:10px;
+
+    padding:14px 16px;
+
+    text-decoration:none;
+
+    color:#eee;
+
+    transition:background 0.15s,border-color 0.15s;
+
+}
+
+.skillTile:hover{
+
+    background:#242422;
+
+    border-color:#3a3a37;
+
+}
+
+.skillIcon{
+
+    font-size:20px;
+
+    line-height:1;
+
+    flex-shrink:0;
+
+}
+
+.skillLabel{
+
+    font-size:14px;
+
+    font-weight:600;
 
 }
 
@@ -346,9 +458,15 @@ textarea{
 
 #verdict{
 
-    margin-top:20px;
+    margin-top:0;
 
     font-size:18px;
+
+}
+
+#verdict:empty{
+
+    display:none;
 
 }
 
@@ -377,6 +495,90 @@ textarea{
     font-size:14px;
 
     font-family:Consolas,monospace;
+
+}
+
+#runCode{
+
+    background:#333;
+
+    color:#eee;
+
+}
+
+#runCode:hover{
+
+    background:#444;
+
+}
+
+.runOutput{
+
+    margin-top:0;
+
+    font-size:14px;
+
+    font-family:Consolas,monospace;
+
+    color:#ccc;
+
+    white-space:pre-wrap;
+
+    overflow-wrap:anywhere;
+
+}
+
+.runOutput:empty{
+
+    display:none;
+
+}
+
+.runOutput+#verdict:not(:empty){
+
+    margin-top:14px;
+
+}
+
+.runOutputError{
+
+    color:#ff5555;
+
+}
+
+.outputConsole{
+
+    margin-top:16px;
+
+    box-sizing:border-box;
+
+    background:#111110;
+
+    border:1px solid #2a2a28;
+
+    border-radius:8px;
+
+    padding:12px 16px;
+
+    min-height:56px;
+
+    max-height:220px;
+
+    overflow-y:auto;
+
+}
+
+.outputConsoleLabel{
+
+    font-size:11px;
+
+    text-transform:uppercase;
+
+    letter-spacing:0.06em;
+
+    color:#777;
+
+    margin-bottom:8px;
 
 }
 
@@ -471,6 +673,90 @@ textarea{
 .barHover{
 
     opacity:0.85;
+
+}
+
+.completionList{
+
+    background:#1a1a19;
+
+    border-radius:8px;
+
+    padding:16px 20px;
+
+    margin-top:12px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+}
+
+.completionRow{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+}
+
+.completionLabel{
+
+    width:170px;
+
+    flex-shrink:0;
+
+    font-size:13px;
+
+    color:#c3c2b7;
+
+}
+
+.completionBarTrack{
+
+    flex:1;
+
+    height:14px;
+
+    background:#2c2c2a;
+
+    border-radius:7px;
+
+    overflow:hidden;
+
+    cursor:default;
+
+}
+
+.completionBarFill{
+
+    height:100%;
+
+    background:#0ca30c;
+
+    border-radius:7px;
+
+}
+
+.completionPct{
+
+    width:64px;
+
+    flex-shrink:0;
+
+    text-align:right;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    color:#ffffff;
+
+    font-variant-numeric:tabular-nums;
 
 }
 
@@ -637,6 +923,8 @@ textarea{
 
     width:800px;
 
+    position:relative;
+
 }
 
 .profileHeader{
@@ -646,6 +934,150 @@ textarea{
     gap:24px;
 
     align-items:flex-start;
+
+}
+
+.profileInfo{
+
+    flex:1;
+
+    min-width:0;
+
+}
+
+.badgesBox{
+
+    margin-top:16px;
+
+    background:#1a1a19;
+
+    border-radius:12px;
+
+    padding:16px;
+
+}
+
+.badgesBoxTitle{
+
+    margin:0 0 12px 0;
+
+    font-size:15px;
+
+    color:#c3c2b7;
+
+}
+
+.badgesGrid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(84px,1fr));
+
+    gap:10px;
+
+}
+
+.badgeTile{
+
+    background:linear-gradient(160deg,var(--badgeColor,#555) 0%,#222 85%);
+
+    border:1px solid var(--badgeColor,#555);
+
+    border-radius:8px;
+
+    padding:8px 6px;
+
+    text-align:center;
+
+    color:white;
+
+}
+
+.badgeTileLocked{
+
+    background:#222;
+
+    border-color:#3a3a3a;
+
+    color:#666;
+
+    opacity:0.55;
+
+}
+
+.badgeAtomicNumber{
+
+    font-size:10px;
+
+    text-align:left;
+
+    opacity:0.8;
+
+    height:12px;
+
+}
+
+.badgeSymbol{
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    line-height:1.1;
+
+}
+
+.badgeElementName{
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:0.5px;
+
+    margin-top:2px;
+
+    opacity:0.9;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+.badgeStars{
+
+    margin-top:4px;
+
+    font-size:11px;
+
+    color:#ffd54f;
+
+    letter-spacing:1px;
+
+}
+
+.badgeTileLocked .badgeStars{
+
+    color:#555;
+
+}
+
+.badgeLabel{
+
+    margin-top:5px;
+
+    font-size:9px;
+
+    color:#999;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
 
 }
 
@@ -673,6 +1105,34 @@ textarea{
 
 }
 
+.avatarImage{
+
+    object-fit:cover;
+
+}
+
+.photoPreview{
+
+    margin-top:16px;
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.photoPreview img{
+
+    width:120px;
+
+    height:120px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+}
+
 .profileTagline{
 
     color:#c3c2b7;
@@ -685,7 +1145,17 @@ textarea{
 
     display:inline-block;
 
-    margin-top:12px;
+    position:absolute;
+
+    top:40px;
+
+    right:40px;
+
+}
+
+.editProfileLink button{
+
+    margin-top:0;
 
 }
 
@@ -984,5 +1454,179 @@ input[type="text"]{
     max-height:600px;
 
     overflow-y:auto;
+
+}
+
+/* matches .questionInfo's max-height so the codepad defaults to the
+   same visual length as the question box beside it, instead of the
+   much shorter height rows="18" gives on its own */
+#code{
+
+    height:600px;
+
+}
+
+.loginCard{
+
+    width:440px;
+
+}
+
+.googleButton{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    background:white;
+
+    color:#3c4043;
+
+    border:1px solid #dadce0;
+
+    border-radius:6px;
+
+    padding:12px 20px;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    font-family:Segoe UI;
+
+    cursor:pointer;
+
+    margin-top:24px;
+
+}
+
+.googleButton:hover{
+
+    box-shadow:0 1px 3px rgba(0,0,0,0.3);
+
+}
+
+.linkedinButton{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    background:#0A66C2;
+
+    color:white;
+
+    border:1px solid #0A66C2;
+
+    border-radius:6px;
+
+    padding:12px 20px;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    font-family:Segoe UI;
+
+    cursor:pointer;
+
+    margin-top:12px;
+
+}
+
+.linkedinButton:hover{
+
+    background:#0958a8;
+
+}
+
+.authNote{
+
+    display:none;
+
+    margin-top:10px;
+
+    font-size:14px;
+
+}
+
+.loginDivider{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    color:#999;
+
+    margin:24px 0;
+
+}
+
+.loginDivider::before,
+.loginDivider::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:#333;
+
+}
+
+.loginForm{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.loginForm label{
+
+    color:#999;
+
+    font-size:14px;
+
+}
+
+.loginForm input{
+
+    box-sizing:border-box;
+
+    padding:12px;
+
+    border-radius:6px;
+
+    border:1px solid #444;
+
+    background:#111;
+
+    color:white;
+
+    font-size:16px;
+
+}
+
+.errorText{
+
+    color:#ff6666;
 
 }

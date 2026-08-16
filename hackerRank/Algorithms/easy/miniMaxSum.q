@@ -87,3 +87,14 @@ miniMaxSum:{[arr]
   (s-mx; s-mn)
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Sorts and drops the largest/smallest element instead of
+/ subtracting max/min from the total.
+/ miniMaxSum2 arr
+miniMaxSum2:{[arr]
+  s:asc arr;
+  (sum -1_s; sum 1_s)
+ };
+/ =============================================================

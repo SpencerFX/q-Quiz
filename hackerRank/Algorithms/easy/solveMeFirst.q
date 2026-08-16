@@ -64,3 +64,12 @@ solveMeFirst:{[num1; num2]
   num1 + num2
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Plus-reduce fold over the pair instead of direct addition.
+/ solveMeFirst2[num1;num2]
+solveMeFirst2:{[num1;num2]
+  (+/) (num1;num2)
+ };
+/ =============================================================

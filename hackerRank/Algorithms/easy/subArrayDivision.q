@@ -96,3 +96,18 @@ subArrayDivision:{[s;d;m]
   sum window = d
  }
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Prefix-sum technique: each window sum is a difference of two
+/ cumulative sums, instead of recomputing sum s[x+til m] per
+/ window.
+/ subArrayDivision2[s;d;m]
+subArrayDivision2:{[s;d;m]
+  n:count s;
+  prefix:0,sums s;
+  positionCount:(n-m)+1;
+  windowSums:prefix[m+til positionCount] - prefix[til positionCount];
+  sum windowSums=d
+ }
+/ =============================================================

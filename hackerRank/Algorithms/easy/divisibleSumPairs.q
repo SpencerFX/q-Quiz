@@ -89,3 +89,18 @@ divisibleSumPairs:{[k;arr]
   sum 0 = (sum each comb[2;arr]) mod k
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Direct O(n^2) index-pair scan (i<j) instead of generating all
+/ combinations up front and filtering afterward.
+/ divisibleSumPairs2[k;arr]
+divisibleSumPairs2:{[k;arr]
+  n:count arr;
+  perIndex:{[arr;k;i]
+    rest:arr[(i+1)+til ((count[arr]-i)-1)];
+    sum 0=(arr[i]+rest) mod k
+   }[arr;k;] each til n;
+  sum perIndex
+ };
+/ =============================================================

@@ -105,3 +105,21 @@ dayOfTheProgrammer:{[y]
   dd,".",mm,".",yyyy
  }
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Day 256 always falls in September for every case this problem
+/ covers, so this computes the day-of-September directly by rule
+/ instead of walking a cumulative days-per-month table.
+/ dayOfTheProgrammer2 year
+dayOfTheProgrammer2:{[y]
+  d:$[y=1918;
+        26;
+      y<1918;
+        $[0=y mod 4; 12; 13];
+        $[(0=y mod 400) | ((0=y mod 4) & (0<>y mod 100)); 12; 13]
+     ];
+  dd:$[d<10; "0",string d; string d];
+  dd,".09.",string y
+ };
+/ =============================================================

@@ -95,3 +95,19 @@ drawingBook:{[n;p]
   min front,back
  }
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Literally simulates flipping pages two at a time from the
+/ front and from the back, instead of the closed-form division.
+/ drawingBook2[n;p]
+drawingBook2:{[n;p]
+  frontTurns:0;
+  page:1;
+  while[page<p; page+:2; frontTurns+:1];
+  backTurns:0;
+  page:$[n mod 2=0; n; n-1];
+  while[page>p; page-:2; backTurns+:1];
+  min (frontTurns;backTurns)
+ }
+/ =============================================================

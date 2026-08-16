@@ -5,6 +5,11 @@ challenge10Edges:({fwd:([] s:`A`B`B`D`E; d:`B`C`D`E`C; c:8 50 5 10 6); fwd,([] s
 challenge15Words:("fly";"fry";"try";"cry";"word";"ward";"ware";"mare";"maze");
 challenge15Pairs:(("fly";"try");("try";"fly");("word";"maze"));
 
+/ 500x20 hallway grid of relative-integer dust counts, seeded for
+/ reproducibility - regenerating this deterministically is far
+/ shorter than inlining 10,000 literals
+challenge21Grid:({system "S 42"; -50+500 20#10000?101}[]);
+
 .inputs.diChallenges.easy: (!) . flip raze 2 cut
     (
         (`challenge0; enlist 7 3);                                            / decodeMessage
@@ -22,7 +27,8 @@ challenge15Pairs:(("fly";"try");("try";"fly");("word";"maze"));
         (`challenge12; enlist ((1;2);(0;3);(1;1);(0;1);(1;5)));               / simulate
         (`challenge13; enlist ("AAAAAAB";"AAAAAAB"));                         / sumBestCounts
         (`challenge14; enlist 4#enlist 10 5 21 45 53 70 66 4);                / sumTurnsToWin
-        (`challenge15; (challenge15Words; challenge15Pairs))                  / productOfChains
+        (`challenge15; (challenge15Words; challenge15Pairs));                 / productOfChains
+        (`challenge21; (challenge21Grid; 5))                                  / maxDustCollected
     );
 
 .inputs.diChallenges.medium: (!) . flip raze 2 cut

@@ -98,9 +98,33 @@ class QuizService:
                 "questionNo": int(row["questionNo"]),
                 "question": _decode(row["question"]),
                 "questionType": _decode(row["questionType"]),
+                "category": _decode(row["category"]),
                 "correct": bool(row["result"]),
                 "runningCorrect": int(row["runningCorrect"]),
                 "percentCorrect": float(row["percentCorrect"])
+            }
+            for row in _rows(rows)
+        ]
+
+    def badge_counts(self):
+
+        rows = self.q.execute(".web.badgeCounts[]")
+
+        return {
+            _decode(row["questionType"]): int(row["correctCount"])
+            for row in _rows(rows)
+        }
+
+    def completion_rates(self):
+
+        rows = self.q.execute(".web.completionRates[]")
+
+        return [
+            {
+                "questionType": _decode(row["questionType"]),
+                "completed": int(row["completed"]),
+                "total": int(row["total"]),
+                "pct": float(row["pct"])
             }
             for row in _rows(rows)
         ]
@@ -153,6 +177,14 @@ class JudgeService:
             passed=bool(data["pass"]),
             cases=cases
         )
+
+    def run(self, problem, code):
+
+        raw = self.q.execute(".web.runProblem", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
 
     def get_info(self, problem):
 
@@ -218,6 +250,14 @@ class DiChallengeService:
             passed=bool(data["pass"]),
             cases=cases
         )
+
+    def run(self, problem, code):
+
+        raw = self.q.execute(".web.runDiChallenge", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
 
     def get_info(self, problem):
 
@@ -290,6 +330,14 @@ class LeetcodeService:
             cases=cases
         )
 
+    def run(self, problem, code):
+
+        raw = self.q.execute(".web.runLeetcode", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
+
     def get_info(self, problem):
 
         raw_lines = self.q.execute(".web.leetcodeInfoLines", problem)
@@ -361,6 +409,14 @@ class IdiomService:
             cases=cases
         )
 
+    def run(self, problem, code):
+
+        raw = self.q.execute(".web.runIdiom", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
+
     def get_info(self, problem):
 
         raw_lines = self.q.execute(".web.idiomInfoLines", problem)
@@ -425,6 +481,14 @@ class QuantRankService:
             passed=bool(data["pass"]),
             cases=cases
         )
+
+    def run(self, problem, code):
+
+        raw = self.q.execute(".web.runQuantRank", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
 
     def get_info(self, problem):
 
@@ -536,6 +600,14 @@ class FundamentalsService:
             cases=cases
         )
 
+    def run(self, problem, code):
+
+        raw = self.q.execute(".web.runFundamentals", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
+
     def get_info(self, problem):
 
         raw_lines = self.q.execute(".web.fundamentalsInfoLines", problem)
@@ -581,6 +653,7 @@ class ProfileService:
             "phone": _decode(data["phone"]),
             "location": _decode(data["location"]),
             "resumeFilename": _decode(data["resumeFilename"]),
+            "photoFilename": _decode(data["photoFilename"]),
             "registered": bool(data["registered"]),
             "experience": _decode_entries(data["experience"]),
             "education": _decode_entries(data["education"]),
@@ -601,6 +674,10 @@ class ProfileService:
     def set_resume(self, filename):
 
         return self._parse(self.q.execute(".web.profile.setResume", filename))
+
+    def set_photo(self, filename):
+
+        return self._parse(self.q.execute(".web.profile.setPhoto", filename))
 
     def add_experience(self, company, title, start_date, end_date, location, description):
 

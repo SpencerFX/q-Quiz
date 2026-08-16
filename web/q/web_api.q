@@ -62,6 +62,24 @@
  };
 
 
+/ Run only - literally evaluate whatever the user typed against the
+/ live q process and hand back whatever it produces (or its error),
+/ with no comparison to an expected answer and nothing recorded into
+/ any results table / .quiz.history. Not wrapped into the problem's
+/ own function signature or base input at all - this is a raw eval, so
+/ arbitrary q (assignments, multi-statement code, `system` calls, etc)
+/ all work exactly as they would typed at a q console. Shared by every
+/ section's run* wrapper below (see the .web.runX:.web.runRaw aliases
+/ further down this file).
+.web.runRaw:{[problemName;codeStr]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    actual:.[value;enlist codeStr;{"Error: ",x}];
+    `problem`output!(problemName; $[10h=type actual; actual; @[{-3!x}; actual; {"(unable to display result)"}]])
+ };
+
+.web.runProblem:.web.runRaw;
+
+
 / .quiz.history also holds HackerRank/etc submissions, so anything
 / counting or numbering multiple-choice progress has to scope to just
 / the rows for whichever bank is currently active
@@ -132,6 +150,44 @@
 .web.results:{[] .quiz.results[]};
 
 
+/ Correct-answer count per category (questionType), for the profile
+/ page's badges box. 0! un-keys the grouped result into a plain table
+/ (questionType;correctCount) so it decodes the same way every other
+/ list endpoint does, instead of needing keyed-table handling on the
+/ Python side.
+.web.badgeCounts:{[] 0!select correctCount:sum result by questionType from .quiz.history};
+
+
+/ Completion rate per section, for the results dashboard's completion
+/ chart: distinct questions/problems ever answered correctly (from
+/ .quiz.history) against that section's full catalog size, as a
+/ percentage. Deliberately distinct-question based rather than
+/ badgeCounts' cumulative correct-attempt count above - getting the
+/ same HackerRank problem right on a third resubmission shouldn't move
+/ this number, only newly-solved problems should. Sections with no
+/ history rows yet (lj leaves completed null) fall back to 0 via 0^,
+/ same trick handles the pct column when total is ever 0 (0%0 is 0n,
+/ which 0^ also cleans up).
+.web.completionRates:{[]
+    solvedK:select completed:count distinct question by questionType from .quiz.history where result;
+    totalTypes:`MultipleChoice`MultipleChoiceSyntax`HackerRank`Idioms`DiChallenge`Leetcode`QuantRank`Fundamentals;
+    totalCounts:(
+        count .quiz.bank;
+        count .quiz.bankSyntax;
+        count .web.listProblems[];
+        count .web.listIdioms[];
+        count .web.listDiChallenges[];
+        count .web.listLeetcode[];
+        count .web.listQuantRank[];
+        count .web.listFundamentals[]
+    );
+    t:([] questionType:totalTypes; total:totalCounts);
+    t:t lj solvedK;
+    t:update completed:0^completed from t;
+    update pct:0^100f*completed%total from t
+ };
+
+
 //====================================================================
 //
 // AquaQ Challenges (diChallenges) - same shape of wrappers as the
@@ -195,6 +251,10 @@
  };
 
 
+/ Run only - raw eval, see .web.runRaw above for why.
+.web.runDiChallenge:.web.runRaw;
+
+
 //====================================================================
 //
 // leetcode - same shape of wrappers as AquaQ Challenges above, reusing
@@ -252,6 +312,10 @@
     `problem`area`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
         (problemName;`leetcode;difficulty;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
  };
+
+
+/ Run only - raw eval, see .web.runRaw above for why.
+.web.runLeetcode:.web.runRaw;
 
 
 //====================================================================
@@ -346,6 +410,10 @@
  };
 
 
+/ Run only - raw eval, see .web.runRaw above for why.
+.web.runIdiom:.web.runRaw;
+
+
 //====================================================================
 //
 // quantRank - all 5 problems live under .inputs.quant.probability.*
@@ -418,6 +486,10 @@
     `problem`area`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
         (problemName;`probability;difficulty;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
  };
+
+
+/ Run only - raw eval, see .web.runRaw above for why.
+.web.runQuantRank:.web.runRaw;
 
 
 //====================================================================
@@ -508,6 +580,10 @@
  };
 
 
+/ Run only - raw eval, see .web.runRaw above for why.
+.web.runFundamentals:.web.runRaw;
+
+
 //====================================================================
 //
 // Profile — a single local profile (no login), stored in q and
@@ -517,10 +593,13 @@
 //
 //====================================================================
 
-.profile.defaultInfo:`name`tagline`email`phone`location`resumeFilename!("";"";"";"";"";"");
+.profile.defaultInfo:`name`tagline`email`phone`location`resumeFilename`photoFilename!("";"";"";"";"";"";"");
 
 .profile.init:{[]
     .profile.info:@[get; `:./profile/info; {.profile.defaultInfo}];
+    / backfills any default keys (eg photoFilename) missing from a profile/info
+    / file saved before that key existed, without touching real values
+    .profile.info:.profile.defaultInfo,.profile.info;
     .profile.experience:@[get; `:./profile/experience; {([] id:`long$(); company:(); title:(); startDate:(); endDate:(); location:(); description:())}];
     .profile.education:@[get; `:./profile/education; {([] id:`long$(); school:(); degree:(); startDate:(); endDate:())}];
     .profile.links:@[get; `:./profile/links; {([] id:`long$(); label:(); url:())}];
@@ -561,6 +640,12 @@ if[(@[value; `.profile.info; {`NOTSET}])~`NOTSET; .profile.init[]];
     .web.profile.get[]
  };
 
+.web.profile.setPhoto:{[filename]
+    .profile.info[`photoFilename]:filename;
+    .profile.save[];
+    .web.profile.get[]
+ };
+
 .web.profile.addExperience:{[company;title;startDate;endDate;location;description]
     id:.profile.nextId[.profile.experience];
     `.profile.experience insert (id;company;title;startDate;endDate;location;description);
@@ -568,8 +653,8 @@ if[(@[value; `.profile.info; {`NOTSET}])~`NOTSET; .profile.init[]];
     .web.profile.get[]
  };
 
-.web.profile.removeExperience:{[id]
-    .profile.experience:delete from .profile.experience where id=id;
+.web.profile.removeExperience:{[targetId]
+    .profile.experience:delete from .profile.experience where id=targetId;
     .profile.save[];
     .web.profile.get[]
  };
@@ -581,8 +666,8 @@ if[(@[value; `.profile.info; {`NOTSET}])~`NOTSET; .profile.init[]];
     .web.profile.get[]
  };
 
-.web.profile.removeEducation:{[id]
-    .profile.education:delete from .profile.education where id=id;
+.web.profile.removeEducation:{[targetId]
+    .profile.education:delete from .profile.education where id=targetId;
     .profile.save[];
     .web.profile.get[]
  };
@@ -594,8 +679,8 @@ if[(@[value; `.profile.info; {`NOTSET}])~`NOTSET; .profile.init[]];
     .web.profile.get[]
  };
 
-.web.profile.removeLink:{[id]
-    .profile.links:delete from .profile.links where id=id;
+.web.profile.removeLink:{[targetId]
+    .profile.links:delete from .profile.links where id=targetId;
     .profile.save[];
     .web.profile.get[]
  };
@@ -607,8 +692,8 @@ if[(@[value; `.profile.info; {`NOTSET}])~`NOTSET; .profile.init[]];
     .web.profile.get[]
  };
 
-.web.profile.removeSkill:{[id]
-    .profile.skills:delete from .profile.skills where id=id;
+.web.profile.removeSkill:{[targetId]
+    .profile.skills:delete from .profile.skills where id=targetId;
     .profile.save[];
     .web.profile.get[]
  };

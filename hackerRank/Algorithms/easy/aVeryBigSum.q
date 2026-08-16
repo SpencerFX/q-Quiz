@@ -68,3 +68,16 @@ aVeryBigSum:{[x]
   sum x
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Explicit iterative accumulation instead of the vectorised sum.
+/ aVeryBigSum2 x
+aVeryBigSum2:{[x]
+  total:0;
+  i:0;
+  n:count x;
+  while[i<n; total+:x[i]; i+:1];
+  total
+ };
+/ =============================================================

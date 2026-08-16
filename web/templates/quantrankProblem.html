@@ -10,9 +10,15 @@
 </div>
 <div class="problemEditorColumn">
 <textarea id="code" rows="18" spellcheck="false" placeholder="{[args] ... }"></textarea>
+<button id="runCode">Run</button>
 <button id="submitCode">Submit</button>
-<div id="verdict"></div>
+<button id="nextProblem">Next</button>
 </div>
+</div>
+<div id="outputConsole" class="outputConsole">
+<div class="outputConsoleLabel">Console</div>
+<div id="runOutput" class="runOutput"></div>
+<div id="verdict"></div>
 </div>
 </div>
 {% endblock %}

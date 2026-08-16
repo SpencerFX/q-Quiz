@@ -68,11 +68,36 @@
  };
 
 
+/ Maps every multiple-choice question name to the bank folder it came
+/ from (eg `sortedAttribute`->`attributes for a question defined in
+/ .quiz.attributes.easy), across both ./banks/ and ./banksSyntax/. Built
+/ once .quiz.bank/.quiz.bankSyntax are loaded (see .quiz.init), since
+/ that origin is lost once the per-bank dicts are razed together into
+/ one flat bank. Question names outside these banks (HackerRank,
+/ leetcode, ...) simply aren't keys here, so indexing with them below
+/ falls through to a null category, same as any other dict miss.
+.quiz.categoryLookup:{[dir]
+    names:key hsym `$dir;
+    raze {[bankName]
+        qs:raze {[bankName;diff]
+            @[{key value x}; ` sv `.quiz,bankName,diff; {`symbol$()}]
+         }[bankName;] each `easy`medium`hard;
+        qs!count[qs]#bankName
+     } each names
+ };
+
+.quiz.buildQuestionCategory:{[]
+    .quiz.questionCategory:.quiz.categoryLookup["./banks/"],.quiz.categoryLookup["./banksSyntax/"];
+ };
+
+.quiz.buildQuestionCategory[];
+
+
 .quiz.results:{[]
     h:.quiz.history;
     if[0=count h;
         :h];
-    update runningCorrect:sums result, questionNo:1+til count h, percentCorrect:100f*(sums result)%(1+til count h) from h
+    update runningCorrect:sums result, questionNo:1+til count h, percentCorrect:100f*(sums result)%(1+til count h), category:.quiz.questionCategory question from h
  };
 
 

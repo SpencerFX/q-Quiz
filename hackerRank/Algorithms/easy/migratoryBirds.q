@@ -82,3 +82,17 @@ migratoryBirds:{[arr]
   where t=max t
   };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Counts against a fixed 1-5 ID range directly (as the question's
+/ own notes suggest) instead of grouping by observed value - also
+/ correctly resolves ties to the smallest ID, since ids is already
+/ ascending.
+/ migratoryBirds2 arr
+migratoryBirds2:{[arr]
+  ids:1+til 5;
+  counts:{[arr;id] sum arr=id}[arr;] each ids;
+  ids first where counts=max counts
+ };
+/ =============================================================

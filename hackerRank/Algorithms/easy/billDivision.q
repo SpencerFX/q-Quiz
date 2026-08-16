@@ -106,3 +106,15 @@ billDivision:{[bill;k;b]
   ]
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Excludes Anna's item via a boolean mask instead of index
+/ subtraction, and uses integer div instead of float divide.
+/ billDivision2[bill;k;b]
+billDivision2:{[bill;k;b]
+  mask:(til count bill)<>k;
+  annaShare:(sum bill where mask) div 2;
+  $[annaShare=b; "Bon Appetit"; string b-annaShare]
+ };
+/ =============================================================

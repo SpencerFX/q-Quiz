@@ -8,6 +8,10 @@ window.addEventListener("DOMContentLoaded",function(){
 
     document.getElementById("uploadResume").onclick=uploadResume;
 
+    document.getElementById("uploadAutofillResume").onclick=uploadAndAutofillResume;
+
+    document.getElementById("uploadPhoto").onclick=uploadPhoto;
+
     document.getElementById("addExperience").onclick=addExperience;
 
     document.getElementById("addEducation").onclick=addEducation;
@@ -47,6 +51,8 @@ function applyProfile(p){
     document.getElementById("resumeStatus").textContent=
 
         p.resumeFilename? ("Current resume: "+p.resumeFilename):"No resume uploaded yet.";
+
+    renderPhotoPreview(p);
 
     renderList(
 
@@ -95,6 +101,40 @@ function applyProfile(p){
         removeSkill
 
     );
+
+}
+
+
+
+function renderPhotoPreview(p){
+
+    const container=document.getElementById("photoPreview");
+
+    container.innerHTML="";
+
+    if(p.photoFilename){
+
+        const img=document.createElement("img");
+
+        img.src="/uploads/"+encodeURIComponent(p.photoFilename)+"?t="+Date.now();
+
+        img.alt="Profile picture";
+
+        container.appendChild(img);
+
+    }
+
+    else{
+
+        const placeholder=document.createElement("span");
+
+        placeholder.textContent="No photo uploaded yet.";
+
+        placeholder.className="meta";
+
+        container.appendChild(placeholder);
+
+    }
 
 }
 
@@ -193,6 +233,74 @@ async function uploadResume(){
     formData.append("resume",fileInput.files[0]);
 
     const response=await fetch("/api/profile/resume",{ method:"POST", body:formData });
+
+    const p=await response.json();
+
+    if(response.ok) applyProfile(p);
+
+}
+
+
+
+async function uploadAndAutofillResume(){
+
+    const fileInput=document.getElementById("resumeFile");
+
+    const status=document.getElementById("autofillStatus");
+
+    if(!fileInput.files.length){
+
+        status.textContent="Choose a resume file first.";
+
+        return;
+
+    }
+
+    status.textContent="Reading resume...";
+
+    const formData=new FormData();
+
+    formData.append("resume",fileInput.files[0]);
+
+    const response=await fetch("/api/profile/resume/autofill",{ method:"POST", body:formData });
+
+    const p=await response.json();
+
+    if(!response.ok){
+
+        status.textContent=p.error||"Couldn't auto-fill from that resume.";
+
+        return;
+
+    }
+
+    applyProfile(p);
+
+    const a=p.autofill||{};
+
+    const found=(a.experience||0)+(a.education||0)+(a.links||0)+(a.skills||0);
+
+    status.textContent=found
+
+        ? "Auto-filled "+a.experience+" experience, "+a.education+" education, "+a.links+" link(s), "+a.skills+" skill(s) - review below and remove/edit anything that's off."
+
+        : "Uploaded, but couldn't find recognizable Experience/Education/Links/Skills sections to auto-fill - add them in manually below.";
+
+}
+
+
+
+async function uploadPhoto(){
+
+    const fileInput=document.getElementById("photoFile");
+
+    if(!fileInput.files.length) return;
+
+    const formData=new FormData();
+
+    formData.append("photo",fileInput.files[0]);
+
+    const response=await fetch("/api/profile/photo",{ method:"POST", body:formData });
 
     const p=await response.json();
 

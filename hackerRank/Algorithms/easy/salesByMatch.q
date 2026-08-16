@@ -81,3 +81,12 @@
 / salesByMatch ar
 salesByMatch:{sum floor {x%2}count each group x}
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Integer div per color instead of float-divide-then-floor.
+/ salesByMatch2 ar
+salesByMatch2:{[ar]
+  sum {x div 2} count each group ar
+ };
+/ =============================================================

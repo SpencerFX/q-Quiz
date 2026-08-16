@@ -6,13 +6,48 @@ window.addEventListener("DOMContentLoaded",function(){
 
 
 
+// Elemental-table progression for badges: every 4th milestone rolls the
+// badge on to the next element; the 1-4 stars track how far through the
+// current element's 4 milestones you are. Milestone size is per-category
+// (see BADGE_CATEGORIES) - the Challenges section has far fewer questions
+// than the Multiple Choice banks, so it earns a star every 10 correct
+// instead of every 50.
+const BADGE_ELEMENTS=[
+    ["H","Hydrogen",1],["He","Helium",2],["Li","Lithium",3],["Be","Beryllium",4],
+    ["B","Boron",5],["C","Carbon",6],["N","Nitrogen",7],["O","Oxygen",8],
+    ["F","Fluorine",9],["Ne","Neon",10],["Na","Sodium",11],["Mg","Magnesium",12],
+    ["Al","Aluminium",13],["Si","Silicon",14],["P","Phosphorus",15],["S","Sulfur",16],
+    ["Cl","Chlorine",17],["Ar","Argon",18],["K","Potassium",19],["Ca","Calcium",20]
+];
+
+const BADGE_CATEGORIES=[
+    {key:"MultipleChoice",label:"Multiple Choice",color:"#4fc3f7",milestone:50},
+    {key:"MultipleChoiceSyntax",label:"MC - Syntax",color:"#81c784",milestone:50},
+    {key:"HackerRank",label:"HackerRank",color:"#22c55e",milestone:10},
+    {key:"DiChallenge",label:"AquaQ Challenges",color:"#38bdf8",milestone:10},
+    {key:"Leetcode",label:"leetcode",color:"#fbbf24",milestone:10},
+    {key:"Idioms",label:"qIdioms",color:"#c084fc",milestone:50},
+    {key:"QuantRank",label:"quantRank",color:"#f472b6",milestone:10},
+    {key:"Fundamentals",label:"Fundamentals",color:"#fb923c",milestone:50}
+];
+
+
+
 async function loadProfileView(){
 
     const container=document.getElementById("profileView");
 
-    const response=await fetch("/api/profile");
+    const [profileResponse,badgesResponse]=await Promise.all([
 
-    const p=await response.json();
+        fetch("/api/profile"),
+
+        fetch("/api/profile/badges")
+
+    ]);
+
+    const p=await profileResponse.json();
+
+    const badgeCounts=badgesResponse.ok?await badgesResponse.json():{};
 
     container.innerHTML="";
 
@@ -24,7 +59,11 @@ async function loadProfileView(){
 
     }
 
+    container.appendChild(buildEditProfileButton());
+
     container.appendChild(buildHeader(p));
+
+    container.appendChild(buildBadgesBox(badgeCounts||{}));
 
     container.appendChild(buildPersonalInfo(p));
 
@@ -86,19 +125,151 @@ function renderEmptyState(container){
 
 
 
+function buildAvatar(p,circleClass){
+
+    if(p.photoFilename){
+
+        const img=document.createElement("img");
+
+        img.className=circleClass+" avatarImage";
+
+        img.src="/uploads/"+encodeURIComponent(p.photoFilename);
+
+        img.alt=p.name;
+
+        return img;
+
+    }
+
+    const circle=document.createElement("div");
+
+    circle.className=circleClass;
+
+    circle.textContent=(p.name.trim().charAt(0)||"?").toUpperCase();
+
+    return circle;
+
+}
+
+
+
+function computeBadge(correctCount,milestoneSize){
+
+    const milestones=Math.floor(correctCount/milestoneSize);
+
+    if(milestones===0) return null;
+
+    const elementIndex=Math.min(Math.floor((milestones-1)/4),BADGE_ELEMENTS.length-1);
+
+    const stars=((milestones-1)%4)+1;
+
+    return {element:BADGE_ELEMENTS[elementIndex],stars:stars};
+
+}
+
+
+
+function buildBadgeTile(category,badge){
+
+    const tile=document.createElement("div");
+
+    tile.className=badge?"badgeTile":"badgeTile badgeTileLocked";
+
+    tile.style.setProperty("--badgeColor",category.color);
+
+    tile.title=category.label+(badge?(" — "+badge.element[1]+", "+badge.stars+"/4 stars"):(" — locked ("+category.milestone+" correct to unlock)"));
+
+    const number=document.createElement("div");
+
+    number.className="badgeAtomicNumber";
+
+    number.textContent=badge?badge.element[2]:"";
+
+    const symbol=document.createElement("div");
+
+    symbol.className="badgeSymbol";
+
+    symbol.textContent=badge?badge.element[0]:"?";
+
+    const elementName=document.createElement("div");
+
+    elementName.className="badgeElementName";
+
+    elementName.textContent=badge?badge.element[1]:"Locked";
+
+    const stars=document.createElement("div");
+
+    stars.className="badgeStars";
+
+    stars.textContent=badge?"★".repeat(badge.stars)+"☆".repeat(4-badge.stars):"☆☆☆☆";
+
+    const label=document.createElement("div");
+
+    label.className="badgeLabel";
+
+    label.textContent=category.label;
+
+    tile.appendChild(number);
+
+    tile.appendChild(symbol);
+
+    tile.appendChild(elementName);
+
+    tile.appendChild(stars);
+
+    tile.appendChild(label);
+
+    return tile;
+
+}
+
+
+
+function buildBadgesBox(badgeCounts){
+
+    const box=document.createElement("div");
+
+    box.className="badgesBox";
+
+    const heading=document.createElement("h3");
+
+    heading.className="badgesBoxTitle";
+
+    heading.textContent="Badges";
+
+    box.appendChild(heading);
+
+    const grid=document.createElement("div");
+
+    grid.className="badgesGrid";
+
+    BADGE_CATEGORIES.forEach(function(category){
+
+        const badge=computeBadge(badgeCounts[category.key]||0,category.milestone);
+
+        grid.appendChild(buildBadgeTile(category,badge));
+
+    });
+
+    box.appendChild(grid);
+
+    return box;
+
+}
+
+
+
 function buildHeader(p){
 
     const wrap=document.createElement("div");
 
     wrap.className="profileHeader";
 
-    const avatar=document.createElement("div");
-
-    avatar.className="avatarCircleLarge";
-
-    avatar.textContent=(p.name.trim().charAt(0)||"?").toUpperCase();
+    const avatar=buildAvatar(p,"avatarCircleLarge");
 
     const info=document.createElement("div");
+
+    info.className="profileInfo";
 
     const name=document.createElement("h1");
 
@@ -130,6 +301,18 @@ function buildHeader(p){
 
     }
 
+    wrap.appendChild(avatar);
+
+    wrap.appendChild(info);
+
+    return wrap;
+
+}
+
+
+
+function buildEditProfileButton(){
+
     const editLink=document.createElement("a");
 
     editLink.href="/profile/edit";
@@ -142,13 +325,7 @@ function buildHeader(p){
 
     editLink.appendChild(editButton);
 
-    info.appendChild(editLink);
-
-    wrap.appendChild(avatar);
-
-    wrap.appendChild(info);
-
-    return wrap;
+    return editLink;
 
 }
 

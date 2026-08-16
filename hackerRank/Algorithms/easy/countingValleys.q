@@ -92,3 +92,24 @@ countingValleys:{[p]
   sum (level=0) & (steps=1)
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Imperative simulation tracking altitude step by step, instead
+/ of the vectorised sums/steps approach.
+/ countingValleys2 p
+countingValleys2:{[p]
+  n:count p;
+  alt:0;
+  prevAlt:0;
+  valleys:0;
+  i:0;
+  while[i<n;
+    prevAlt:alt;
+    alt:alt + $[p[i]="U"; 1; -1];
+    if[(prevAlt<0) and alt=0; valleys+:1];
+    i+:1;
+   ];
+  valleys
+ };
+/ =============================================================

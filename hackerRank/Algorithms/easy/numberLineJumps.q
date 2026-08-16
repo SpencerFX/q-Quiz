@@ -90,3 +90,17 @@
 / numberLineJumps[x1;v1;x2;v2]
 numberLineJumps:{[x1;v1;x2;v2] $[(v1>v2) & 0=(x2-x1) mod (v1-v2); `YES; `NO]}
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Brute-force simulation: check every jump count up to the max
+/ possible bound implied by the constraints, rather than solving
+/ the meeting-point equation algebraically.
+/ numberLineJumps2[x1;v1;x2;v2]
+numberLineJumps2:{[x1;v1;x2;v2]
+  jumps:til 10001;
+  pos1:x1+v1*jumps;
+  pos2:x2+v2*jumps;
+  $[any pos1=pos2; `YES; `NO]
+ }
+/ =============================================================

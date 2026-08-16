@@ -17,6 +17,8 @@ window.addEventListener("DOMContentLoaded",function(){
 
         const apiBase=card.dataset.apiBase||"/api/problems";
 
+        const linkBase=apiBase.replace(/^\/api/,"");
+
         loadProblemMeta(apiBase,card.dataset.problem);
 
         loadQuestionInfo(apiBase,card.dataset.problem);
@@ -24,6 +26,16 @@ window.addEventListener("DOMContentLoaded",function(){
         document
             .getElementById("submitCode")
             .onclick=function(){ submitCode(apiBase,card.dataset.problem); };
+
+        const runButton=document.getElementById("runCode");
+
+        if(runButton){
+
+            runButton.onclick=function(){ runCode(apiBase,card.dataset.problem); };
+
+        }
+
+        setupNextButton(apiBase,linkBase,card.dataset.problem);
 
     }
 
@@ -185,6 +197,86 @@ async function loadProblemMeta(apiBase,problem){
             .innerText=match.area+" / "+match.difficulty;
 
     }
+
+}
+
+
+
+async function setupNextButton(apiBase,linkBase,problem){
+
+    const button=document.getElementById("nextProblem");
+
+    if(!button) return;
+
+    const response=await fetch(apiBase);
+
+    const problems=await response.json();
+
+    const index=problems.findIndex(function(p){ return p.problem===problem; });
+
+    const next=(index>=0 && index+1<problems.length)? problems[index+1]:null;
+
+    if(!next){
+
+        button.disabled=true;
+
+        button.title="No more problems in this list";
+
+        return;
+
+    }
+
+    button.onclick=function(){
+
+        window.location=linkBase+"/"+encodeURIComponent(next.problem);
+
+    };
+
+}
+
+
+
+async function runCode(apiBase,problem){
+
+    const code=document.getElementById("code").value;
+
+    const output=document.getElementById("runOutput");
+
+    if(!output) return;
+
+    output.className="runOutput";
+
+    output.innerText="Running...";
+
+    const response=await fetch(
+
+        apiBase+"/"+encodeURIComponent(problem)+"/run",
+
+        {
+
+            method:"POST",
+
+            headers:{ "Content-Type":"application/json" },
+
+            body:JSON.stringify({ code:code })
+
+        }
+
+    );
+
+    const result=await response.json();
+
+    if(!response.ok){
+
+        output.className="runOutput runOutputError";
+
+        output.innerText="Error: "+result.error;
+
+        return;
+
+    }
+
+    output.innerText="Output: "+result.output;
 
 }
 

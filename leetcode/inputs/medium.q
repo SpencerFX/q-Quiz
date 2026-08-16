@@ -18,5 +18,10 @@
         (`addTwoNumbers; (2 4 3; 5 6 4));
         (`longestSubstringWithoutRepeatingCharacters; enlist "abcabcbb");
         (`longestPalindromicSubstring; enlist "babad");
-        (`zigzagConversion; ("PAYPALISHIRING"; 3))
+        (`zigzagConversion; ("PAYPALISHIRING"; 3));
+        (`reverseInteger; enlist 123);
+        (`containerWithMostWater; enlist 1 8 6 2 5 4 8 3 7);
+        (`integerToRoman; enlist 1994);
+        (`threeSum; enlist -1 0 1 2 -1 -4);
+        (`letterCombinationsOfAPhoneNumber; enlist "23")
     );

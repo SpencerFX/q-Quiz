@@ -62,3 +62,12 @@ simpleArraySum:{[arr]
   sum arr
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Plus-reduce fold instead of the sum aggregate.
+/ simpleArraySum2 arr
+simpleArraySum2:{[arr]
+  (+/) arr
+ };
+/ =============================================================

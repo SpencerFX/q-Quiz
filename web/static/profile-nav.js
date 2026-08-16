@@ -28,11 +28,23 @@ async function loadHeaderProfile(){
 
         link.href="/profile";
 
-        const avatar=document.createElement("span");
+        const avatar=p.photoFilename?document.createElement("img"):document.createElement("span");
 
-        avatar.className="avatarCircle";
+        avatar.className=p.photoFilename?"avatarCircle avatarImage":"avatarCircle";
 
-        avatar.textContent=(p.name.trim().charAt(0)||"?").toUpperCase();
+        if(p.photoFilename){
+
+            avatar.src="/uploads/"+encodeURIComponent(p.photoFilename);
+
+            avatar.alt=p.name;
+
+        }
+
+        else{
+
+            avatar.textContent=(p.name.trim().charAt(0)||"?").toUpperCase();
+
+        }
 
         const name=document.createElement("span");
 

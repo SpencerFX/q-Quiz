@@ -75,3 +75,14 @@
 / staircase n
 staircase:{[n] {((x-y)#" "), y#"#"}[n;]each 1+til n};
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Over-builds "n spaces + i hashes" then right-truncates to n
+/ chars with a negative take, instead of computing the pad
+/ length directly.
+/ staircase2 n
+staircase2:{[n]
+  {[n;i] (neg n)#(n#" "),i#"#"}[n;] each 1+til n
+ };
+/ =============================================================

@@ -83,3 +83,18 @@ diagonalDifference:{[x]
   abs d1 - d2
  }
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Indexes each diagonal element directly by position instead of
+/ zipping idx against the rows with each-both.
+/ diagonalDifference2 x
+diagonalDifference2:{[x]
+  n:first x;
+  rows:1_x;
+  idx:til n;
+  d1:sum {[rows;i] rows[i][i]}[rows;] each idx;
+  d2:sum {[rows;n;i] rows[i][(n-1)-i]}[rows;n;] each idx;
+  abs d1-d2
+ }
+/ =============================================================

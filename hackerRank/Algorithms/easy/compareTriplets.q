@@ -81,3 +81,14 @@ compareTriplets:{[a;b]
   (sum a>b; sum a<b)
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Uses signum of the element-wise difference instead of separate
+/ greater-than/less-than comparisons.
+/ compareTriplets2[a;b]
+compareTriplets2:{[a;b]
+  diffs:signum a-b;
+  (sum diffs=1; sum diffs=-1)
+ };
+/ =============================================================

@@ -44,9 +44,27 @@ async function loadDashboard(){
 
     renderAccuracyChart(history);
 
-    renderBreakdownChart(buildTypeGroups(history));
+    renderBreakdownChart(buildTypeGroups(history),"breakdownChart");
+
+    renderBreakdownChart(buildCategoryGroups(history,false),"categoryBreakdownChart");
+
+    renderBreakdownChart(buildCategoryGroups(history,true),"categoryBreakdownSyntaxChart");
 
     renderTable(history);
+
+    loadCompletion();
+
+}
+
+
+
+async function loadCompletion(){
+
+    const response=await fetch("/api/completion");
+
+    const rates=await response.json();
+
+    renderCompletionChart(rates);
 
 }
 
@@ -63,6 +81,37 @@ const TYPE_LABELS={
     Idioms:"Idioms",
 
     DiChallenge:"AquaQ Challenges",
+
+    Leetcode:"leetcode",
+
+    QuantRank:"quantRank"
+
+};
+
+
+
+// Own label set + fixed display order for the completion chart - kept
+// separate from TYPE_LABELS above since that map's wording ("HackerRank",
+// "Idioms") is already relied on by the other charts on this page and
+// this chart's section names ("HackerRank Problems", "qIdioms") differ.
+const COMPLETION_ORDER=[
+    "MultipleChoice","MultipleChoiceSyntax","Idioms","Fundamentals",
+    "DiChallenge","HackerRank","Leetcode","QuantRank"
+];
+
+const COMPLETION_LABELS={
+
+    MultipleChoice:"Multiple Choice",
+
+    MultipleChoiceSyntax:"Multiple Choice - Syntax",
+
+    Idioms:"qIdioms",
+
+    Fundamentals:"Fundamentals",
+
+    DiChallenge:"AquaQ Challenges",
+
+    HackerRank:"HackerRank Problems",
 
     Leetcode:"leetcode",
 
@@ -100,7 +149,83 @@ function buildTypeGroups(history){
 
     });
 
+    // Sort by the displayed label (not the raw questionType key), same
+    // case-insensitive rule as the category charts below, so the axis
+    // reads alphabetically left-to-right rather than in first-seen order.
+    groups.sort(function(a,b){ return a.label.localeCompare(b.label,undefined,{sensitivity:"base"}); });
+
     return groups;
+
+}
+
+
+
+// The "syntax" bank (regular Multiple Choice) is an exact-name match,
+// distinct from the syntaxAdverbs/syntaxJoins/... banks that back the
+// dedicated Multiple Choice - Syntax mode - a prefix check alone would
+// wrongly sort "syntax" itself into the Syntax bucket.
+function isSyntaxBankCategory(category){
+
+    return category!=="syntax" && category.indexOf("syntax")===0;
+
+}
+
+
+
+// Split by the category's own name rather than the row's questionType:
+// a handful of older rows are tagged MultipleChoice but their question
+// now resolves (via today's bank layout) to a syntaxXxx category, so
+// filtering on questionType alone left syntax-named bars showing up in
+// the "without Syntax" chart. Category name is the more trustworthy
+// signal for which chart a row belongs in.
+function buildCategoryGroups(history,syntaxBucket){
+
+    const mcRows=history.filter(function(h){
+
+        if(!h.category) return false;
+
+        return isSyntaxBankCategory(h.category)===syntaxBucket;
+
+    });
+
+    const categories=[];
+
+    mcRows.forEach(function(h){
+
+        if(categories.indexOf(h.category)===-1) categories.push(h.category);
+
+    });
+
+    // Plain .sort() is case-sensitive, so single-letter bank names like
+    // "Q"/"Z" sorted before every lowercase-starting category (eg
+    // "attributes") instead of landing alphabetically among them.
+    categories.sort(function(a,b){ return a.localeCompare(b,undefined,{sensitivity:"base"}); });
+
+    return categories.map(function(category){
+
+        const rows=mcRows.filter(function(h){ return h.category===category; });
+
+        const correct=rows.filter(function(h){ return h.correct; }).length;
+
+        // In the Syntax chart every category shares the "syntax" prefix
+        // (that's the whole point of the bucket), so it's redundant on
+        // every bar - strip it for the axis label only, the underlying
+        // grouping above still uses the full category name.
+        const label=syntaxBucket&&category&&category.indexOf("syntax")===0
+            ? category.slice("syntax".length)
+            :(category||"Uncategorized");
+
+        return {
+
+            label:label,
+
+            correct:correct,
+
+            incorrect:rows.length-correct
+
+        };
+
+    });
 
 }
 
@@ -160,6 +285,71 @@ function renderKpis(history){
 
 
 
+function renderCompletionChart(rates){
+
+    const container=document.getElementById("completionList");
+
+    container.innerHTML="";
+
+    const byType={};
+
+    rates.forEach(function(r){ byType[r.questionType]=r; });
+
+    COMPLETION_ORDER.forEach(function(type){
+
+        const r=byType[type]||{ completed:0, total:0, pct:0 };
+
+        const row=document.createElement("div");
+
+        row.className="completionRow";
+
+        const label=document.createElement("div");
+
+        label.className="completionLabel";
+
+        label.textContent=COMPLETION_LABELS[type]||type;
+
+        const track=document.createElement("div");
+
+        track.className="completionBarTrack";
+
+        const fill=document.createElement("div");
+
+        fill.className="completionBarFill";
+
+        fill.style.width=Math.max(0,Math.min(100,r.pct))+"%";
+
+        track.appendChild(fill);
+
+        track.addEventListener("pointermove",function(evt){
+
+            showTooltip(evt.clientX,evt.clientY,COMPLETION_LABELS[type]||type,
+                r.completed+" / "+r.total+" solved");
+
+        });
+
+        track.addEventListener("pointerleave",hideTooltip);
+
+        const pct=document.createElement("div");
+
+        pct.className="completionPct";
+
+        pct.textContent=r.total? r.pct.toFixed(1)+"%":"—";
+
+        row.appendChild(label);
+
+        row.appendChild(track);
+
+        row.appendChild(pct);
+
+        container.appendChild(row);
+
+    });
+
+}
+
+
+
 function renderTable(history){
 
     const tbody=document.getElementById("historyTableBody");
@@ -170,7 +360,7 @@ function renderTable(history){
 
         const tr=document.createElement("tr");
 
-        [String(row.questionNo),row.question,row.questionType].forEach(function(text){
+        [String(row.questionNo),row.question,row.questionType,row.category||"—"].forEach(function(text){
 
             const td=document.createElement("td");
 
@@ -480,15 +670,19 @@ function renderAccuracyChart(history){
 
 
 
-function renderBreakdownChart(groups){
+function renderBreakdownChart(groups,containerId){
 
     const svgNS="http://www.w3.org/2000/svg";
 
-    const width=820,height=240,padL=40,padR=16,padT=28,padB=40;
+    let width=820;
 
-    const plotW=width-padL-padR, plotH=height-padT-padB;
+    const height=240,padL=40,padR=16,padT=28,padB=40;
 
-    const container=document.getElementById("breakdownChart");
+    let plotW=width-padL-padR;
+
+    const plotH=height-padT-padB;
+
+    const container=document.getElementById(containerId);
 
     container.innerHTML="";
 
@@ -512,11 +706,29 @@ function renderBreakdownChart(groups){
     // of groups don't drift too far apart), instead of a fixed gap
     // that pushed wider group counts past the plot area and clipped
     // the leftmost bars.
-    const groupGap=groups.length>1
+    let groupGap=groups.length>1
         ? Math.min(96,Math.max(16,(plotW-groups.length*groupW)/(groups.length-1)))
         :0;
 
-    const totalW=groups.length*groupW+(groups.length-1)*groupGap;
+    let totalW=groups.length*groupW+(groups.length-1)*groupGap;
+
+    // A category breakdown can have far more groups than the type
+    // breakdown (bank folders vs a handful of quiz sections) - if even
+    // the minimum gap doesn't fit the fixed 820 canvas, grow the canvas
+    // instead of clipping the leftmost bars. The svg is set to 100%
+    // width below, so a wider viewBox just scales everything down to
+    // fit the card rather than overflowing it.
+    if(totalW>plotW){
+
+        groupGap=groups.length>1?16:0;
+
+        totalW=groups.length*groupW+(groups.length-1)*groupGap;
+
+        width=totalW+padL+padR;
+
+        plotW=width-padL-padR;
+
+    }
 
     const startX=padL+(plotW-totalW)/2;
 

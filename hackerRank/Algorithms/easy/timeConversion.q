@@ -89,3 +89,18 @@ timeConversion:{[t]
   hh,1_rest
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Splits on ":" with vs and reconstructs the hour via mod-12
+/ arithmetic instead of manual character slicing.
+/ timeConversion2 t
+timeConversion2:{[t]
+  parts:":" vs 8#t;
+  suffix:-2#t;
+  h:"I"$parts 0;
+  nh:$[suffix~"AM"; h mod 12; 12+h mod 12];
+  hh:-2#"0",string nh;
+  hh,":",parts[1],":",parts[2]
+ };
+/ =============================================================

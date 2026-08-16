@@ -8,8 +8,19 @@ resultsHackerRank: ([] problem:`symbol$(); pass:`boolean$(); actual:(); expected
 / comes back nested, so `$ over it yields a length-1 symbol *list* rather
 / than an atom - unwrap that so every case's result has a uniform shape
 / (the original single-case checker masked this same quirk with min min).
+/ Genuinely nested results (eg 3Sum's list of triplets) are type 0h and
+/ used to blow up inside "sv" below - string on a nested list doesn't
+/ come back as a flat list of strings, so sv had nothing valid to join.
+/ Recursing per-element first (each sublist normalises down to its own
+/ flat string) before joining fixes that without touching the atom/flat
+/ vector path at all, which is the only path every other section's
+/ problems have ever exercised.
+.checker.normaliseStr:{[x]
+    $[0h=type x; " " sv .checker.normaliseStr each x; $[1<count x; " " sv string x; string x]]
+ };
+
 .checker.normalise:{[x]
-    y:$[1<count x; `$" " sv string x; `$string x];
+    y:`$(.checker.normaliseStr x);
     $[-11h=type y; y; first y]
  };
 

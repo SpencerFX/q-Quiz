@@ -82,3 +82,16 @@
 / gradingStudents grades
 gradingStudents:{[x]x + ((5 - x mod 5) * ((x>=38) & (5 - x mod 5) < 3))};
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Per-grade "each" with an explicit if/else, instead of one
+/ vectorised arithmetic expression over the whole array.
+/ gradingStudents2 grades
+gradingStudents2:{[grades]
+  {[g]
+    diff:5 - g mod 5;
+    $[(g>=38) and diff<3; g+diff; g]
+   } each grades
+ };
+/ =============================================================

@@ -107,3 +107,16 @@ breakingTheRecords:{[scores]
   (res 2; res 3)
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Vectorised with running max/min (maxs/mins) instead of a fold:
+/ a score at position i breaks a record iff it beats the running
+/ max/min of everything strictly before it.
+/ breakingTheRecords2 scores
+breakingTheRecords2:{[scores]
+  highCount:sum (1_scores) > -1_maxs scores;
+  lowCount:sum (1_scores) < -1_mins scores;
+  (highCount;lowCount)
+ };
+/ =============================================================

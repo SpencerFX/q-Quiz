@@ -83,3 +83,13 @@ plusMinus:{[arr]
   (posNum % n; negNum % n;zer % n)
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Uses avg over each boolean mask (mean of a boolean vector is
+/ exactly its true-ratio) instead of manual count/n division.
+/ plusMinus2 arr
+plusMinus2:{[arr]
+  (avg arr>0; avg arr<0; avg arr=0)
+ };
+/ =============================================================

@@ -14,5 +14,10 @@
         (`addTwoNumbers; 7 0 8);
         (`longestSubstringWithoutRepeatingCharacters; 3);
         (`longestPalindromicSubstring; "bab");
-        (`zigzagConversion; "PAHNAPLSIIGYIR")
+        (`zigzagConversion; "PAHNAPLSIIGYIR");
+        (`reverseInteger; 321);
+        (`containerWithMostWater; 49);
+        (`integerToRoman; "MCMXCIV");
+        (`threeSum; (-1 -1 2; -1 0 1));
+        (`letterCombinationsOfAPhoneNumber; ("ad";"bd";"cd";"ae";"be";"ce";"af";"bf";"cf"))
     );
