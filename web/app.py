@@ -4,7 +4,7 @@ from dataclasses import asdict
 from flask import Flask, render_template, request, jsonify, send_from_directory, session, redirect, url_for
 from werkzeug.utils import secure_filename
 
-from services import QuizService, JudgeService, ProfileService, DiChallengeService, LeetcodeService, IdiomService, QuantRankService, JobService, FundamentalsService, LeaderboardService
+from services import QuizService, JudgeService, ProfileService, DiChallengeService, LeetcodeService, IdiomService, QuantRankService, JobService, FundamentalsService, LeaderboardService, AssessmentService
 import resume_parser
 
 app = Flask(__name__)
@@ -28,6 +28,7 @@ quantrank = QuantRankService()
 jobs = JobService()
 fundamentals = FundamentalsService()
 leaderboard = LeaderboardService()
+assessment = AssessmentService()
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "uploads")
 ALLOWED_RESUME_EXTENSIONS = {"pdf", "doc", "docx"}
@@ -151,6 +152,52 @@ def api_completion():
     return jsonify(quiz.completion_rates())
 
 
+@app.route("/assessment/<difficulty>")
+def assessment_page(difficulty):
+    if difficulty not in ("easy", "medium", "hard"):
+        return "Unknown difficulty", 404
+    return render_template("assessment.html", difficulty=difficulty)
+
+
+@app.route("/api/assessment/start", methods=["POST"])
+def api_assessment_start():
+    difficulty = request.get_json(force=True).get("difficulty", "")
+    try:
+        result = assessment.start(difficulty)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
+@app.route("/api/assessment/current")
+def api_assessment_current():
+    try:
+        result = assessment.current()
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
+@app.route("/api/assessment/submit", methods=["POST"])
+def api_assessment_submit():
+    answer = request.get_json(force=True).get("answer", "")
+    try:
+        result = assessment.submit(answer)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
+@app.route("/api/assessment/history")
+def api_assessment_history():
+    return jsonify(assessment.history())
+
+
+@app.route("/api/assessment/history/<int:run_id>")
+def api_assessment_detail(run_id):
+    return jsonify(assessment.detail(run_id))
+
+
 @app.route("/problems")
 def problems():
     return render_template("problems.html")
@@ -173,6 +220,15 @@ def api_problem_info(problem):
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
     return jsonify({"info": info})
+
+
+@app.route("/api/problems/<problem>/testcases")
+def api_problem_testcases(problem):
+    try:
+        result = judge.test_cases(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
 
 
 @app.route("/api/problems/<problem>/submit", methods=["POST"])
@@ -219,6 +275,15 @@ def api_aquaq_info(problem):
     return jsonify({"info": info})
 
 
+@app.route("/api/aquaq/<problem>/testcases")
+def api_aquaq_testcases(problem):
+    try:
+        result = aquaq.test_cases(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
 @app.route("/api/aquaq/<problem>/submit", methods=["POST"])
 def api_aquaq_submit(problem):
     code = request.get_json(force=True).get("code", "")
@@ -261,6 +326,15 @@ def api_leetcode_info(problem):
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
     return jsonify({"info": info})
+
+
+@app.route("/api/leetcode/<problem>/testcases")
+def api_leetcode_testcases(problem):
+    try:
+        result = leetcode.test_cases(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
 
 
 @app.route("/api/leetcode/<problem>/submit", methods=["POST"])
@@ -307,6 +381,15 @@ def api_qidioms_info(problem):
     return jsonify({"info": info})
 
 
+@app.route("/api/qidioms/<problem>/testcases")
+def api_qidioms_testcases(problem):
+    try:
+        result = qidioms.test_cases(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
 @app.route("/api/qidioms/<problem>/submit", methods=["POST"])
 def api_qidioms_submit(problem):
     code = request.get_json(force=True).get("code", "")
@@ -349,6 +432,15 @@ def api_quantrank_info(problem):
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
     return jsonify({"info": info})
+
+
+@app.route("/api/quantrank/<problem>/testcases")
+def api_quantrank_testcases(problem):
+    try:
+        result = quantrank.test_cases(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
 
 
 @app.route("/api/quantrank/<problem>/submit", methods=["POST"])
@@ -413,6 +505,15 @@ def api_fundamentals_info(problem):
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
     return jsonify({"info": info})
+
+
+@app.route("/api/fundamentals/<problem>/testcases")
+def api_fundamentals_testcases(problem):
+    try:
+        result = fundamentals.test_cases(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
 
 
 @app.route("/api/fundamentals/<problem>/submit", methods=["POST"])

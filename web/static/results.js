@@ -54,6 +54,186 @@ async function loadDashboard(){
 
     loadCompletion();
 
+    loadAssessmentHistory();
+
+}
+
+
+
+async function loadAssessmentHistory(){
+
+    const response=await fetch("/api/assessment/history");
+
+    const runs=await response.json();
+
+    renderAssessmentHistory(runs);
+
+}
+
+
+
+function renderAssessmentHistory(runs){
+
+    const tbody=document.getElementById("assessmentHistoryBody");
+
+    tbody.innerHTML="";
+
+    if(runs.length===0){
+
+        const tr=document.createElement("tr");
+
+        const td=document.createElement("td");
+
+        td.colSpan=3;
+
+        td.textContent="No assessments completed yet.";
+
+        tr.appendChild(td);
+
+        tbody.appendChild(tr);
+
+        return;
+
+    }
+
+    runs.forEach(function(run){
+
+        const tr=document.createElement("tr");
+
+        tr.className="assessmentRunRow";
+
+        const difficultyTd=document.createElement("td");
+
+        difficultyTd.textContent=run.difficulty.charAt(0).toUpperCase()+run.difficulty.slice(1);
+
+        tr.appendChild(difficultyTd);
+
+        const scoreTd=document.createElement("td");
+
+        scoreTd.className=run.correct===run.total? "resultPass":"";
+
+        scoreTd.textContent=run.correct+" / "+run.total;
+
+        tr.appendChild(scoreTd);
+
+        const dateTd=document.createElement("td");
+
+        dateTd.textContent=new Date(run.ts).toLocaleString();
+
+        tr.appendChild(dateTd);
+
+        tbody.appendChild(tr);
+
+        const detailTr=document.createElement("tr");
+
+        detailTr.className="assessmentDetailRow";
+
+        detailTr.style.display="none";
+
+        const detailTd=document.createElement("td");
+
+        detailTd.colSpan=3;
+
+        detailTr.appendChild(detailTd);
+
+        tbody.appendChild(detailTr);
+
+        // Fetched lazily on first click, then cached on the row so
+        // repeat toggles don't refetch the same run's breakdown.
+        let questions=null;
+
+        tr.addEventListener("click",async function(){
+
+            const isOpen=detailTr.style.display!=="none";
+
+            if(isOpen){
+
+                detailTr.style.display="none";
+
+                return;
+
+            }
+
+            if(questions===null){
+
+                detailTd.textContent="Loading…";
+
+                const response=await fetch("/api/assessment/history/"+run.runId);
+
+                questions=await response.json();
+
+                renderAssessmentDetail(detailTd,questions);
+
+            }
+
+            detailTr.style.display="table-row";
+
+        });
+
+    });
+
+}
+
+
+
+function renderAssessmentDetail(container,questions){
+
+    container.innerHTML="";
+
+    const table=document.createElement("table");
+
+    table.className="historyTable assessmentDetailTable";
+
+    const thead=document.createElement("thead");
+
+    const headRow=document.createElement("tr");
+
+    ["#","Problem","Type","Result"].forEach(function(text){
+
+        const th=document.createElement("th");
+
+        th.textContent=text;
+
+        headRow.appendChild(th);
+
+    });
+
+    thead.appendChild(headRow);
+
+    table.appendChild(thead);
+
+    const detailBody=document.createElement("tbody");
+
+    questions.forEach(function(q){
+
+        const tr=document.createElement("tr");
+
+        [String(q.questionNo),q.problem,q.questionType].forEach(function(text){
+
+            const td=document.createElement("td");
+
+            td.textContent=text;
+
+            tr.appendChild(td);
+
+        });
+
+        const resultTd=document.createElement("td");
+
+        resultTd.className=q.correct? "resultPass":"resultFail";
+
+        resultTd.textContent=q.correct? "✓ Correct":"✗ Incorrect";
+
+        tr.appendChild(resultTd);
+
+        detailBody.appendChild(tr);
+
+    });
+
+    table.appendChild(detailBody);
+
+    container.appendChild(table);
+
 }
 
 

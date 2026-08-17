@@ -35,6 +35,14 @@ window.addEventListener("DOMContentLoaded",function(){
 
         }
 
+        const testCasesButton=document.getElementById("testCasesButton");
+
+        if(testCasesButton){
+
+            testCasesButton.onclick=function(){ runTestCases(apiBase,card.dataset.problem); };
+
+        }
+
         setupNextButton(apiBase,linkBase,card.dataset.problem);
 
     }
@@ -96,9 +104,25 @@ async function loadProblems(apiBase,linkBase){
 
             row.href=linkBase+"/"+encodeURIComponent(p.problem);
 
+            const nameGroup=document.createElement("span");
+
+            nameGroup.className="problemNameGroup";
+
+            const status=document.createElement("span");
+
+            const statusLabel=(p.status||"unattempted").charAt(0).toUpperCase()+(p.status||"unattempted").slice(1);
+
+            status.className="problemStatus status"+statusLabel;
+
+            status.title=statusLabel;
+
             const name=document.createElement("span");
 
             name.textContent=p.problem;
+
+            nameGroup.appendChild(status);
+
+            nameGroup.appendChild(name);
 
             const meta=document.createElement("span");
 
@@ -106,7 +130,7 @@ async function loadProblems(apiBase,linkBase){
 
             meta.textContent=p.area+" / "+p.difficulty;
 
-            row.appendChild(name);
+            row.appendChild(nameGroup);
 
             row.appendChild(meta);
 
@@ -175,6 +199,30 @@ async function loadProblems(apiBase,linkBase){
         buildFilterBar("difficulty",difficulties);
 
     }
+
+    const legend=document.createElement("div");
+
+    legend.className="problemStatusLegend";
+
+    [["statusSolved","Solved"],["statusAttempted","Attempted"],["statusUnattempted","Not attempted"]].forEach(function([cls,label]){
+
+        const item=document.createElement("span");
+
+        item.className="problemStatusLegendItem";
+
+        const dot=document.createElement("span");
+
+        dot.className="problemStatus "+cls;
+
+        item.appendChild(dot);
+
+        item.appendChild(document.createTextNode(label));
+
+        legend.appendChild(item);
+
+    });
+
+    list.parentNode.insertBefore(legend,list);
 
     renderList();
 
@@ -363,5 +411,130 @@ function renderVerdict(verdict,result){
         verdict.appendChild(row);
 
     });
+
+}
+
+
+
+// Benchmarks the section's own reference solution (not the codepad
+// submission) across a few auto-scaled input sizes, so CPU time /
+// space growth is visible - not every section has a reference
+// function to run this against, in which case the backend reports
+// available:false with a reason instead of rows.
+async function runTestCases(apiBase,problem){
+
+    const button=document.getElementById("testCasesButton");
+
+    const container=document.getElementById("testCasesResult");
+
+    if(!container) return;
+
+    if(button) button.disabled=true;
+
+    container.innerHTML="";
+
+    container.textContent="Running...";
+
+    let response;
+
+    try{
+
+        response=await fetch(apiBase+"/"+encodeURIComponent(problem)+"/testcases");
+
+    }
+
+    finally{
+
+        if(button) button.disabled=false;
+
+    }
+
+    const result=await response.json();
+
+    if(!response.ok){
+
+        container.textContent="Error: "+result.error;
+
+        return;
+
+    }
+
+    renderTestCases(container,result);
+
+}
+
+
+
+function renderTestCases(container,result){
+
+    container.innerHTML="";
+
+    if(!result.available){
+
+        const msg=document.createElement("p");
+
+        msg.className="meta";
+
+        msg.textContent=result.reason;
+
+        container.appendChild(msg);
+
+        return;
+
+    }
+
+    const table=document.createElement("table");
+
+    table.className="testCasesTable";
+
+    const thead=document.createElement("thead");
+
+    const headRow=document.createElement("tr");
+
+    ["Scale","Input size","CPU time (ms)","Space (bytes)","Status"].forEach(function(h){
+
+        const th=document.createElement("th");
+
+        th.textContent=h;
+
+        headRow.appendChild(th);
+
+    });
+
+    thead.appendChild(headRow);
+
+    table.appendChild(thead);
+
+    const tbody=document.createElement("tbody");
+
+    result.rows.forEach(function(row){
+
+        const tr=document.createElement("tr");
+
+        [row.scale+"x",row.inputSize,row.timeMs.toFixed(4),row.spaceBytes].forEach(function(v){
+
+            const td=document.createElement("td");
+
+            td.textContent=v;
+
+            tr.appendChild(td);
+
+        });
+
+        const statusTd=document.createElement("td");
+
+        statusTd.className=row.errored? "resultFail":"resultPass";
+
+        statusTd.textContent=row.errored? ("Error: "+row.message):"OK";
+
+        tr.appendChild(statusTd);
+
+        tbody.appendChild(tr);
+
+    });
+
+    table.appendChild(tbody);
+
+    container.appendChild(table);
 
 }

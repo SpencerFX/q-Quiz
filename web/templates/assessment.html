@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Assessment - {{ difficulty|capitalize }}{% endblock %}
+{% block content %}
+<div class="card problemPageCard" id="assessmentCard" data-difficulty="{{ difficulty }}">
+<h1>{{ difficulty|capitalize }} Assessment</h1>
+<p class="meta progress">Question <span id="assessmentIndex">1</span> / <span id="assessmentTotal">10</span> &middot; <span id="assessmentTypeLabel"></span></p>
+
+<div id="mcView">
+<h2 id="questionText">Loading...</h2>
+<div id="answers"></div>
+</div>
+
+<div id="codingView" class="problemColumns">
+<div class="problemInfoColumn">
+<div id="questionInfo" class="questionInfo"></div>
+</div>
+<div class="problemEditorColumn">
+<textarea id="code" rows="18" spellcheck="false" placeholder="{[args] ... }"></textarea>
+<button id="runCode">Run</button>
+</div>
+</div>
+
+<div id="outputConsole" class="outputConsole">
+<div class="outputConsoleLabel">Console</div>
+<div id="runOutput" class="runOutput"></div>
+</div>
+
+<button id="assessmentSubmit">Submit</button>
+
+<div id="assessmentSummary"></div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static',filename='assessment.js') }}"></script>
+{% endblock %}

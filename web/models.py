@@ -20,6 +20,8 @@ class Problem:
 
     difficulty: str
 
+    status: str
+
 
 @dataclass
 class CaseResult:

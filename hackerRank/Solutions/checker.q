@@ -74,7 +74,9 @@ checker:{[problemName; function]
         (`.inputs.algorithms.hard; `.solutions.algorithms.hard);
         (`.inputs.dataStructures.easy; `.solutions.dataStructures.easy);
         (`.inputs.dataStructures.medium; `.solutions.dataStructures.medium);
-        (`.inputs.dataStructures.hard; `.solutions.dataStructures.hard)
+        (`.inputs.dataStructures.hard; `.solutions.dataStructures.hard);
+        (`.inputs.sql.easy; `.solutions.sql.easy);
+        (`.inputs.sql.medium; `.solutions.sql.medium)
     );
 
 confirmCategory:{[problemName]

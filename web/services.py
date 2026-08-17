@@ -1,4 +1,5 @@
 import re
+from datetime import datetime, timedelta
 
 from qclient import QClient
 from models import Problem, JudgeResult, CaseResult, Job, LeaderboardEntry
@@ -10,6 +11,14 @@ _INFO_LINE = re.compile(r'^\s*-1\s+"(.*)";\s*$')
 # diChallenges question files use plain "/ text" comments instead - just
 # strip the leading slash and at most one following space.
 _DI_INFO_LINE = re.compile(r'^/ ?(.*)$')
+
+# q timestamps are nanoseconds since 2000.01.01, not the Unix epoch.
+_Q_EPOCH = datetime(2000, 1, 1)
+
+
+def _decode_q_timestamp(ns):
+
+    return (_Q_EPOCH + timedelta(microseconds=int(ns) / 1000)).isoformat()
 
 
 def _decode(value):
@@ -40,6 +49,29 @@ def _rows(table):
         ]
 
     return list(table)
+
+
+def _test_cases(raw):
+
+    data = {_decode(k): v for k, v in raw.items()}
+
+    result = {"available": bool(data["available"]), "reason": _decode(data["reason"]), "rows": []}
+
+    if result["available"]:
+
+        result["rows"] = [
+            {
+                "scale": int(row["scale"]),
+                "inputSize": int(row["inputSize"]),
+                "timeMs": float(row["timeMs"]),
+                "spaceBytes": int(row["spaceBytes"]),
+                "errored": bool(row["errored"]),
+                "message": _decode(row["message"])
+            }
+            for row in _rows(data["rows"])
+        ]
+
+    return result
 
 
 class QuizService:
@@ -144,7 +176,8 @@ class JudgeService:
             Problem(
                 problem=_decode(row["problem"]),
                 area=_decode(row["area"]),
-                difficulty=_decode(row["difficulty"])
+                difficulty=_decode(row["difficulty"]),
+                status=_decode(row["status"])
             )
             for row in _rows(rows)
         ]
@@ -186,6 +219,10 @@ class JudgeService:
 
         return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
 
+    def test_cases(self, problem):
+
+        return _test_cases(self.q.execute(".web.testCases.forProblem", problem))
+
     def get_info(self, problem):
 
         raw_lines = self.q.execute(".web.problemInfoLines", problem)
@@ -217,7 +254,8 @@ class DiChallengeService:
             Problem(
                 problem=_decode(row["problem"]),
                 area=_decode(row["area"]),
-                difficulty=_decode(row["difficulty"])
+                difficulty=_decode(row["difficulty"]),
+                status=_decode(row["status"])
             )
             for row in _rows(rows)
         ]
@@ -259,6 +297,10 @@ class DiChallengeService:
 
         return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
 
+    def test_cases(self, problem):
+
+        return _test_cases(self.q.execute(".web.testCases.forDiChallenge", problem))
+
     def get_info(self, problem):
 
         raw_lines = self.q.execute(".web.diChallengeInfoLines", problem)
@@ -296,7 +338,8 @@ class LeetcodeService:
             Problem(
                 problem=_decode(row["problem"]),
                 area=_decode(row["area"]),
-                difficulty=_decode(row["difficulty"])
+                difficulty=_decode(row["difficulty"]),
+                status=_decode(row["status"])
             )
             for row in _rows(rows)
         ]
@@ -338,6 +381,10 @@ class LeetcodeService:
 
         return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
 
+    def test_cases(self, problem):
+
+        return _test_cases(self.q.execute(".web.testCases.forLeetcode", problem))
+
     def get_info(self, problem):
 
         raw_lines = self.q.execute(".web.leetcodeInfoLines", problem)
@@ -375,7 +422,8 @@ class IdiomService:
             Problem(
                 problem=_decode(row["problem"]),
                 area=_decode(row["area"]),
-                difficulty=_decode(row["difficulty"])
+                difficulty=_decode(row["difficulty"]),
+                status=_decode(row["status"])
             )
             for row in _rows(rows)
         ]
@@ -417,6 +465,10 @@ class IdiomService:
 
         return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
 
+    def test_cases(self, problem):
+
+        return _test_cases(self.q.execute(".web.testCases.forIdiom", problem))
+
     def get_info(self, problem):
 
         raw_lines = self.q.execute(".web.idiomInfoLines", problem)
@@ -448,7 +500,8 @@ class QuantRankService:
             Problem(
                 problem=_decode(row["problem"]),
                 area=_decode(row["area"]),
-                difficulty=_decode(row["difficulty"])
+                difficulty=_decode(row["difficulty"]),
+                status=_decode(row["status"])
             )
             for row in _rows(rows)
         ]
@@ -489,6 +542,10 @@ class QuantRankService:
         data = {_decode(k): v for k, v in raw.items()}
 
         return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
+
+    def test_cases(self, problem):
+
+        return _test_cases(self.q.execute(".web.testCases.forQuantRank", problem))
 
     def get_info(self, problem):
 
@@ -566,7 +623,8 @@ class FundamentalsService:
             Problem(
                 problem=_decode(row["problem"]),
                 area=_decode(row["area"]),
-                difficulty=_decode(row["difficulty"])
+                difficulty=_decode(row["difficulty"]),
+                status=_decode(row["status"])
             )
             for row in _rows(rows)
         ]
@@ -607,6 +665,10 @@ class FundamentalsService:
         data = {_decode(k): v for k, v in raw.items()}
 
         return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
+
+    def test_cases(self, problem):
+
+        return _test_cases(self.q.execute(".web.testCases.forFundamentals", problem))
 
     def get_info(self, problem):
 
@@ -717,3 +779,79 @@ class ProfileService:
     def remove_skill(self, entry_id):
 
         return self._parse(self.q.execute(".web.profile.removeSkill", entry_id))
+
+
+class AssessmentService:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def _parse(self, raw):
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        if bool(data["finished"]):
+            return {
+                "finished": True,
+                "total": int(data["total"]),
+                "correct": int(data["correct"])
+            }
+
+        result = {
+            "finished": False,
+            "index": int(data["index"]),
+            "total": int(data["total"]),
+            "difficulty": _decode(data["difficulty"]),
+            "kind": _decode(data["kind"]),
+            "questionType": _decode(data["questionType"]),
+            "problem": _decode(data["problem"])
+        }
+
+        if result["kind"] == "mc":
+            result["question"] = _decode(data["question"])
+            result["answers"] = {_decode(k): _decode(v) for k, v in data["answers"].items()}
+
+        return result
+
+    def start(self, difficulty):
+
+        return self._parse(self.q.execute(".web.assessment.start", difficulty))
+
+    def current(self):
+
+        return self._parse(self.q.execute(".web.assessment.current[]"))
+
+    def submit(self, answer):
+
+        return self._parse(self.q.execute(".web.assessment.submit", answer))
+
+    def history(self):
+
+        rows = self.q.execute(".web.assessmentHistory[]")
+
+        return [
+            {
+                "runId": int(row["runId"]),
+                "difficulty": _decode(row["difficulty"]),
+                "correct": int(row["correct"]),
+                "total": int(row["total"]),
+                "ts": _decode_q_timestamp(row["ts"])
+            }
+            for row in _rows(rows)
+        ]
+
+    def detail(self, run_id):
+
+        rows = self.q.execute(".web.assessmentDetail", run_id)
+
+        return [
+            {
+                "questionNo": int(row["questionNo"]),
+                "kind": _decode(row["kind"]),
+                "questionType": _decode(row["questionType"]),
+                "problem": _decode(row["problem"]),
+                "correct": bool(row["correct"])
+            }
+            for row in _rows(rows)
+        ]
