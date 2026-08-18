@@ -1,6 +1,19 @@
 import os
 from dataclasses import asdict
 
+from dotenv import load_dotenv
+
+# Has to run before any of the os.environ.get(...) calls below, and
+# before `from services import ...` (which pulls in config.py's own
+# Q_HOST/Q_PORT env reads) - an explicit path next to this file rather
+# than load_dotenv()'s default upward search, since this app is run
+# from a few different working directories (web/ directly, or
+# scripts/supervisor.py's repo-root cwd). load_dotenv() never
+# overrides a variable that's already set in the environment, so
+# anything exported by hand (or by supervisor.py) still wins over
+# web/.env - see web/.env.example for what goes in it.
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+
 from flask import Flask, render_template, request, jsonify, send_from_directory, session, redirect, url_for
 from werkzeug.utils import secure_filename
 from google.auth.transport import requests as google_auth_requests
@@ -16,8 +29,9 @@ app = Flask(__name__)
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
 # Needed to sign the session cookie that backs the lightweight login below.
-# This is a local dev install with no real accounts yet - swap for a real
-# secret (env-only, never committed) before this goes anywhere multi-user.
+# Real value comes from web/.env (gitignored, see web/.env.example) via
+# load_dotenv() above - this fallback only fires if that file is missing,
+# so it should never actually be reached outside a very first checkout.
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-only-insecure-secret-change-me")
 
 # Google OAuth client ID (not secret - it's embedded in the login page's
