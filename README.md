@@ -26,8 +26,8 @@ python scripts/supervisor.py
 Run from the repo root. This starts both the q server and the
 waitress-served web app (`web/wsgi.py`) as child processes, and restarts
 whichever one exits unexpectedly - closing the gap where a q crash needed
-a manual restart. Logs go to `logs/q.log` and `logs/web.log` (not
-committed). Stop with Ctrl+C.
+a manual restart. Logs go to `logs/q-server.log` and `logs/web-server.log`
+(gitignored, never committed). Stop with Ctrl+C.
 
 Config via env vars, all optional:
 

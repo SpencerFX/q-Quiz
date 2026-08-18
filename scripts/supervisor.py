@@ -50,7 +50,7 @@ def _open_log(name):
 
 def start_q():
 
-    log = _open_log("q.log")
+    log = _open_log("q-server.log")
 
     log.write("\n=== " + _timestamp() + " starting q on port " + Q_PORT + " ===\n")
 
@@ -68,7 +68,7 @@ def start_q():
 
 def start_web():
 
-    log = _open_log("web.log")
+    log = _open_log("web-server.log")
 
     log.write("\n=== " + _timestamp() + " starting web ===\n")
 
