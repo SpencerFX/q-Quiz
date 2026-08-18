@@ -47,5 +47,5 @@ checkDi:{[problemName; function]
     $[min min pass; show"Your solution works!"; show"Please try again."];
     et:.z.p;
     insert[`resultsDiChallenges; (problemName; min min pass; enlist actual; enlist expected; st; et; kind; `easy)];
-    insert[`.quiz.history; (problemName; actual; expected; min min pass; `DiChallenge)];
+    insert[`.quiz.history; (problemName; actual; expected; min min pass; `DiChallenge; .web.currentUser)];
  };

@@ -7,3 +7,5 @@ click==7.1.2
 qPython==2.0.0
 PyPDF2==1.26.0
 python-docx==0.8.11
+google-auth==2.22.0
+waitress==2.0.0

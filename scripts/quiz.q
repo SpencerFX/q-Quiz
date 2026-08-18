@@ -3,7 +3,8 @@
     input:`symbol$();
     correct:`symbol$();
     result:`boolean$();
-    questionType:`symbol$()
+    questionType:`symbol$();
+    user:`symbol$()
  );
 
 / Which multiple-choice bank is currently active - MultipleChoice
@@ -56,7 +57,8 @@
          choice;
          correct;
          choice=correct;
-         .quiz.currentType)];
+         .quiz.currentType;
+         .web.currentUser)];
     / Display result
     if[choice=correct;
         -1 "Correct!";

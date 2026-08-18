@@ -28,6 +28,8 @@ window.addEventListener("DOMContentLoaded",function(){
 
         loadDashboard();
 
+        loadResultsUser();
+
     }
 
 });
@@ -55,6 +57,22 @@ async function loadDashboard(){
     loadCompletion();
 
     loadAssessmentHistory();
+
+}
+
+
+
+async function loadResultsUser(){
+
+    const label=document.getElementById("resultsUser");
+
+    if(!label) return;
+
+    const response=await fetch("/api/session");
+
+    const session=await response.json();
+
+    label.textContent=session.loggedIn? "Results for "+session.handle:"Sign in to attach these results to your name.";
 
 }
 
@@ -254,7 +272,7 @@ const TYPE_LABELS={
 
     MultipleChoice:"Multiple Choice",
 
-    MultipleChoiceSyntax:"Multiple Choice - Syntax",
+    MultipleChoiceSyntax:"Syntax",
 
     HackerRank:"HackerRank",
 
@@ -264,7 +282,11 @@ const TYPE_LABELS={
 
     Leetcode:"leetcode",
 
-    QuantRank:"quantRank"
+    QuantRank:"quantRank",
+
+    Euler:"Project Euler",
+
+    AdventOfCode:"Advent of Code"
 
 };
 
@@ -276,7 +298,7 @@ const TYPE_LABELS={
 // this chart's section names ("HackerRank Problems", "qIdioms") differ.
 const COMPLETION_ORDER=[
     "MultipleChoice","MultipleChoiceSyntax","Idioms","Fundamentals",
-    "DiChallenge","HackerRank","Leetcode","QuantRank"
+    "DiChallenge","HackerRank","Leetcode","QuantRank","Euler","AdventOfCode"
 ];
 
 const COMPLETION_LABELS={
@@ -295,7 +317,11 @@ const COMPLETION_LABELS={
 
     Leetcode:"leetcode",
 
-    QuantRank:"quantRank"
+    QuantRank:"quantRank",
+
+    Euler:"Project Euler",
+
+    AdventOfCode:"Advent of Code"
 
 };
 

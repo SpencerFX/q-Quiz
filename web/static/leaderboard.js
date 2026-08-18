@@ -20,7 +20,16 @@ async function loadLeaderboard(){
 
         const tr=document.createElement("tr");
 
-        [String(e.place),e.handle,String(e.score),String(e.solved),e.accuracy.toFixed(1)+"%"].forEach(function(text){
+        // Places beyond however many real users have any history yet
+        // come back with an empty handle and zeroed stats - show those
+        // as dashes rather than a misleading "0%"/"0".
+        const filled=!!e.handle;
+
+        const cells=filled
+            ? [String(e.place),e.handle,String(e.score),String(e.solved),e.accuracy.toFixed(1)+"%"]
+            : [String(e.place),"—","—","—","—"];
+
+        cells.forEach(function(text){
 
             const td=document.createElement("td");
 
@@ -29,6 +38,8 @@ async function loadLeaderboard(){
             tr.appendChild(td);
 
         });
+
+        if(!filled) tr.className="leaderboardEmptyRow";
 
         tbody.appendChild(tr);
 

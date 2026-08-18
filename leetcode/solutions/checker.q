@@ -51,7 +51,7 @@ checkLeet:{[problemName; function]
     $[result`pass; show"Your solution works!"; show"Please try again."];
     et:.z.p;
     insert[`resultsLeetcode; (problemName; result`pass; result`caseActual; result`caseExpected; st; et; result`difficulty)];
-    insert[`.quiz.history; (problemName; first result`caseActual; first result`caseExpected; result`pass; `Leetcode)];
+    insert[`.quiz.history; (problemName; first result`caseActual; first result`caseExpected; result`pass; `Leetcode; .web.currentUser)];
  };
 
 / checkLeet[`twoSum; twoSum]

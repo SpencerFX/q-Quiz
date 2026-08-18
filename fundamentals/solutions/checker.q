@@ -55,5 +55,5 @@ checkFundamental:{[problemName; function]
     $[pass; show"Your solution works!"; show"Please try again."];
     et:.z.p;
     insert[`resultsFundamentals; (problemName; pass; enlist actualN; enlist expectedN; st; et; kind; difficulty)];
-    insert[`.quiz.history; (problemName; actualN; expectedN; pass; `Fundamentals)];
+    insert[`.quiz.history; (problemName; actualN; expectedN; pass; `Fundamentals; .web.currentUser)];
  };

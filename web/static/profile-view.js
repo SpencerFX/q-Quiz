@@ -20,15 +20,18 @@ const BADGE_ELEMENTS=[
     ["Cl","Chlorine",17],["Ar","Argon",18],["K","Potassium",19],["Ca","Calcium",20]
 ];
 
+// Alphabetical by label, 10 entries -> two 5-item rows (see .badgesGrid).
 const BADGE_CATEGORIES=[
-    {key:"MultipleChoice",label:"Multiple Choice",color:"#4fc3f7",milestone:50},
-    {key:"MultipleChoiceSyntax",label:"MC - Syntax",color:"#81c784",milestone:50},
-    {key:"HackerRank",label:"HackerRank",color:"#22c55e",milestone:10},
+    {key:"AdventOfCode",label:"Advent of Code",color:"#ef4444",milestone:10},
     {key:"DiChallenge",label:"AquaQ Challenges",color:"#38bdf8",milestone:10},
+    {key:"Fundamentals",label:"Fundamentals",color:"#fb923c",milestone:50},
+    {key:"HackerRank",label:"HackerRank",color:"#22c55e",milestone:10},
     {key:"Leetcode",label:"leetcode",color:"#fbbf24",milestone:10},
+    {key:"MultipleChoiceSyntax",label:"MC - Syntax",color:"#81c784",milestone:50},
+    {key:"MultipleChoice",label:"Multiple Choice",color:"#4fc3f7",milestone:50},
+    {key:"Euler",label:"Project Euler",color:"#22d3ee",milestone:10},
     {key:"Idioms",label:"qIdioms",color:"#c084fc",milestone:50},
-    {key:"QuantRank",label:"quantRank",color:"#f472b6",milestone:10},
-    {key:"Fundamentals",label:"Fundamentals",color:"#fb923c",milestone:50}
+    {key:"QuantRank",label:"quantRank",color:"#f472b6",milestone:10}
 ];
 
 

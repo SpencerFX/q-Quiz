@@ -64,7 +64,7 @@ checker:{[problemName; function]
     actualSummary:`$" | " sv string each result`caseActual;
     expectedSummary:`$" | " sv string each result`caseExpected;
     insert[`resultsHackerRank; (problemName; result`pass; enlist actualSummary; enlist expectedSummary; st; et; result`area; result`difficulty)];
-    insert[`.quiz.history; (problemName; actualSummary; expectedSummary; result`pass; `HackerRank)];
+    insert[`.quiz.history; (problemName; actualSummary; expectedSummary; result`pass; `HackerRank; .web.currentUser)];
  };
 
 .checker.ref.dict: (!) . flip raze 2 cut

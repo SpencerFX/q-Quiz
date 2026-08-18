@@ -76,7 +76,7 @@
     insert[`resultsHackerRank; (problemName;result`pass;enlist result`caseActual;enlist result`caseExpected;st;st;result`area;result`difficulty)];
     actualSummary:`$" | " sv string each result`caseActual;
     expectedSummary:`$" | " sv string each result`caseExpected;
-    insert[`.quiz.history; (problemName;actualSummary;expectedSummary;result`pass;`HackerRank)];
+    insert[`.quiz.history; (problemName;actualSummary;expectedSummary;result`pass;`HackerRank;.web.currentUser)];
     result
  };
 
@@ -162,7 +162,7 @@
     q:.quiz.bank .quiz.current;
     correct:q`correct;
     isCorrect:choice=correct;
-    insert[`.quiz.history; (.quiz.current;choice;correct;isCorrect;.quiz.currentType)];
+    insert[`.quiz.history; (.quiz.current;choice;correct;isCorrect;.quiz.currentType;.web.currentUser)];
     .quiz.current:`;
     remaining:(key .quiz.bank) except .web.mcHistory[]`question;
     `correct`correctAnswer`finished!(isCorrect;correct;0=count remaining)
@@ -201,7 +201,7 @@
 / which 0^ also cleans up).
 .web.completionRates:{[]
     solvedK:select completed:count distinct question by questionType from .quiz.history where result;
-    totalTypes:`MultipleChoice`MultipleChoiceSyntax`HackerRank`Idioms`DiChallenge`Leetcode`QuantRank`Fundamentals;
+    totalTypes:`MultipleChoice`MultipleChoiceSyntax`HackerRank`Idioms`DiChallenge`Leetcode`QuantRank`Fundamentals`Euler`AdventOfCode;
     totalCounts:(
         count .quiz.bank;
         count .quiz.bankSyntax;
@@ -210,7 +210,9 @@
         count .web.listDiChallenges[];
         count .web.listLeetcode[];
         count .web.listQuantRank[];
-        count .web.listFundamentals[]
+        count .web.listFundamentals[];
+        count .web.listEuler[];
+        count .web.listAdventOfCode[]
     );
     t:([] questionType:totalTypes; total:totalCounts);
     t:t lj solvedK;
@@ -277,7 +279,7 @@
     pass:actualN=expectedN;
     st:.z.p;
     insert[`resultsDiChallenges; (problemName;pass;enlist actualN;enlist expectedN;st;st;kind;`easy)];
-    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`DiChallenge)];
+    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`DiChallenge;.web.currentUser)];
     `problem`kind`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
         (problemName;kind;`easy;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
  };
@@ -285,6 +287,116 @@
 
 / Run only - raw eval, see .web.runRaw above for why.
 .web.runDiChallenge:.web.runRaw;
+
+
+//====================================================================
+//
+// Project Euler - same shape of wrappers as AquaQ Challenges above,
+// but flat (no kind sub-split): every problem lives directly in
+// .inputs.euler.easy / .solutions.euler.easy, keyed by problem name.
+//====================================================================
+
+.web.listEuler:{[]
+    names:key .inputs.euler.easy;
+    t:([] problem:names; area:count[names]#`euler; difficulty:count[names]#`easy);
+    t:update status:.web.problemStatus[`Euler;problem] from t;
+    / problems are named "problemNNNN" - sort numerically so the list
+    / reads problem0001 .. problem0008 top to bottom, same reasoning as
+    / .web.listDiChallenges' challengeNum sort.
+    problemNum:{[p] "I"$(-4)#string p};
+    t iasc problemNum each t`problem
+ };
+
+
+/ Euler files start with a "/ PROBLEM N ===...===" header line, a few
+/ "/"/"//" comment lines describing the problem, then close with a
+/ lone "/ ===...===" rule before the code starts - reuse that existing
+/ structure rather than adding diChallenges-style "Question Info"/
+/ "Solution Info" markers, so the problem files stay exactly as given.
+.web.eulerInfoLines:{[problemName]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    if[not problemName in key .inputs.euler.easy; '"Unknown problem"];
+    path:`$":euler/questions/",string[problemName],".q";
+    lines:read0 path;
+    endIdx:first where lines like "/ ===*";
+    if[null endIdx; :()];
+    1_ endIdx#lines
+ };
+
+
+.web.judgeEuler:{[problemName;codeStr]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    if[not problemName in key .inputs.euler.easy; '"Unknown problem"];
+    func:@[value; codeStr; {'"Could not parse submission: ",x}];
+    input:.inputs.euler.easy problemName;
+    expected:.solutions.euler.easy problemName;
+    actual:.[func;input;{"Error with ",x}];
+    actualN:.checker.normalise actual;
+    expectedN:.checker.normalise expected;
+    pass:actualN=expectedN;
+    st:.z.p;
+    insert[`resultsEuler; (problemName;pass;enlist actualN;enlist expectedN;st;st)];
+    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`Euler;.web.currentUser)];
+    `problem`pass`caseNo`casePass`caseActual`caseExpected!
+        (problemName;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
+ };
+
+
+/ Run only - raw eval, see .web.runRaw above for why.
+.web.runEuler:.web.runRaw;
+
+
+//====================================================================
+//
+// Advent of Code - same shape of wrappers as Project Euler above:
+// flat, single tier, every problem in .inputs.adventOfCode.easy /
+// .solutions.adventOfCode.easy keyed by problem name. Every dayNN
+// function is a single positional arg (the puzzle input as a list of
+// strings) returning a 2-element (part1;part2) result.
+//====================================================================
+
+.web.listAdventOfCode:{[]
+    names:key .inputs.adventOfCode.easy;
+    t:([] problem:names; area:count[names]#`adventOfCode; difficulty:count[names]#`easy);
+    update status:.web.problemStatus[`AdventOfCode;problem] from t
+ };
+
+
+/ Advent of Code files start with a "/ PUZZLE N ===...===" header
+/ line, a few "/" comment lines describing the problem, then close
+/ with a lone "/ ===...===" rule before the code starts - same
+/ boundary convention as .web.eulerInfoLines.
+.web.adventOfCodeInfoLines:{[problemName]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    if[not problemName in key .inputs.adventOfCode.easy; '"Unknown problem"];
+    path:`$":adventOfCode/questions/",string[problemName],".q";
+    lines:read0 path;
+    endIdx:first where lines like "/ ===*";
+    if[null endIdx; :()];
+    1_ endIdx#lines
+ };
+
+
+.web.judgeAdventOfCode:{[problemName;codeStr]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    if[not problemName in key .inputs.adventOfCode.easy; '"Unknown problem"];
+    func:@[value; codeStr; {'"Could not parse submission: ",x}];
+    input:.inputs.adventOfCode.easy problemName;
+    expected:.solutions.adventOfCode.easy problemName;
+    actual:.[func;input;{"Error with ",x}];
+    actualN:.checker.normalise actual;
+    expectedN:.checker.normalise expected;
+    pass:actualN=expectedN;
+    st:.z.p;
+    insert[`resultsAdventOfCode; (problemName;pass;enlist actualN;enlist expectedN;st;st)];
+    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`AdventOfCode;.web.currentUser)];
+    `problem`pass`caseNo`casePass`caseActual`caseExpected!
+        (problemName;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
+ };
+
+
+/ Run only - raw eval, see .web.runRaw above for why.
+.web.runAdventOfCode:.web.runRaw;
 
 
 //====================================================================
@@ -341,7 +453,7 @@
     pass:actualN=expectedN;
     st:.z.p;
     insert[`resultsLeetcode; (problemName;pass;enlist actualN;enlist expectedN;st;st;difficulty)];
-    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`Leetcode)];
+    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`Leetcode;.web.currentUser)];
     `problem`area`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
         (problemName;`leetcode;difficulty;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
  };
@@ -438,7 +550,7 @@
     st:.z.p;
     problemSlug:$[-11h=type problemSlug; problemSlug; `$problemSlug];
     insert[`resultsIdioms; (problemSlug;pass;enlist actualN;enlist expectedN;st;st;topic;`easy)];
-    insert[`.quiz.history; (problemSlug;actualN;expectedN;pass;`Idioms)];
+    insert[`.quiz.history; (problemSlug;actualN;expectedN;pass;`Idioms;.web.currentUser)];
     `problem`area`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
         (problemSlug;topic;`easy;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
  };
@@ -517,7 +629,7 @@
     pass:actualN=expectedN;
     st:.z.p;
     insert[`resultsQuantRank; (problemName;pass;enlist actualN;enlist expectedN;st;st;`probability;difficulty)];
-    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`QuantRank)];
+    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`QuantRank;.web.currentUser)];
     `problem`area`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
         (problemName;`probability;difficulty;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
  };
@@ -540,12 +652,34 @@
 
 //====================================================================
 //
-// Leaderboard - a flat, read-only, hypothetical listing (no grading,
-// no per-row detail page) seeded from leaderboard/leaderboard.q, same
-// shape as Jobs above.
+// Leaderboard - real standings derived from .quiz.history's user
+// column (see .web.currentUser / web/qclient.py), not the fictional
+// seed data leaderboard/leaderboard.q used to hold. Ranked by score
+// (total correct submissions, repeats included) descending; "solved"
+// is distinct correctly-answered questions, which can be lower than
+// score if the same question was answered correctly more than once.
+// Rows with no signed-in user attached are excluded entirely (they'd
+// all collapse into one bogus "anonymous" entry otherwise). Always
+// returns exactly 10 rows - if fewer than 10 real users have any
+// history yet, the remaining places are padded with an empty handle
+// and zeroed stats, which .web.leaderboard's caller (web/services.py)
+// renders as dashes.
 //====================================================================
 
-.web.listLeaderboard:{[] .leaderboard.data };
+.web.listLeaderboard:{[]
+    hist:select from .quiz.history where not user=`;
+    byUser:select score:sum result, solved:count distinct question where result, total:count i by user from hist;
+    byUser:update accuracy:100f*score%total from byUser;
+    t:`score xdesc 0!byUser;
+    t:$[10<count t; 10#t; t];
+    padCount:10-count t;
+    padded:$[padCount>0;
+        t,([] user:padCount#`; score:padCount#0; solved:padCount#0; total:padCount#0; accuracy:padCount#0f);
+        t
+     ];
+    ranked:update place:1+til count padded from padded;
+    select place, handle:user, score, solved, accuracy from ranked
+ };
 
 
 //====================================================================
@@ -610,7 +744,7 @@
     pass:actualN=expectedN;
     st:.z.p;
     insert[`resultsFundamentals; (problemName;pass;enlist actualN;enlist expectedN;st;st;kind;difficulty)];
-    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`Fundamentals)];
+    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`Fundamentals;.web.currentUser)];
     `problem`area`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
         (problemName;kind;difficulty;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
  };
@@ -758,7 +892,7 @@
     if[not choice in `a`b`c`d; '"Answer must be one of a, b, c or d"];
     correct:(.assessment.mcBank[] name)`correct;
     isCorrect:choice=correct;
-    insert[`.quiz.history; (name;choice;correct;isCorrect;`MultipleChoice)];
+    insert[`.quiz.history; (name;choice;correct;isCorrect;`MultipleChoice;.web.currentUser)];
     isCorrect
  };
 
@@ -905,6 +1039,17 @@
     .web.testCases.extractFuncName read0 path
  };
 
+/ No comment-scanning needed here (unlike the funcName helpers above) -
+/ every euler problem's solve function is deterministically named
+/ ".<problemName>.solve" by euler/scripts/init.q's namespaced load, so
+/ the qualified name can just be built directly.
+.web.testCases.eulerFuncName:{[problemName] `$".",string[problemName],".solve" };
+
+/ Every Advent of Code problem's function is named exactly after the
+/ problem itself (day01, day02, ...), same reasoning as
+/ .web.testCases.hackerRankFuncName.
+.web.testCases.adventOfCodeFuncName:{[problemName] problemName };
+
 .web.testCases.quantRankFuncName:{[problemName]
     path:.web.quantRankQuestionPath problemName;
     .web.testCases.extractFuncName read0 path
@@ -993,6 +1138,26 @@
     func:@[value; funcName; {(::)}];
     if[100h<>type func; :.web.testCases.notAvailable["No reference function could be located for this problem"]];
     input:.inputs.diChallenges.easy problemName;
+    `available`reason`rows!(1b;"";.web.testCases.run[func;input])
+ };
+
+.web.testCases.forEuler:{[problemName]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    if[not problemName in key .inputs.euler.easy; '"Unknown problem"];
+    funcName:.web.testCases.eulerFuncName problemName;
+    func:@[value; funcName; {(::)}];
+    if[100h<>type func; :.web.testCases.notAvailable["No reference function could be located for this problem"]];
+    input:.inputs.euler.easy problemName;
+    `available`reason`rows!(1b;"";.web.testCases.run[func;input])
+ };
+
+.web.testCases.forAdventOfCode:{[problemName]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    if[not problemName in key .inputs.adventOfCode.easy; '"Unknown problem"];
+    funcName:.web.testCases.adventOfCodeFuncName problemName;
+    func:@[value; funcName; {(::)}];
+    if[100h<>type func; :.web.testCases.notAvailable["No reference function could be located for this problem"]];
+    input:.inputs.adventOfCode.easy problemName;
     `available`reason`rows!(1b;"";.web.testCases.run[func;input])
  };
 

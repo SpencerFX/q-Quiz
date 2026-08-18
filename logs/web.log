@@ -1,0 +1,5 @@
+
+=== 2026-08-18 21:43:05 starting web ===
+C:\Users\giant\AppData\Local\Programs\Python\Python36\lib\site-packages\requests\__init__.py:104: RequestsDependencyWarning: urllib3 (1.26.20) or chardet (5.0.0)/charset_normalizer (2.0.12) doesn't match a supported version!
+  RequestsDependencyWarning)
+[autosave] started, saving every 300s

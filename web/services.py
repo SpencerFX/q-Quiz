@@ -12,6 +12,10 @@ _INFO_LINE = re.compile(r'^\s*-1\s+"(.*)";\s*$')
 # strip the leading slash and at most one following space.
 _DI_INFO_LINE = re.compile(r'^/ ?(.*)$')
 
+# euler question files mix single "/ " and double "// " comment markers
+# within the same problem statement - strip one or two leading slashes.
+_EULER_INFO_LINE = re.compile(r'^/{1,2} ?(.*)$')
+
 # q timestamps are nanoseconds since 2000.01.01, not the Unix epoch.
 _Q_EPOCH = datetime(2000, 1, 1)
 
@@ -318,6 +322,174 @@ class DiChallengeService:
                 continue
 
             match = _DI_INFO_LINE.match(decoded)
+
+            text_lines.append(match.group(1) if match else decoded)
+
+        return "\n".join(text_lines)
+
+
+class EulerService:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def list_problems(self):
+
+        rows = self.q.execute(".web.listEuler[]")
+
+        return [
+            Problem(
+                problem=_decode(row["problem"]),
+                area=_decode(row["area"]),
+                difficulty=_decode(row["difficulty"]),
+                status=_decode(row["status"])
+            )
+            for row in _rows(rows)
+        ]
+
+    def submit(self, problem, code):
+
+        raw = self.q.execute(".web.judgeEuler", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        cases = [
+            CaseResult(
+                case_no=int(case_no),
+                passed=bool(passed),
+                actual=_decode(actual),
+                expected=_decode(expected)
+            )
+            for case_no, passed, actual, expected in zip(
+                data["caseNo"],
+                data["casePass"],
+                _decode_list(data["caseActual"]),
+                _decode_list(data["caseExpected"])
+            )
+        ]
+
+        return JudgeResult(
+            problem=_decode(data["problem"]),
+            area="euler",
+            difficulty="easy",
+            passed=bool(data["pass"]),
+            cases=cases
+        )
+
+    def run(self, problem, code):
+
+        raw = self.q.execute(".web.runEuler", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
+
+    def test_cases(self, problem):
+
+        return _test_cases(self.q.execute(".web.testCases.forEuler", problem))
+
+    def get_info(self, problem):
+
+        raw_lines = self.q.execute(".web.eulerInfoLines", problem)
+
+        text_lines = []
+
+        for raw_line in raw_lines:
+
+            decoded = _decode(raw_line)
+
+            if decoded.strip() == "":
+
+                text_lines.append("")
+
+                continue
+
+            match = _EULER_INFO_LINE.match(decoded)
+
+            text_lines.append(match.group(1) if match else decoded)
+
+        return "\n".join(text_lines)
+
+
+class AdventOfCodeService:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def list_problems(self):
+
+        rows = self.q.execute(".web.listAdventOfCode[]")
+
+        return [
+            Problem(
+                problem=_decode(row["problem"]),
+                area=_decode(row["area"]),
+                difficulty=_decode(row["difficulty"]),
+                status=_decode(row["status"])
+            )
+            for row in _rows(rows)
+        ]
+
+    def submit(self, problem, code):
+
+        raw = self.q.execute(".web.judgeAdventOfCode", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        cases = [
+            CaseResult(
+                case_no=int(case_no),
+                passed=bool(passed),
+                actual=_decode(actual),
+                expected=_decode(expected)
+            )
+            for case_no, passed, actual, expected in zip(
+                data["caseNo"],
+                data["casePass"],
+                _decode_list(data["caseActual"]),
+                _decode_list(data["caseExpected"])
+            )
+        ]
+
+        return JudgeResult(
+            problem=_decode(data["problem"]),
+            area="adventOfCode",
+            difficulty="easy",
+            passed=bool(data["pass"]),
+            cases=cases
+        )
+
+    def run(self, problem, code):
+
+        raw = self.q.execute(".web.runAdventOfCode", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
+
+    def test_cases(self, problem):
+
+        return _test_cases(self.q.execute(".web.testCases.forAdventOfCode", problem))
+
+    def get_info(self, problem):
+
+        raw_lines = self.q.execute(".web.adventOfCodeInfoLines", problem)
+
+        text_lines = []
+
+        for raw_line in raw_lines:
+
+            decoded = _decode(raw_line)
+
+            if decoded.strip() == "":
+
+                text_lines.append("")
+
+                continue
+
+            match = _EULER_INFO_LINE.match(decoded)
 
             text_lines.append(match.group(1) if match else decoded)
 

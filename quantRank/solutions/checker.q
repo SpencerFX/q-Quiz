@@ -42,7 +42,7 @@ checkQuant:{[problemName; function]
     $[pass; show"Your solution works!"; show"Please try again."];
     et:.z.p;
     insert[`resultsQuantRank; (problemName; pass; enlist actualN; enlist expectedN; st; et; `probability; difficulty)];
-    insert[`.quiz.history; (problemName; actualN; expectedN; pass; `QuantRank)];
+    insert[`.quiz.history; (problemName; actualN; expectedN; pass; `QuantRank; .web.currentUser)];
  };
 
 / checkQuant[`noWomenAtTableA; probNoWomen]

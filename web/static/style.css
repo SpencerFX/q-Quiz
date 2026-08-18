@@ -1036,6 +1036,12 @@ textarea{
 
 }
 
+.leaderboardEmptyRow td{
+
+    color:#666;
+
+}
+
 .assessmentRunRow{
 
     cursor:pointer;
@@ -1161,7 +1167,7 @@ textarea{
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fill,minmax(84px,1fr));
+    grid-template-columns:repeat(5,1fr);
 
     gap:10px;
 

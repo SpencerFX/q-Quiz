@@ -3,8 +3,10 @@ from dataclasses import asdict
 
 from flask import Flask, render_template, request, jsonify, send_from_directory, session, redirect, url_for
 from werkzeug.utils import secure_filename
+from google.auth.transport import requests as google_auth_requests
+from google.oauth2 import id_token as google_id_token
 
-from services import QuizService, JudgeService, ProfileService, DiChallengeService, LeetcodeService, IdiomService, QuantRankService, JobService, FundamentalsService, LeaderboardService, AssessmentService
+from services import QuizService, JudgeService, ProfileService, DiChallengeService, LeetcodeService, IdiomService, QuantRankService, JobService, FundamentalsService, LeaderboardService, AssessmentService, EulerService, AdventOfCodeService
 import resume_parser
 
 app = Flask(__name__)
@@ -18,6 +20,14 @@ app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 # secret (env-only, never committed) before this goes anywhere multi-user.
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-only-insecure-secret-change-me")
 
+# Google OAuth client ID (not secret - it's embedded in the login page's
+# JS) from a Google Cloud "OAuth client ID" credential of type "Web
+# application". Only the ID is needed since sign-in uses Google Identity
+# Services' ID-token flow (verified server-side below), not the
+# authorization-code flow, so there's no client secret to manage.
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
+GOOGLE_REQUEST = google_auth_requests.Request()
+
 quiz = QuizService()
 judge = JudgeService()
 profile = ProfileService()
@@ -29,6 +39,8 @@ jobs = JobService()
 fundamentals = FundamentalsService()
 leaderboard = LeaderboardService()
 assessment = AssessmentService()
+euler = EulerService()
+adventOfCode = AdventOfCodeService()
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "uploads")
 ALLOWED_RESUME_EXTENSIONS = {"pdf", "doc", "docx"}
@@ -59,7 +71,7 @@ def about():
 def login_page():
     if session.get("user_handle"):
         return redirect(url_for("index"))
-    return render_template("login.html")
+    return render_template("login.html", google_client_id=GOOGLE_CLIENT_ID)
 
 
 @app.route("/login", methods=["POST"])
@@ -74,6 +86,8 @@ def login_submit():
 @app.route("/logout")
 def logout():
     session.pop("user_handle", None)
+    session.pop("user_email", None)
+    session.pop("google_sub", None)
     return redirect(url_for("index"))
 
 
@@ -85,14 +99,41 @@ def api_session():
 
 @app.route("/auth/google")
 def auth_google_stub():
-    # No Google Cloud OAuth client has been provisioned for this app yet -
-    # this endpoint exists so the "Sign in with Google" button on /login
-    # has something real to call and can explain why it doesn't work yet,
-    # instead of failing silently. Wire this up to Authlib/Flask-Dance once
-    # GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET are available.
+    # Reached only if the Google button is clicked without GOOGLE_CLIENT_ID
+    # configured (the login page falls back to this instead of rendering
+    # Google's real sign-in button in that case).
     return jsonify({
-        "error": "Google sign-in isn't configured yet - set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to enable it. Use the display name field below for now."
+        "error": "Google sign-in isn't configured yet - set GOOGLE_CLIENT_ID to enable it. Use the display name field below for now."
     }), 501
+
+
+@app.route("/api/auth/google", methods=["POST"])
+def api_auth_google():
+    # Google Identity Services (the "Sign in with Google" button rendered
+    # on /login) hands the page a signed ID token JWT after the user
+    # authenticates with Google - the page posts that token here as
+    # {"credential": "..."} and this verifies it server-side (signature,
+    # expiry, audience==our client ID, issuer==Google) before trusting any
+    # of the claims inside it. No client secret involved: verifying an ID
+    # token only needs the public client ID, unlike the authorization-code
+    # exchange flow.
+    if not GOOGLE_CLIENT_ID:
+        return jsonify({"error": "Google sign-in isn't configured yet."}), 501
+
+    credential = request.get_json(force=True).get("credential", "")
+    if not credential:
+        return jsonify({"error": "Missing credential."}), 400
+
+    try:
+        payload = google_id_token.verify_oauth2_token(credential, GOOGLE_REQUEST, GOOGLE_CLIENT_ID)
+    except ValueError as exc:
+        return jsonify({"error": "Could not verify Google sign-in: " + str(exc)}), 401
+
+    handle = payload.get("name") or payload.get("email") or "Google user"
+    session["user_handle"] = handle[:40]
+    session["user_email"] = payload.get("email")
+    session["google_sub"] = payload.get("sub")
+    return jsonify({"loggedIn": True, "handle": session["user_handle"]})
 
 
 @app.route("/auth/linkedin")
@@ -299,6 +340,112 @@ def api_aquaq_run(problem):
     code = request.get_json(force=True).get("code", "")
     try:
         result = aquaq.run(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
+@app.route("/euler")
+def euler_list():
+    return render_template("euler.html")
+
+
+@app.route("/api/euler")
+def api_euler_list():
+    return jsonify([p.__dict__ for p in euler.list_problems()])
+
+
+@app.route("/euler/<problem>")
+def euler_detail(problem):
+    return render_template("eulerProblem.html", problem=problem)
+
+
+@app.route("/api/euler/<problem>/info")
+def api_euler_info(problem):
+    try:
+        info = euler.get_info(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify({"info": info})
+
+
+@app.route("/api/euler/<problem>/testcases")
+def api_euler_testcases(problem):
+    try:
+        result = euler.test_cases(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
+@app.route("/api/euler/<problem>/submit", methods=["POST"])
+def api_euler_submit(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = euler.submit(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(asdict(result))
+
+
+@app.route("/api/euler/<problem>/run", methods=["POST"])
+def api_euler_run(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = euler.run(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
+@app.route("/adventOfCode")
+def advent_of_code_list():
+    return render_template("adventOfCode.html")
+
+
+@app.route("/api/adventOfCode")
+def api_advent_of_code_list():
+    return jsonify([p.__dict__ for p in adventOfCode.list_problems()])
+
+
+@app.route("/adventOfCode/<problem>")
+def advent_of_code_detail(problem):
+    return render_template("adventOfCodeProblem.html", problem=problem)
+
+
+@app.route("/api/adventOfCode/<problem>/info")
+def api_advent_of_code_info(problem):
+    try:
+        info = adventOfCode.get_info(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify({"info": info})
+
+
+@app.route("/api/adventOfCode/<problem>/testcases")
+def api_advent_of_code_testcases(problem):
+    try:
+        result = adventOfCode.test_cases(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
+@app.route("/api/adventOfCode/<problem>/submit", methods=["POST"])
+def api_advent_of_code_submit(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = adventOfCode.submit(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(asdict(result))
+
+
+@app.route("/api/adventOfCode/<problem>/run", methods=["POST"])
+def api_advent_of_code_run(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = adventOfCode.run(problem, code)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
     return jsonify(result)
@@ -768,8 +915,15 @@ def api_remove_skill(entry_id):
 
 
 if __name__ == "__main__":
-    app.run(
-        host="127.0.0.1",
-        port=8000,
-        debug=True
-    )
+    # Werkzeug's dev server (with the reloader/debugger) is still handy for
+    # active local iteration - opt into it explicitly with FLASK_DEBUG=1.
+    # The default is the same waitress-based production server wsgi.py
+    # uses, so `python app.py` and `python wsgi.py` behave the same way
+    # unless you ask for debug mode.
+    if os.environ.get("FLASK_DEBUG") == "1":
+        app.run(host="127.0.0.1", port=8000, debug=True)
+    else:
+        from waitress import serve
+        import autosave
+        autosave.start()
+        serve(app, host="127.0.0.1", port=8000)
