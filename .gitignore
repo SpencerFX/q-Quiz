@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Runtime logs (scripts/supervisor.py) - regenerated every run
+logs/
+*.log
+
+# User-uploaded files (web/app.py's resume/photo upload routes)
+web/uploads/*
+!web/uploads/.gitkeep
+
+# Secrets / local config - see README's "Running in production" section
+# and k8s/base/secret.example.yaml for how these should actually be
+# supplied instead
+.env
+*.env
+
+# kdb+ license and any licensed Linux build placed here per k8s/README.md -
+# never commit either, the binary isn't freely redistributable and the
+# license is per-installation
+docker/kdb/
+*.lic
+
+# Editor / OS cruft
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
