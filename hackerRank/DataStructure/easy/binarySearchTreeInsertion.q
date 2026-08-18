@@ -1,76 +1,76 @@
-/ Question Info ===============================================
-/ Binary Search Tree Insertion
-
-/ You are given the root of a Binary Search Tree (BST) and a value
-/ to insert into the tree.
-
-/ A Binary Search Tree has the following properties:
-/ - The left subtree of a node contains only values less than the node's value
-/ - The right subtree contains only values greater than the node's value
-/ - Both left and right subtrees are also BSTs
-
-/ Each node contains:
-/ - data: integer value
-/ - left: reference to left child (or null)
-/ - right: reference to right child (or null)
-
-/ Task:
-/ - Insert the given value into the BST
-/ - Maintain the BST property
-/ - Return the root of the updated tree
-
-/ Example:
-/ Input Tree:
-/        4
-/       / \
-/      2   7
-/     / \
-/    1   3
-
-/ Insert: 6
-
-/ Result:
-/        4
-/       / \
-/      2   7
-/     / \  /
-/    1   3 6
-
-/ Function Description:
-/ insert takes:
-/   - root: reference to the root node of the BST
-/   - data: integer value to insert
-
-/ Returns:
-/   - reference to the root of the updated BST
-
-/ Input Format:
-/ - First line: integer t (number of nodes)
-/ - Next t lines: each line contains an integer to insert
-
-/ Constraints:
-/ - 1 ≤ t ≤ 1000
-/ - 0 ≤ data ≤ 1000
-
-/ Notes:
-/ - If the tree is empty, the new node becomes the root
-/ - Traverse the tree:
-/     - Go left if data is less than current node
-/     - Go right if data is greater than current node
-/ - Insert at the correct null position
-
-/ Goal:
-/ - Maintain BST properties during insertion
-/ - Return the updated tree structure
-/ =============================================================
-
-
-/ Input Info ==================================================
-/root:();
-/vals:4 2 7 1 3 6;
-/binarySearchTreeInsertion/[root;vals]
-/ treeLevelOrderTraversal binarySearchTreeInsertion/[root;vals];
-/ =============================================================
+//====================================================================
+// Binary Search Tree Insertion
+//
+// Displays the HackerRank problem statement.
+//
+// Usage:
+//      .quiz.hackerRank.dataStructures.binarySearchTreeInsertion.info[]
+//====================================================================
+.quiz.hackerRank.dataStructures.binarySearchTreeInsertion.info:{
+    -1 "/Question Info ===============================================";
+    -1 "/";
+    -1 "Binary Search Tree Insertion";
+    -1 "";
+    -1 "You are given the root of a Binary Search Tree (BST) and a value";
+    -1 "to insert into the tree.";
+    -1 "";
+    -1 "A Binary Search Tree has the following properties:";
+    -1 "- The left subtree of a node contains only values less than the node's value";
+    -1 "- The right subtree contains only values greater than the node's value";
+    -1 "- Both left and right subtrees are also BSTs";
+    -1 "";
+    -1 "Each node contains:";
+    -1 "- data: integer value";
+    -1 "- left: reference to left child (or null)";
+    -1 "- right: reference to right child (or null)";
+    -1 "";
+    -1 "Task:";
+    -1 "- Insert the given value into the BST";
+    -1 "- Maintain the BST property";
+    -1 "- Return the root of the updated tree";
+    -1 "";
+    -1 "Example:";
+    -1 "Insert values 4 2 7 1 3 6 in order into an empty tree.";
+    -1 "";
+    -1 "Result (level order):";
+    -1 "4 2 7 1 3 6";
+    -1 "";
+    -1 "Function Description:";
+    -1 "binarySearchTreeInsertion takes:";
+    -1 "  - root: reference to the root node of the BST (empty tree to start)";
+    -1 "  - vals: array of integers to insert in order";
+    -1 "";
+    -1 "Returns:";
+    -1 "  - the resulting tree's values in level order";
+    -1 "";
+    -1 "Input Format:";
+    -1 "- First line: integer t (number of values to insert)";
+    -1 "- Next t lines: each line contains an integer to insert";
+    -1 "";
+    -1 "Constraints:";
+    -1 "- 1 <= t <= 1000";
+    -1 "- 0 <= data <= 1000";
+    -1 "";
+    -1 "Notes:";
+    -1 "- If the tree is empty, the new node becomes the root";
+    -1 "- Traverse the tree:";
+    -1 "    - Go left if data is less than current node";
+    -1 "    - Go right if data is greater than current node";
+    -1 "- Insert at the correct null position";
+    -1 "";
+    -1 "Goal:";
+    -1 "- Maintain BST properties during insertion";
+    -1 "- Return the updated tree structure";
+    -1 "/";
+    -1 "/=============================================================";
+    -1 "";
+    -1 "/ Input Info ==================================================";
+    -1 "/";
+    -1 "root:();";
+    -1 "vals:4 2 7 1 3 6;";
+    -1 "/";
+    -1 "/=============================================================";
+ };
 
 
 / Solution Info ===============================================

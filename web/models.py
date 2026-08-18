@@ -9,3 +9,71 @@ class Question:
     answers: dict
 
     correct: str
+
+
+@dataclass
+class Problem:
+
+    problem: str
+
+    area: str
+
+    difficulty: str
+
+    status: str
+
+
+@dataclass
+class CaseResult:
+
+    case_no: int
+
+    passed: bool
+
+    actual: str
+
+    expected: str
+
+
+@dataclass
+class JudgeResult:
+
+    problem: str
+
+    area: str
+
+    difficulty: str
+
+    passed: bool
+
+    cases: list
+
+
+@dataclass
+class Job:
+
+    id: int
+
+    title: str
+
+    company: str
+
+    country: str
+
+    location: str
+
+    description: str
+
+
+@dataclass
+class LeaderboardEntry:
+
+    place: int
+
+    handle: str
+
+    score: int
+
+    solved: int
+
+    accuracy: float

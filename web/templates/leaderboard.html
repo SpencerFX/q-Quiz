@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard{% endblock %}
+{% block content %}
+<div class="card dashboardCard">
+<h1>Leaderboard</h1>
+<p class="meta">Ranked by total correct submissions, from everyone who's signed in and answered something. Open slots (if fewer than 10 people have any history yet) show as dashes.</p>
+<div class="tableContainer">
+<table class="historyTable">
+<thead>
+<tr>
+<th>#</th>
+<th>Handle</th>
+<th>Score</th>
+<th>Solved</th>
+<th>Accuracy</th>
+</tr>
+</thead>
+<tbody id="leaderboardBody"></tbody>
+</table>
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static',filename='leaderboard.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,26 @@
+# Placeholder host/class - replace q-quiz.example.com with a real
+# domain and ingressClassName with whatever your cluster actually runs
+# (nginx here as the common default). TLS isn't set up - a real
+# deployment needs a cert (cert-manager + Let's Encrypt is the usual
+# path) before this is actually safe to put the Google sign-in flow
+# behind; Google's own Identity Services requires HTTPS in production
+# (localhost is a documented exception, which is the only reason this
+# has worked over plain HTTP so far).
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web
+  namespace: q-quiz
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: q-quiz.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 80

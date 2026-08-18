@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+AquaQ Challenges
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+<h1>
+
+AquaQ Challenges
+
+</h1>
+
+<div id="problemList"
+data-api-base="/api/aquaq"
+data-link-base="/aquaq">
+
+Loading...
+
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static',filename='judge.js') }}"></script>
+
+{% endblock %}

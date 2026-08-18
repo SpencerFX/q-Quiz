@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Edit Profile
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card profileCard">
+
+<h1>
+
+Edit Profile
+
+</h1>
+
+<a href="/profile">
+
+View Profile
+
+</a>
+
+<h2 class="chartTitle">
+
+Basics
+
+</h2>
+
+<div class="formGrid">
+
+<input id="fieldName" type="text" placeholder="Name">
+
+<input id="fieldTagline" type="text" placeholder="Tagline">
+
+<input id="fieldEmail" type="text" placeholder="Email">
+
+<input id="fieldPhone" type="text" placeholder="Phone">
+
+<input id="fieldLocation" type="text" placeholder="Location">
+
+</div>
+
+<button id="saveBasics">
+
+Save
+
+</button>
+
+<h2 class="chartTitle">
+
+Profile Picture
+
+</h2>
+
+<div id="photoPreview" class="photoPreview">
+
+</div>
+
+<input id="photoFile" type="file" accept="image/png,image/jpeg,image/gif,image/webp">
+
+<button id="uploadPhoto">
+
+Upload
+
+</button>
+
+<h2 class="chartTitle">
+
+Resume
+
+</h2>
+
+<div id="resumeStatus" class="meta">
+
+</div>
+
+<input id="resumeFile" type="file" accept=".pdf,.doc,.docx">
+
+<button id="uploadResume">
+
+Upload
+
+</button>
+
+<button id="uploadAutofillResume">
+
+Upload / Auto-fill
+
+</button>
+
+<div id="autofillStatus" class="meta">
+
+</div>
+
+<h2 class="chartTitle">
+
+Work Experience
+
+</h2>
+
+<div id="experienceList" class="editableList">
+
+</div>
+
+<div class="formGrid">
+
+<input id="expCompany" type="text" placeholder="Company">
+
+<input id="expTitle" type="text" placeholder="Title">
+
+<input id="expStart" type="text" placeholder="Start date">
+
+<input id="expEnd" type="text" placeholder="End date">
+
+<input id="expLocation" type="text" placeholder="Location">
+
+</div>
+
+<textarea id="expDescription" placeholder="Description" rows="3"></textarea>
+
+<button id="addExperience">
+
+Add Experience
+
+</button>
+
+<h2 class="chartTitle">
+
+Education
+
+</h2>
+
+<div id="educationList" class="editableList">
+
+</div>
+
+<div class="formGrid">
+
+<input id="eduSchool" type="text" placeholder="School">
+
+<input id="eduDegree" type="text" placeholder="Degree">
+
+<input id="eduStart" type="text" placeholder="Start date">
+
+<input id="eduEnd" type="text" placeholder="End date">
+
+</div>
+
+<button id="addEducation">
+
+Add Education
+
+</button>
+
+<h2 class="chartTitle">
+
+Links
+
+</h2>
+
+<div id="linksList" class="editableList">
+
+</div>
+
+<div class="formGrid">
+
+<input id="linkLabel" type="text" placeholder="Label (eg. Github)">
+
+<input id="linkUrl" type="text" placeholder="URL">
+
+</div>
+
+<button id="addLink">
+
+Add Link
+
+</button>
+
+<h2 class="chartTitle">
+
+Skills
+
+</h2>
+
+<div id="skillsList" class="editableList">
+
+</div>
+
+<div class="formGrid">
+
+<input id="skillInput" type="text" placeholder="Skill">
+
+</div>
+
+<button id="addSkill">
+
+Add Skill
+
+</button>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static',filename='profile-edit.js') }}"></script>
+
+{% endblock %}

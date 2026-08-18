@@ -1,0 +1,15 @@
+# Internal only (ClusterIP, no external exposure) - only the web tier
+# talks to q-core, over the same qpython IPC protocol
+# web/qclient.py already uses locally, just pointed at "q-core:5000"
+# (this Service's DNS name) instead of localhost.
+apiVersion: v1
+kind: Service
+metadata:
+  name: q-core
+  namespace: q-quiz
+spec:
+  selector:
+    app: q-core
+  ports:
+    - port: 5000
+      targetPort: 5000

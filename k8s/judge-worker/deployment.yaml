@@ -1,0 +1,77 @@
+# The actual point of doing any of this in Kubernetes: a small pool of
+# pre-warmed, hardened q processes that grade arbitrary user-submitted
+# code in isolation from q-core's real data. "Pre-warmed" here just
+# means "already running" - the Service below load-balances across
+# whichever replicas are ready, so a submission never pays q's ~3s
+# startup cost the way a fresh-subprocess-per-submission approach
+# would (that was explicitly ruled out - instant feedback over
+# per-submission process spawn).
+#
+# Hardening, so a submission that reaches for `system`, file handles,
+# or a network call finds nothing: read-only root filesystem, no
+# capabilities, can't escalate privileges, non-root user, and (see
+# networkpolicy.yaml) no network access at all beyond receiving IPC
+# calls from the web tier.
+#
+# NOT yet wired up: web/services.py still calls q-core directly for
+# grading, the same as it does locally. Pointing it at this Service
+# instead is a real code change, not part of this infra sketch - see
+# k8s/README.md.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: judge-worker
+  namespace: q-quiz
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: judge-worker
+  template:
+    metadata:
+      labels:
+        app: judge-worker
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: judge-worker
+          image: q-quiz/judge-worker:latest   # built from docker/judge-worker.Dockerfile
+          ports:
+            - containerPort: 5000
+              name: qipc
+          securityContext:
+            readOnlyRootFilesystem: true
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            # kdb+ wants some scratch space even for small in-memory
+            # work; everything else about the image is read-only.
+            - name: tmp
+              mountPath: /tmp
+          readinessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              # Tight on purpose - this is what actually bounds a
+              # runaway or malicious submission, not a q-level timeout
+              # (there still isn't one - see k8s/README.md).
+              cpu: 500m
+              memory: 256Mi
+      volumes:
+        - name: tmp
+          emptyDir:
+            sizeLimit: 64Mi

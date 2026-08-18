@@ -1,68 +1,80 @@
-/Question Info ===============================================
-/
-Time Conversion
-
-Given a time in 12-hour AM/PM format, convert it to military
-(24-hour) time.
-
-Note:
-- 12:00:00AM on a 12-hour clock is 00:00:00 on a 24-hour clock
-- 12:00:00PM on a 12-hour clock is 12:00:00 on a 24-hour clock
-
-Task:
-- Convert the given time string to 24-hour format
-- Return the converted time
-
-Example:
-s = 07:05:45PM
-
-Result:
-19:05:45
-
-Explanation:
-- PM time → add 12 to the hour (except 12PM)
-- AM time → keep hour the same (except 12AM → 00)
-
-Function Description:
-timeConversion takes:
-  - s: a string representing time in 12-hour format (hh:mm:ssAM or PM)
-
-Returns:
-  - string representing time in 24-hour format (HH:mm:ss)
-
-Input Format:
-- A single string s in the format hh:mm:ssAM or hh:mm:ssPM
-
-Output Format:
-- Return the converted time string
-
-Constraints:
-- All input times are valid
-- 01 ≤ hh ≤ 12
-- 00 ≤ mm, ss ≤ 59
-
-Notes:
-- If period is "AM":
-    - If hour == 12 → convert to "00"
-    - Else → keep hour as is
-- If period is "PM":
-    - If hour == 12 → keep as 12
-    - Else → add 12 to hour
-- Only the hour portion changes
-
-Goal:
-- Correctly handle edge cases (12AM, 12PM)
-- Return properly formatted 24-hour time string
-\
-/=============================================================
-
-/ Input Info ==================================================
-input: "07:05:45PM";
-/ =============================================================
+//====================================================================
+// Time Conversion
+//
+// Displays the HackerRank problem statement.
+//
+// Usage:
+//      .quiz.hackerRank.algorithms.timeConversion.info[]
+//====================================================================
+.quiz.hackerRank.algorithms.timeConversion.info:{
+    -1 "/Question Info ===============================================";
+    -1 "/";
+    -1 "Time Conversion";
+    -1 "";
+    -1 "Given a time in 12-hour AM/PM format, convert it to military";
+    -1 "(24-hour) time.";
+    -1 "";
+    -1 "Note:";
+    -1 "- 12:00:00AM on a 12-hour clock is 00:00:00 on a 24-hour clock";
+    -1 "- 12:00:00PM on a 12-hour clock is 12:00:00 on a 24-hour clock";
+    -1 "";
+    -1 "Task:";
+    -1 "- Convert the given time string to 24-hour format";
+    -1 "- Return the converted time";
+    -1 "";
+    -1 "Example:";
+    -1 "s = 07:05:45PM";
+    -1 "";
+    -1 "Result:";
+    -1 "19:05:45";
+    -1 "";
+    -1 "Explanation:";
+    -1 "- PM time -> add 12 to the hour (except 12PM)";
+    -1 "- AM time -> keep hour the same (except 12AM -> 00)";
+    -1 "";
+    -1 "Function Description:";
+    -1 "timeConversion takes:";
+    -1 "  - s: a string representing time in 12-hour format (hh:mm:ssAM or PM)";
+    -1 "";
+    -1 "Returns:";
+    -1 "  - string representing time in 24-hour format (HH:mm:ss)";
+    -1 "";
+    -1 "Input Format:";
+    -1 "- A single string s in the format hh:mm:ssAM or hh:mm:ssPM";
+    -1 "";
+    -1 "Output Format:";
+    -1 "- Return the converted time string";
+    -1 "";
+    -1 "Constraints:";
+    -1 "- All input times are valid";
+    -1 "- 01 <= hh <= 12";
+    -1 "- 00 <= mm, ss <= 59";
+    -1 "";
+    -1 "Notes:";
+    -1 "- If period is \"AM\":";
+    -1 "    - If hour == 12 -> convert to \"00\"";
+    -1 "    - Else -> keep hour as is";
+    -1 "- If period is \"PM\":";
+    -1 "    - If hour == 12 -> keep as 12";
+    -1 "    - Else -> add 12 to hour";
+    -1 "- Only the hour portion changes";
+    -1 "";
+    -1 "Goal:";
+    -1 "- Correctly handle edge cases (12AM, 12PM)";
+    -1 "- Return properly formatted 24-hour time string";
+    -1 "/";
+    -1 "/=============================================================";
+    -1 "";
+    -1 "/ Input Info ==================================================";
+    -1 "/";
+    -1 "t:\"07:05:45PM\";";
+    -1 "/";
+    -1 "/=============================================================";
+ };
 
 
 / Solution Info ===============================================
-/ timeConversion input
+/ timeConversion t
 timeConversion:{[t]
   h:"J"$2#t;        / hour as int
   suffix:-2#t;      / "AM" or "PM"
@@ -75,5 +87,20 @@ timeConversion:{[t]
   / format hour properly as 2-digit string
   hh:$[nh<10; "0",string nh; string nh];
   hh,1_rest
+ };
+/ =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Splits on ":" with vs and reconstructs the hour via mod-12
+/ arithmetic instead of manual character slicing.
+/ timeConversion2 t
+timeConversion2:{[t]
+  parts:":" vs 8#t;
+  suffix:-2#t;
+  h:"I"$parts 0;
+  nh:$[suffix~"AM"; h mod 12; 12+h mod 12];
+  hh:-2#"0",string nh;
+  hh,":",parts[1],":",parts[2]
  };
 / =============================================================

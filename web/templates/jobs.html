@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Jobs{% endblock %}
+{% block content %}
+<div class="card">
+<h1>Jobs</h1>
+<div id="jobFilterBar"></div>
+<div id="jobList">Loading...</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static',filename='jobs.js') }}"></script>
+{% endblock %}

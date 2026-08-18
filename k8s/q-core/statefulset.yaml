@@ -1,0 +1,88 @@
+# A StatefulSet (not a Deployment) because q-core is a stateful
+# singleton, not a horizontally-scalable service - this app has no
+# multi-master kdb+ replication, so replicas stays at 1. What this
+# still buys over the hand-rolled Python supervisor: Kubernetes itself
+# notices a dead/unready pod and restarts it (restartPolicy + the
+# probes below), instead of a poll loop I wrote checking every 5s.
+#
+# A killed pod still loses everything since the last autosave, exactly
+# like today - this doesn't change that, it just restarts faster and
+# more reliably. See k8s/README.md.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: q-core
+  namespace: q-quiz
+spec:
+  serviceName: q-core
+  replicas: 1
+  selector:
+    matchLabels:
+      app: q-core
+  template:
+    metadata:
+      labels:
+        app: q-core
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: q-core
+          image: q-quiz/q-core:latest   # built from docker/q-core.Dockerfile
+          ports:
+            - containerPort: 5000
+              name: qipc
+          env:
+            - name: QLIC
+              value: /opt/kdb/license
+          envFrom:
+            - configMapRef:
+                name: q-quiz-config
+          volumeMounts:
+            - name: data
+              mountPath: /app/results
+              subPath: results
+            - name: data
+              mountPath: /app/profile
+              subPath: profile
+            - name: kdb-license
+              mountPath: /opt/kdb/license
+              readOnly: true
+          # q has no HTTP endpoint - a TCP connect is the honest signal
+          # here, same thing web/tests/conftest.py's readiness check
+          # ultimately relies on (it goes one step further and issues
+          # a real query, which a probe command could also do via
+          # `q -c ...`, but a TCP check is enough to know the process
+          # is up and accepting connections).
+          readinessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+      volumes:
+        - name: kdb-license
+          secret:
+            # kubectl create secret generic q-quiz-kdb-license
+            #   --namespace q-quiz --from-file=k4.lic=/path/to/your/k4.lic
+            secretName: q-quiz-kdb-license
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi

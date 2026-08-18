@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}qIdioms{% endblock %}
+{% block content %}
+<div class="card">
+<h1>qIdioms</h1>
+<div id="problemList" data-api-base="/api/qidioms" data-link-base="/qidioms">Loading...</div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static',filename='judge.js') }}"></script>
+{% endblock %}

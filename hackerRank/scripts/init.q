@@ -17,6 +17,27 @@ loadAllDataStructure:{[]
     {system"l ./hackerRank/DataStructure/hard/", x}each string filesHardDS;
  };
 
+/ Sample data (CITY, STATION, ...) backing hackerRank/SQL/ - every SQL
+/ problem's function is niladic and queries these tables as globals,
+/ so this has to load before anything tries to call one, though not
+/ necessarily before the SQL/ files themselves are loaded (a function
+/ body isn't evaluated until it's called).
+loadHackerRankData:{[]
+    system "l ./hackerRank/data/tables.q";
+ };
+
+/ Mirrors loadAllAlgorithms/loadAllDataStructure - hard/ is currently
+/ empty (no hard-difficulty SQL problems yet), key on an empty folder
+/ just yields an empty list so the each below is a no-op for it.
+loadAllSQL:{[]
+    filesEasySQL:key `:./hackerRank/SQL/easy/;
+    filesMediumSQL:key `:./hackerRank/SQL/medium/;
+    filesHardSQL:key `:./hackerRank/SQL/hard/;
+    {system"l ./hackerRank/SQL/easy/", x}each string filesEasySQL;
+    {system"l ./hackerRank/SQL/medium/", x}each string filesMediumSQL;
+    {system"l ./hackerRank/SQL/hard/", x}each string filesHardSQL;
+ };
+
 loadAllInputs:{[]
     filesInputs:key `:./hackerRank/Inputs/;
     {system"l ./hackerRank/Inputs/",string x} each filesInputs;
@@ -38,8 +59,10 @@ testAllFuncsEasy:{
  };
 
 initHackerRank:{[]
+    loadHackerRankData[];
     loadAllAlgorithms[];
     loadAllDataStructure[];
+    loadAllSQL[];
     loadAllInputs[];
     loadAllSolutions[];
  };

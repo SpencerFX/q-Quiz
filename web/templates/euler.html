@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+Project Euler
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card">
+
+<h1>
+
+Project Euler
+
+</h1>
+
+<div id="problemList"
+data-api-base="/api/euler"
+data-link-base="/euler">
+
+Loading...
+
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static',filename='judge.js') }}"></script>
+
+{% endblock %}

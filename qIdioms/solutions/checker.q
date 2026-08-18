@@ -16,7 +16,7 @@ checkIdiom:{[problemName; function]
     $[min min pass; show"Your solution works!"; show"Please try again."];
     et:.z.p;
     insert[`resultsIdioms; (problemName; min min pass; enlist actual; enlist expected; st; et; cat;difficulty)];
-    insert[`.quiz.history; (problemName; actual; expected; min min pass;`Idioms)];
+    insert[`.quiz.history; (problemName; actual; expected; min min pass;`Idioms; .web.currentUser)];
  };
 
 topics:`arithmetic`castingAndRepresentation`execution`finance`find`flags`format`geometry`indexes`math`matrixes`miscellaneous`partsItems`polynomials`rank`shape`sort`statistics`strings`temporal`tests`text;

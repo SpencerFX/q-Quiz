@@ -46,7 +46,7 @@
 / =============================================================
 
 / Solution Info ===============================================
-convertZigZag["PAYPALISHIRING"; 3]
+/ convertZigZag["PAYPALISHIRING"; 3]
 
 convertZigZag:{[s;n]
   s:raze string s;
@@ -64,10 +64,12 @@ convertZigZag:{[s;n]
     n:st[3];
 
     / rebuild rows immutably (THIS is the key fix)
-    rows:rows@[row;:;rows[row],c];
+    rows:@[rows;row;:;rows[row],c];
 
-    / direction flip
-    dir:$[(row=0) or (row=n-1);neg dir;dir];
+    / direction flip - set the absolute direction implied by the
+    / boundary just hit, don't blindly negate (negating at row 0
+    / while dir already =1 would send row to -1)
+    dir:$[row=0;1;row=n-1;-1;dir];
 
     / move row pointer
     row+:dir;

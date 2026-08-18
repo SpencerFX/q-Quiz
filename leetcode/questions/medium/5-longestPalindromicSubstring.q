@@ -36,7 +36,7 @@
 longestPalindrome:{[s]
     subs:distinct {x@raze{{{y+til x}[x] each til y}[x[0];x[1]]} each a,'reverse a:1+til count x} s;
     palindromes:  subs where {x~reverse x}each subs;
-    largestCount:first desc count each palindromes;
-    palindromes[largestCount]
+    longestIdx:first idesc count each palindromes;
+    palindromes[longestIdx]
  };
 / =============================================================

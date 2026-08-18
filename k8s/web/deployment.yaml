@@ -1,0 +1,62 @@
+# replicas: 1 for now - web/uploads/ (resume/photo uploads, see
+# web/app.py's upload routes) is mounted from a single ReadWriteOnce
+# PVC below, which only one pod can mount read-write cleanly at a
+# time. Scaling this past 1 replica needs uploads/ moved to real
+# object storage (S3/GCS/etc.) or a ReadWriteMany volume first -
+# everything else about this tier (Flask itself) is stateless and
+# would scale fine as-is, since all real state lives in q-core.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: q-quiz
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: web
+          image: q-quiz/web:latest   # built from docker/web.Dockerfile
+          ports:
+            - containerPort: 8000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: q-quiz-config
+            - secretRef:
+                name: q-quiz-secrets
+          volumeMounts:
+            - name: uploads
+              mountPath: /app/uploads
+          readinessProbe:
+            httpGet:
+              path: /api/session
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /api/session
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: web-uploads

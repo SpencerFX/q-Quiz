@@ -114,3 +114,15 @@ appleAndOrange:{[s;t;a;b;apples;oranges]
   (appleHits; orangeHits)
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Uses q's built-in "within" for the range check instead of a
+/ manual >= & <= pair.
+/ appleAndOrange2[s;t;a;b;apples;oranges]
+appleAndOrange2:{[s;t;a;b;apples;oranges]
+  applePos:a+apples;
+  orangePos:b+oranges;
+  (sum applePos within (s;t); sum orangePos within (s;t))
+ };
+/ =============================================================

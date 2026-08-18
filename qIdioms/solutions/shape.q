@@ -1,4 +1,4 @@
-.solutions.shape.easy: flip raze 2 cut
+.solutions.shape.easy: (!) . flip raze 2 cut
     (
     (`conformTableRows;4 3#1 2 3 4 5 6 7 8 9 0 0 0);
     (`conformTableColumns;4 5#9 9 0 0 0 9 9 0 0 0 9 9 0 0 0 9 9 0 0 0);

@@ -1,0 +1,32 @@
+# The other half of the isolation story (deployment.yaml's
+# securityContext handles the filesystem/privilege side): a
+# judge-worker pod can only receive IPC calls from the web tier, and
+# cannot initiate any outbound connection at all - not to q-core, not
+# to the internet, not even DNS (it never needs to resolve a name, so
+# there's nothing to allow). A submission that tries `hopen` or any
+# other outbound call has nowhere to go.
+#
+# Requires a CNI plugin that enforces NetworkPolicy (Calico, Cilium,
+# etc.) - some default cluster setups (eg plain kindnet in kind) don't
+# enforce these by default, worth checking before relying on this.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: judge-worker-isolation
+  namespace: q-quiz
+spec:
+  podSelector:
+    matchLabels:
+      app: judge-worker
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: web
+      ports:
+        - protocol: TCP
+          port: 5000
+  egress: []

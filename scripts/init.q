@@ -13,8 +13,18 @@
         question:`symbol$();
         input:`symbol$();
         correct:`symbol$();
-        result:`boolean$()
+        result:`boolean$();
+        user:`symbol$()
     );
+    / Whoever is signed in on the Flask session at the moment a result is
+    / recorded - null symbol when nobody's signed in. Set by
+    / .web.setCurrentUser (web/q/web_api.q), which web/qclient.py calls
+    / before every request so this stays in sync with the session even
+    / across q restarts. Defined here (not in web_api.q) so it always
+    / exists, since console-only checker.q insert calls reference it too
+    / and web_api.q only loads lazily on Flask's first request.
+    .web.currentUser:`;
+    .web.setCurrentUser:{[u] .web.currentUser:$[0=count u; `; `$u] };
     .quiz.loadBanks[];
     .quiz.loadBanksSyntax[];
     .quiz.shuffleBank each key .quiz.bank;
@@ -22,8 +32,21 @@
     system "l ./scripts/quiz.q";
     system "l ./hackerRank/scripts/init.q";
     system "l ./qIdioms/scripts/init.q";
+    system "l ./diChallenges/scripts/init.q";
+    system "l ./leetcode/scripts/init.q";
+    system "l ./quantRank/scripts/init.q";
+    system "l ./jobs/jobs.q";
+    system "l ./fundamentals/scripts/init.q";
+    system "l ./euler/scripts/init.q";
+    system "l ./adventOfCode/scripts/init.q";
     initHackerRank[];
     initQIdioms[];
+    initDiChallenges[];
+    initLeetcode[];
+    initQuantRank[];
+    initFundamentals[];
+    initEuler[];
+    initAdventOfCode[];
     .quiz.loadResults[];
     -1 "Loaded.";
  };
@@ -77,7 +100,14 @@
 
 .quiz.loadResults:{[]
     if[`tab in key `:./results; load `:./results/tab];
-    .quiz.history:tab;
+    / Older saved files predate the user column - backfill it with null
+    / symbols rather than dropping straight into a 6-column insert schema
+    / mismatch the moment anything new gets recorded. Reads tab but never
+    / assigns to it - q treats any name assigned anywhere in a function
+    / body as local for the whole body, which would otherwise shadow the
+    / global tab that load just populated.
+    upgraded:$[`user in cols tab; tab; update user:(count tab)#` from tab];
+    .quiz.history:upgraded;
  };
 
 .quiz.save:{{}

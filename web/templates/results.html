@@ -8,27 +8,184 @@ Results
 
 {% block content %}
 
-<div class="resultsCard">
+<div class="resultsCard dashboardCard">
 
 <h1>
 
-Quiz Complete
+Results
 
 </h1>
 
-<h2 id="score">
+<p class="meta"
+id="resultsUser">
 
-0 / 0
+</p>
+
+<div class="kpiRow"
+id="kpiRow">
+
+</div>
+
+<h2 class="chartTitle">
+
+Assessment history
 
 </h2>
+
+<div class="tableContainer"
+id="assessmentHistoryContainer">
+
+<table class="historyTable">
+
+<thead>
+
+<tr>
+
+<th>Difficulty</th>
+
+<th>Score</th>
+
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody id="assessmentHistoryBody">
+
+</tbody>
+
+</table>
+
+</div>
+
+<h2 class="chartTitle">
+
+Completion by category
+
+</h2>
+
+<div class="completionList"
+id="completionList">
+
+</div>
+
+<h2 class="chartTitle">
+
+Accuracy over time
+
+</h2>
+
+<div class="chartContainer"
+id="accuracyChart">
+
+</div>
+
+<h2 class="chartTitle">
+
+Correct vs incorrect
+
+</h2>
+
+<div class="chartLegend">
+
+<span class="legendItem"><span class="legendSwatch swatchGood"></span>&check; Correct</span>
+
+<span class="legendItem"><span class="legendSwatch swatchCritical"></span>&cross; Incorrect</span>
+
+</div>
+
+<div class="chartContainer"
+id="breakdownChart">
+
+</div>
+
+<h2 class="chartTitle">
+
+Correct vs incorrect: MultipleChoice, by category without Syntax
+
+</h2>
+
+<div class="chartContainer"
+id="categoryBreakdownChart">
+
+</div>
+
+<h2 class="chartTitle">
+
+Correct vs incorrect: MultipleChoice, by category for Syntax
+
+</h2>
+
+<div class="chartContainer"
+id="categoryBreakdownSyntaxChart">
+
+</div>
+
+<h2 class="chartTitle">
+
+Attempt history
+
+</h2>
+
+<div class="tableContainer">
+
+<table class="historyTable">
+
+<thead>
+
+<tr>
+
+<th>#</th>
+
+<th>Question</th>
+
+<th>Type</th>
+
+<th>Category</th>
+
+<th>Result</th>
+
+<th>Running %</th>
+
+</tr>
+
+</thead>
+
+<tbody id="historyTableBody">
+
+</tbody>
+
+</table>
+
+</div>
 
 <button
 onclick="window.location='/'">
 
-Play Again
+Home
 
 </button>
 
 </div>
+
+<div id="chartTooltip"
+class="chartTooltip">
+
+<div class="tipValue">
+
+</div>
+
+<div class="tipTitle">
+
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static',filename='results.js') }}"></script>
 
 {% endblock %}

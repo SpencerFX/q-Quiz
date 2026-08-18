@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}
+
+{{ problem }}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="card problemPageCard"
+id="problemCard"
+data-problem="{{ problem }}"
+data-api-base="/api/problems">
+
+<h1>
+
+{{ problem }}
+
+</h1>
+
+<p class="meta"
+id="problemMeta">
+
+</p>
+
+<div class="problemColumns">
+
+<div class="problemInfoColumn">
+
+<div id="questionInfo" class="questionInfo">
+
+</div>
+
+</div>
+
+<div class="problemEditorColumn">
+
+<textarea
+id="code"
+rows="18"
+spellcheck="false"
+placeholder="{[args] ... }"></textarea>
+
+<button
+id="runCode">
+
+Run
+
+</button>
+
+<button
+id="submitCode">
+
+Submit
+
+</button>
+
+<button
+id="nextProblem">
+
+Next
+
+</button>
+
+</div>
+
+</div>
+
+<div id="outputConsole" class="outputConsole">
+
+<div class="outputConsoleLabel">Console</div>
+
+<div id="runOutput" class="runOutput">
+
+</div>
+
+<div id="verdict">
+
+</div>
+
+</div>
+
+<div class="testCasesSection">
+
+<h2 class="chartTitle">Test Cases</h2>
+
+<p class="meta">Benchmarks this problem's own reference solution (not your submission) across a few auto-scaled input sizes.</p>
+
+<button id="testCasesButton">Run Test Cases</button>
+
+<div id="testCasesResult" class="testCasesResult"></div>
+
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static',filename='judge.js') }}"></script>
+
+{% endblock %}

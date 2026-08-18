@@ -71,3 +71,14 @@
 / birthdayCakeCandles input 
 birthdayCakeCandles:{[heights] sum heights = max heights};
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ Sorts descending and counts the run tied with the first
+/ (tallest) entry, instead of comparing every element to max.
+/ birthdayCakeCandles2 heights
+birthdayCakeCandles2:{[heights]
+  s:desc heights;
+  count s where s=first s
+ };
+/ =============================================================

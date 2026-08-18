@@ -1,29 +1,195 @@
-<!doctype html>
+{% extends "base.html" %}
 
-<html>
+{% block title %}
 
-<head>
+q Quiz
 
-<title>q Quiz</title>
+{% endblock %}
 
-</head>
+{% block content %}
 
-<body>
+<div class="card">
 
-<h1>q Quiz</h1>
+<h1>
 
-<p>Welcome.</p>
+q Quiz
 
-<a href="/quiz">
+</h1>
 
-<button>
+<p>
 
-Start Quiz
+Welcome.
 
-</button>
+</p>
+
+<h2 class="chartTitle">
+
+Fundamentals
+
+</h2>
+
+<div class="skillGrid">
+
+<a href="/quiz" class="skillTile">
+
+<span class="skillIcon">📝</span>
+
+<span class="skillLabel">Multiple Choice</span>
 
 </a>
 
-</body>
+<a href="/quiz?mode=syntax" class="skillTile">
 
-</html>
+<span class="skillIcon">🔤</span>
+
+<span class="skillLabel">Multiple Choice - Syntax</span>
+
+</a>
+
+<a href="/qidioms" class="skillTile">
+
+<span class="skillIcon">💡</span>
+
+<span class="skillLabel">qIdioms</span>
+
+</a>
+
+<a href="/fundamentals" class="skillTile">
+
+<span class="skillIcon">📚</span>
+
+<span class="skillLabel">Fundamentals</span>
+
+</a>
+
+</div>
+
+<h2 class="chartTitle">
+
+Challenges
+
+</h2>
+
+<div class="skillGrid">
+
+<a href="/adventOfCode" class="skillTile">
+
+<span class="skillIcon">🎄</span>
+
+<span class="skillLabel">Advent of Code</span>
+
+</a>
+
+<a href="/aquaq" class="skillTile">
+
+<span class="skillIcon">🌊</span>
+
+<span class="skillLabel">AquaQ Challenges</span>
+
+</a>
+
+<a href="/problems" class="skillTile">
+
+<span class="skillIcon">💻</span>
+
+<span class="skillLabel">HackerRank Problems</span>
+
+</a>
+
+<a href="/leetcode" class="skillTile">
+
+<span class="skillIcon">🧮</span>
+
+<span class="skillLabel">leetcode</span>
+
+</a>
+
+<a href="/euler" class="skillTile">
+
+<span class="skillIcon">🔢</span>
+
+<span class="skillLabel">Project Euler</span>
+
+</a>
+
+<a href="/quantrank" class="skillTile">
+
+<span class="skillIcon">📈</span>
+
+<span class="skillLabel">quantRank</span>
+
+</a>
+
+</div>
+
+<h2 class="chartTitle">
+
+Assessments
+
+</h2>
+
+<div class="skillGrid">
+
+<a href="/assessment/easy" class="skillTile">
+
+<span class="skillIcon">🟢</span>
+
+<span class="skillLabel">Easy</span>
+
+</a>
+
+<a href="/assessment/medium" class="skillTile">
+
+<span class="skillIcon">🟡</span>
+
+<span class="skillLabel">Medium</span>
+
+</a>
+
+<a href="/assessment/hard" class="skillTile">
+
+<span class="skillIcon">🔴</span>
+
+<span class="skillLabel">Hard</span>
+
+</a>
+
+</div>
+
+<h2 class="chartTitle">
+
+Community
+
+</h2>
+
+<div class="skillGrid">
+
+<a href="/about" class="skillTile">
+
+<span class="skillIcon">ℹ️</span>
+
+<span class="skillLabel">About</span>
+
+</a>
+
+<a href="/jobs" class="skillTile">
+
+<span class="skillIcon">💼</span>
+
+<span class="skillLabel">Jobs</span>
+
+</a>
+
+<a href="/leaderboard" class="skillTile">
+
+<span class="skillIcon">🏆</span>
+
+<span class="skillLabel">Leaderboard</span>
+
+</a>
+
+</div>
+
+</div>
+
+{% endblock %}

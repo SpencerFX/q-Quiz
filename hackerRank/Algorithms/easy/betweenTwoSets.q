@@ -89,3 +89,15 @@ betweenTwoSets:{[a;b]
   sum (all each (c mod\: a)=0) & (all each (b mod/: c)=0)
  };
 / =============================================================
+
+
+/ Solution Info (alternate) ====================================
+/ The brute-force approach the question's own notes describe:
+/ scan every candidate from max(a) to min(b) directly, rather
+/ than deriving candidates from the LCM of a.
+/ betweenTwoSets2[a;b]
+betweenTwoSets2:{[a;b]
+  candidates:(max a)+til 1+(min b)-(max a);
+  sum {[a;b;x] (all 0=x mod a) and all 0=b mod x}[a;b;] each candidates
+ };
+/ =============================================================
