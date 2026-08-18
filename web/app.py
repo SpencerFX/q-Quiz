@@ -260,7 +260,7 @@ def api_problem_info(problem):
         info = judge.get_info(problem)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
-    return jsonify({"info": info})
+    return jsonify(info)
 
 
 @app.route("/api/problems/<problem>/testcases")
@@ -313,7 +313,7 @@ def api_aquaq_info(problem):
         info = aquaq.get_info(problem)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
-    return jsonify({"info": info})
+    return jsonify(info)
 
 
 @app.route("/api/aquaq/<problem>/testcases")
@@ -366,7 +366,7 @@ def api_euler_info(problem):
         info = euler.get_info(problem)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
-    return jsonify({"info": info})
+    return jsonify(info)
 
 
 @app.route("/api/euler/<problem>/testcases")
@@ -419,7 +419,7 @@ def api_advent_of_code_info(problem):
         info = adventOfCode.get_info(problem)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
-    return jsonify({"info": info})
+    return jsonify(info)
 
 
 @app.route("/api/adventOfCode/<problem>/testcases")
@@ -472,7 +472,7 @@ def api_leetcode_info(problem):
         info = leetcode.get_info(problem)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
-    return jsonify({"info": info})
+    return jsonify(info)
 
 
 @app.route("/api/leetcode/<problem>/testcases")
@@ -525,7 +525,7 @@ def api_qidioms_info(problem):
         info = qidioms.get_info(problem)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
-    return jsonify({"info": info})
+    return jsonify(info)
 
 
 @app.route("/api/qidioms/<problem>/testcases")
@@ -578,7 +578,7 @@ def api_quantrank_info(problem):
         info = quantrank.get_info(problem)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
-    return jsonify({"info": info})
+    return jsonify(info)
 
 
 @app.route("/api/quantrank/<problem>/testcases")
@@ -651,7 +651,7 @@ def api_fundamentals_info(problem):
         info = fundamentals.get_info(problem)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
-    return jsonify({"info": info})
+    return jsonify(info)
 
 
 @app.route("/api/fundamentals/<problem>/testcases")

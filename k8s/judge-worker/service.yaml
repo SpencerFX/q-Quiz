@@ -1,0 +1,15 @@
+# ClusterIP load-balances across whichever judge-worker replicas are
+# Ready - the web tier just calls "judge-worker:5000" and gets
+# whichever pod picks up the connection, same round-robin behaviour as
+# any other K8s Service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: judge-worker
+  namespace: q-quiz
+spec:
+  selector:
+    app: judge-worker
+  ports:
+    - port: 5000
+      targetPort: 5000

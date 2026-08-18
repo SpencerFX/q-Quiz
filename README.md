@@ -63,3 +63,15 @@ install q-quiz python scripts/supervisor.py`) or a Task Scheduler "at
 startup" trigger. Neither is set up here since installing a service
 manager is a system-level change worth doing deliberately rather than as
 a side effect of this change.
+
+## Kubernetes (sketch, not deployed)
+
+`docker/` and `k8s/` sketch a three-service architecture - q-core (the
+real app), judge-worker (a hardened, isolated pool that grades arbitrary
+submitted code without access to real data), and web - for if this ever
+needs to be reachable by people other than one trusted local user. See
+[`k8s/README.md`](k8s/README.md) for the architecture, what's actually
+been verified (the new q loader script was tested locally; the
+Dockerfiles/manifests have not, since this environment has no Docker,
+kubectl, cluster, or licensed Linux kdb+ build), and what's genuinely
+missing before it would run anywhere.

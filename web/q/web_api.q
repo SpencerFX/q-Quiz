@@ -9,6 +9,43 @@
 //
 //====================================================================
 
+//====================================================================
+//
+// Saved codepad content - the exact text a signed-in user last
+// submitted for a given problem, so returning to that problem page
+// later loads it back into the editor instead of the blank
+// placeholder. Keyed (section;problem;user), so the same problem
+// slug in two different sections (unlikely, but eg qIdioms slugs
+// could theoretically collide with something else) never overwrites
+// the wrong one. Anonymous submissions (.web.currentUser null) are
+// silently not persisted - there's no stable identity to key them on.
+//====================================================================
+
+.web.savedCode:([section:`symbol$(); problem:`symbol$(); user:`symbol$()] code:(); ts:`timestamp$());
+
+/ Called from every section's judge* function below, right alongside
+/ the .quiz.history insert each of them already does.
+.web.saveCode:{[section;problem;code]
+    if[null .web.currentUser; :(::)];
+    `.web.savedCode upsert (section;problem;.web.currentUser;code;.z.p);
+ };
+
+/ Called from every section's get_info (web/services.py) so the
+/ problem page's one info-fetch-on-load also recovers any saved code,
+/ instead of needing a second round trip. Unlike .web.saveCode above
+/ (always called from q-side judge* functions with already-normalized
+/ symbols), this is called directly from Python with plain strings, so
+/ section/problem need normalizing here.
+.web.getSavedCode:{[section;problem]
+    if[null .web.currentUser; :""];
+    section:$[-11h=type section; section; `$section];
+    problem:$[-11h=type problem; problem; `$problem];
+    k:(section;problem;.web.currentUser);
+    if[not k in key .web.savedCode; :""];
+    .web.savedCode[k]`code
+ };
+
+
 / Per-problem progress status for a list page, from .quiz.history:
 / `solved (passed at least once), `attempted (submitted but never
 / passed) or `unattempted (no submission on record at all). Shared by
@@ -70,6 +107,7 @@
 
 .web.judge:{[problemName;codeStr]
     problemName:$[-11h=type problemName; problemName; `$problemName];
+    .web.saveCode[`HackerRank;problemName;codeStr];
     func:@[value; codeStr; {'"Could not parse submission: ",x}];
     result:.checker.grade[problemName;func];
     st:.z.p;
@@ -268,6 +306,7 @@
 
 .web.judgeDiChallenge:{[problemName;codeStr]
     problemName:$[-11h=type problemName; problemName; `$problemName];
+    .web.saveCode[`DiChallenge;problemName;codeStr];
     func:@[value; codeStr; {'"Could not parse submission: ",x}];
     kind:confirmDiChallengeKind problemName;
     if[null kind; '"Unknown problem"];
@@ -327,6 +366,7 @@
 .web.judgeEuler:{[problemName;codeStr]
     problemName:$[-11h=type problemName; problemName; `$problemName];
     if[not problemName in key .inputs.euler.easy; '"Unknown problem"];
+    .web.saveCode[`Euler;problemName;codeStr];
     func:@[value; codeStr; {'"Could not parse submission: ",x}];
     input:.inputs.euler.easy problemName;
     expected:.solutions.euler.easy problemName;
@@ -380,6 +420,7 @@
 .web.judgeAdventOfCode:{[problemName;codeStr]
     problemName:$[-11h=type problemName; problemName; `$problemName];
     if[not problemName in key .inputs.adventOfCode.easy; '"Unknown problem"];
+    .web.saveCode[`AdventOfCode;problemName;codeStr];
     func:@[value; codeStr; {'"Could not parse submission: ",x}];
     input:.inputs.adventOfCode.easy problemName;
     expected:.solutions.adventOfCode.easy problemName;
@@ -442,6 +483,7 @@
 
 .web.judgeLeetcode:{[problemName;codeStr]
     problemName:$[-11h=type problemName; problemName; `$problemName];
+    .web.saveCode[`Leetcode;problemName;codeStr];
     func:@[value; codeStr; {'"Could not parse submission: ",x}];
     difficulty:confirmLeetcodeDifficulty problemName;
     if[null difficulty; '"Unknown problem"];
@@ -537,9 +579,11 @@
 
 
 .web.judgeIdiom:{[problemSlug;codeStr]
+    problemSlug:$[-11h=type problemSlug; problemSlug; `$problemSlug];
     tn:.web.idiomTopicName problemSlug;
     topic:tn`topic;
     name:tn`name;
+    .web.saveCode[`Idioms;problemSlug;codeStr];
     func:@[value; codeStr; {'"Could not parse submission: ",x}];
     input:(value `$".inputs.",string[topic],".easy") name;
     expected:(value `$".solutions.",string[topic],".easy") name;
@@ -548,7 +592,6 @@
     expectedN:.checker.normalise expected;
     pass:actualN=expectedN;
     st:.z.p;
-    problemSlug:$[-11h=type problemSlug; problemSlug; `$problemSlug];
     insert[`resultsIdioms; (problemSlug;pass;enlist actualN;enlist expectedN;st;st;topic;`easy)];
     insert[`.quiz.history; (problemSlug;actualN;expectedN;pass;`Idioms;.web.currentUser)];
     `problem`area`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
@@ -618,6 +661,7 @@
 
 .web.judgeQuantRank:{[problemName;codeStr]
     problemName:$[-11h=type problemName; problemName; `$problemName];
+    .web.saveCode[`QuantRank;problemName;codeStr];
     func:@[value; codeStr; {'"Could not parse submission: ",x}];
     difficulty:confirmQuantRankDifficulty problemName;
     if[null difficulty; '"Unknown problem"];
@@ -731,6 +775,7 @@
 
 .web.judgeFundamentals:{[problemName;codeStr]
     problemName:$[-11h=type problemName; problemName; `$problemName];
+    .web.saveCode[`Fundamentals;problemName;codeStr];
     func:@[value; codeStr; {'"Could not parse submission: ",x}];
     category:confirmFundamentalsCategory problemName;
     kind:category 0;

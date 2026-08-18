@@ -241,7 +241,9 @@ class JudgeService:
 
                 text_lines.append(match.group(1).replace('\\"', '"'))
 
-        return "\n".join(text_lines)
+        saved_code = _decode(self.q.execute(".web.getSavedCode", "HackerRank", problem))
+
+        return {"info": "\n".join(text_lines), "savedCode": saved_code}
 
 
 class DiChallengeService:
@@ -325,7 +327,9 @@ class DiChallengeService:
 
             text_lines.append(match.group(1) if match else decoded)
 
-        return "\n".join(text_lines)
+        saved_code = _decode(self.q.execute(".web.getSavedCode", "DiChallenge", problem))
+
+        return {"info": "\n".join(text_lines), "savedCode": saved_code}
 
 
 class EulerService:
@@ -409,7 +413,9 @@ class EulerService:
 
             text_lines.append(match.group(1) if match else decoded)
 
-        return "\n".join(text_lines)
+        saved_code = _decode(self.q.execute(".web.getSavedCode", "Euler", problem))
+
+        return {"info": "\n".join(text_lines), "savedCode": saved_code}
 
 
 class AdventOfCodeService:
@@ -493,7 +499,9 @@ class AdventOfCodeService:
 
             text_lines.append(match.group(1) if match else decoded)
 
-        return "\n".join(text_lines)
+        saved_code = _decode(self.q.execute(".web.getSavedCode", "AdventOfCode", problem))
+
+        return {"info": "\n".join(text_lines), "savedCode": saved_code}
 
 
 class LeetcodeService:
@@ -577,7 +585,9 @@ class LeetcodeService:
 
             text_lines.append(match.group(1) if match else decoded)
 
-        return "\n".join(text_lines)
+        saved_code = _decode(self.q.execute(".web.getSavedCode", "Leetcode", problem))
+
+        return {"info": "\n".join(text_lines), "savedCode": saved_code}
 
 
 class IdiomService:
@@ -655,7 +665,9 @@ class IdiomService:
 
                 text_lines.append(match.group(1).replace('\\"', '"'))
 
-        return "\n".join(text_lines)
+        saved_code = _decode(self.q.execute(".web.getSavedCode", "Idioms", problem))
+
+        return {"info": "\n".join(text_lines), "savedCode": saved_code}
 
 
 class QuantRankService:
@@ -733,7 +745,9 @@ class QuantRankService:
 
                 text_lines.append(match.group(1).replace('\\"', '"'))
 
-        return "\n".join(text_lines)
+        saved_code = _decode(self.q.execute(".web.getSavedCode", "QuantRank", problem))
+
+        return {"info": "\n".join(text_lines), "savedCode": saved_code}
 
 
 class JobService:
@@ -856,7 +870,9 @@ class FundamentalsService:
 
                 text_lines.append(match.group(1).replace('\\"', '"'))
 
-        return "\n".join(text_lines)
+        saved_code = _decode(self.q.execute(".web.getSavedCode", "Fundamentals", problem))
+
+        return {"info": "\n".join(text_lines), "savedCode": saved_code}
 
 
 def _decode_entries(table):

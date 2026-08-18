@@ -1,0 +1,18 @@
+# Non-secret config, equivalent to the env vars this app already reads
+# via os.environ.get(...) in web/config.py, web/wsgi.py and
+# scripts/supervisor.py - values here just need to change once, here,
+# instead of being exported by hand before every restart (the gap
+# flagged back when the supervisor was built).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: q-quiz-config
+  namespace: q-quiz
+data:
+  Q_HOST: "q-core"                     # ClusterIP Service DNS name, see q-core/service.yaml
+  Q_PORT: "5000"
+  JUDGE_WORKER_HOST: "judge-worker"    # ClusterIP Service DNS name, see judge-worker/service.yaml
+  JUDGE_WORKER_PORT: "5000"
+  PORT: "8000"
+  WAITRESS_THREADS: "4"
+  AUTOSAVE_INTERVAL_SECONDS: "300"

@@ -71,6 +71,17 @@ async function loadQuestionInfo(apiBase,problem){
 
     panel.textContent=result.info || "No description available for this problem yet.";
 
+    // Prefills whatever was last submitted for this problem (signed-in
+    // users only - see .web.saveCode/.web.getSavedCode), so coming back
+    // to a problem doesn't start from the blank placeholder again.
+    const codeField=document.getElementById("code");
+
+    if(codeField && result.savedCode){
+
+        codeField.value=result.savedCode;
+
+    }
+
 }
 
 
