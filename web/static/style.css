@@ -564,6 +564,28 @@ textarea{
 
 }
 
+.caseValueBlock{
+
+    margin:4px 0 0 0;
+
+    padding:8px;
+
+    background:#1a1a19;
+
+    border-radius:6px;
+
+    white-space:pre;
+
+    overflow-x:auto;
+
+    color:#ccc;
+
+    font-size:13px;
+
+    font-family:Consolas,monospace;
+
+}
+
 #runCode{
 
     background:#333;

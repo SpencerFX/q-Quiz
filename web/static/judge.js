@@ -415,9 +415,43 @@ function renderVerdict(verdict,result){
 
         row.className="caseRow";
 
-        row.innerText="Case "+c.case_no+": "+(c.passed? "pass":"fail")
+        // A table renders as a multi-line aligned grid (see
+        // .web.renderPlainValue on the q side) - that doesn't fit on
+        // the compact one-liner every other value uses, so it gets
+        // its own <pre> block instead.
+        const isMultiline=c.actual.indexOf("\n")!==-1||c.expected.indexOf("\n")!==-1;
 
-            +" — actual: "+c.actual+", expected: "+c.expected;
+        if(isMultiline){
+
+            const header=document.createElement("div");
+
+            header.innerText="Case "+c.case_no+": "+(c.passed? "pass":"fail");
+
+            row.appendChild(header);
+
+            const actualBlock=document.createElement("pre");
+
+            actualBlock.className="caseValueBlock";
+
+            actualBlock.innerText="actual:\n"+c.actual;
+
+            row.appendChild(actualBlock);
+
+            const expectedBlock=document.createElement("pre");
+
+            expectedBlock.className="caseValueBlock";
+
+            expectedBlock.innerText="expected:\n"+c.expected;
+
+            row.appendChild(expectedBlock);
+
+        }else{
+
+            row.innerText="Case "+c.case_no+": "+(c.passed? "pass":"fail")
+
+                +" — actual: "+c.actual+", expected: "+c.expected;
+
+        }
 
         verdict.appendChild(row);
 
