@@ -432,6 +432,75 @@ button{
 
 }
 
+.problemRowLeft{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:flex-start;
+
+    gap:8px;
+
+}
+
+.problemCategoryBadge{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:6px;
+
+    background:#1a1a19;
+
+    border:1px solid #2c2c2a;
+
+    border-radius:8px;
+
+    padding:3px 8px;
+
+    text-decoration:none;
+
+    color:#ccc;
+
+    transition:background 0.15s,border-color 0.15s;
+
+}
+
+/* Only the standalone problem-page badge (an <a>) is actually
+   clickable - the list-row version is a <span> inside the row's own
+   link, so this hover has no special meaning there. */
+a.problemCategoryBadge:hover{
+
+    background:#242422;
+
+    border-color:#3a3a37;
+
+    cursor:pointer;
+
+}
+
+.problemCategoryIcon{
+
+    font-size:12px;
+
+    line-height:1;
+
+    flex-shrink:0;
+
+}
+
+.problemCategoryLabel{
+
+    font-size:11px;
+
+    font-weight:600;
+
+    color:#ccc;
+
+}
+
 .problemNameGroup{
 
     display:flex;
@@ -1623,6 +1692,14 @@ input[type="text"]{
 .problemPageCard{
 
     width:1100px;
+
+}
+
+.problemPageCard>.problemCategoryBadge{
+
+    display:inline-flex;
+
+    margin-bottom:12px;
 
 }
 
