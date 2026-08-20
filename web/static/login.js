@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded",function(){
 
     wireAuthStub("googleSignInButton","googleSignInNote","/auth/google","Google sign-in is not available.");
 
+    wireAuthStub("appleSignInButton","appleSignInNote","/auth/apple","Apple sign-in is not available.");
+
     wireAuthStub("linkedinSignInButton","linkedinSignInNote","/auth/linkedin","LinkedIn sign-in is not available.");
 
 });
@@ -67,6 +69,13 @@ async function handleGoogleCredential(response){
 
     }
 
-    window.location="/";
+    // /login?next=... is how the "sign in first" redirect (app.py's
+    // _require_login_for_gated_pages) sends the user here - honor it
+    // so signing in with Google lands back on the page they wanted,
+    // same as the plain handle form (which passes it as a hidden
+    // field instead, since that's a normal POST).
+    const next=new URLSearchParams(window.location.search).get("next");
+
+    window.location=(next&&next.startsWith("/")&&!next.startsWith("//"))? next:"/";
 
 }

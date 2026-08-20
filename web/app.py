@@ -71,6 +71,45 @@ def _error_message(exc):
     return str(message)
 
 
+# Page routes that require a signed-in session - the tiles on the
+# homepage from Multiple Choice through Assessments, plus Results.
+# Prefixes only, and only page routes, not /api/* - this gates
+# navigating to a page, not the underlying API endpoints it calls (an
+# anonymous curl straight at /api/fundamentals still works; getting
+# there by clicking the tile does not).
+GATED_PAGE_PREFIXES = (
+    "/quiz",
+    "/qidioms",
+    "/fundamentals",
+    "/adventOfCode",
+    "/aquaq",
+    "/problems",
+    "/leetcode",
+    "/euler",
+    "/quantrank",
+    "/assessment",
+    "/results",
+)
+
+
+def _is_safe_redirect_target(path):
+    # Only a same-site relative path is allowed as a post-login
+    # redirect target - anything else (an absolute URL, or "//evil.com"
+    # which browsers treat as protocol-relative) could redirect a user
+    # off-site right after they've signed in.
+    return bool(path) and path.startswith("/") and not path.startswith("//")
+
+
+@app.before_request
+def _require_login_for_gated_pages():
+    if session.get("user_handle"):
+        return None
+    if not request.path.startswith(GATED_PAGE_PREFIXES):
+        return None
+    target = request.path + (("?" + request.query_string.decode()) if request.query_string else "")
+    return redirect(url_for("login_page", next=target))
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -83,18 +122,20 @@ def about():
 
 @app.route("/login")
 def login_page():
+    next_target = request.args.get("next", "")
     if session.get("user_handle"):
-        return redirect(url_for("index"))
-    return render_template("login.html", google_client_id=GOOGLE_CLIENT_ID)
+        return redirect(next_target if _is_safe_redirect_target(next_target) else url_for("index"))
+    return render_template("login.html", google_client_id=GOOGLE_CLIENT_ID, next=next_target)
 
 
 @app.route("/login", methods=["POST"])
 def login_submit():
     handle = request.form.get("handle", "").strip()
+    next_target = request.form.get("next", "")
     if not handle:
-        return render_template("login.html", error="Enter a display name to continue."), 400
+        return render_template("login.html", error="Enter a display name to continue.", next=next_target), 400
     session["user_handle"] = handle[:40]
-    return redirect(url_for("index"))
+    return redirect(next_target if _is_safe_redirect_target(next_target) else url_for("index"))
 
 
 @app.route("/logout")
@@ -161,7 +202,19 @@ def auth_linkedin_stub():
     # doing nothing. Wire up via Authlib once LINKEDIN_CLIENT_ID /
     # LINKEDIN_CLIENT_SECRET are available (LinkedIn uses OpenID Connect).
     return jsonify({
-        "error": "LinkedIn sign-in isn't configured yet - set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET to enable it. Use the display name field below for now."
+        "error": "LinkedIn sign-in isn't configured yet - set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET to enable it."
+    }), 501
+
+
+@app.route("/auth/apple")
+def auth_apple_stub():
+    # Same situation as /auth/linkedin - no "Sign in with Apple" Services
+    # ID/key has been registered yet. Apple's flow needs a Services ID,
+    # a private key from an Apple Developer account, and server-side
+    # verification of the identity token (JWT) it returns - structurally
+    # like the Google flow above, but Apple-specific setup.
+    return jsonify({
+        "error": "Apple sign-in isn't configured yet."
     }), 501
 
 
