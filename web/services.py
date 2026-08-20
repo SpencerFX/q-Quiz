@@ -904,6 +904,7 @@ class ProfileService:
             "location": _decode(data["location"]),
             "resumeFilename": _decode(data["resumeFilename"]),
             "photoFilename": _decode(data["photoFilename"]),
+            "leaderboardHandle": _decode(data["leaderboardHandle"]),
             "registered": bool(data["registered"]),
             "experience": _decode_entries(data["experience"]),
             "education": _decode_entries(data["education"]),
@@ -924,6 +925,10 @@ class ProfileService:
     def set_resume(self, filename):
 
         return self._parse(self.q.execute(".web.profile.setResume", filename))
+
+    def set_leaderboard_handle(self, handle):
+
+        return self._parse(self.q.execute(".web.profile.setLeaderboardHandle", handle))
 
     def set_photo(self, filename):
 

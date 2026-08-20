@@ -56,6 +56,10 @@ def test_signed_in_submission_is_attributed_on_leaderboard(client):
 
 def test_results_history_reflects_recorded_answers(client):
 
+    # /api/history is scoped to whoever's signed in (empty for
+    # anonymous requests), so this needs a session to see its own row.
+    client.post("/login", data={"handle": "ResultsHistoryTestUser"})
+
     client.get("/api/question")
 
     client.post("/api/answer", json={"answer": "a"})

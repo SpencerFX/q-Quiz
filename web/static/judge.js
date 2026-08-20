@@ -132,6 +132,17 @@ async function loadProblems(apiBase,linkBase){
 
         });
 
+        // Areas otherwise come back in backend insertion order (eg
+        // fundamentals lists Overloads first, not alphabetically) -
+        // sort() is a stable sort, so this only reorders the area
+        // groups themselves and leaves each group's own existing
+        // difficulty/name ordering untouched.
+        filtered.sort(function(a,b){
+
+            return a.area<b.area? -1 : a.area>b.area? 1 : 0;
+
+        });
+
         filtered.forEach(function(p){
 
             const row=document.createElement("a");

@@ -12,15 +12,28 @@ async function loadHeaderProfile(){
 
     if(!container) return;
 
-    const response=await fetch("/api/profile");
+    const [profileResponse,sessionResponse]=await Promise.all([
+        fetch("/api/profile"),
+        fetch("/api/session")
+    ]);
 
-    if(!response.ok) return;
+    if(!profileResponse.ok) return;
 
-    const p=await response.json();
+    const p=await profileResponse.json();
+
+    const s=sessionResponse.ok? await sessionResponse.json():{loggedIn:false};
 
     container.innerHTML="";
 
-    if(p.registered){
+    if(s.loggedIn){
+
+        // The pill only shows the signed-in name now, not a fallback
+        // to the locally-registered profile name - previously this
+        // fell back to p.name whenever not logged in, which meant
+        // signing out still left the previous identity showing here
+        // (only the session pill next to it changed), looking like
+        // sign-out hadn't actually taken effect.
+        const displayName=s.handle;
 
         const link=document.createElement("a");
 
@@ -36,19 +49,19 @@ async function loadHeaderProfile(){
 
             avatar.src="/uploads/"+encodeURIComponent(p.photoFilename);
 
-            avatar.alt=p.name;
+            avatar.alt=displayName;
 
         }
 
         else{
 
-            avatar.textContent=(p.name.trim().charAt(0)||"?").toUpperCase();
+            avatar.textContent=(displayName.trim().charAt(0)||"?").toUpperCase();
 
         }
 
         const name=document.createElement("span");
 
-        name.textContent=p.name;
+        name.textContent=displayName;
 
         link.appendChild(avatar);
 
@@ -58,7 +71,7 @@ async function loadHeaderProfile(){
 
     }
 
-    else{
+    else if(!p.registered){
 
         const link=document.createElement("a");
 
@@ -75,5 +88,9 @@ async function loadHeaderProfile(){
         container.appendChild(link);
 
     }
+
+    // else: registered locally but not signed in - leave empty, so
+    // "Sign in" (session-nav.js) is the only thing shown here rather
+    // than a name that looks like an active identity when it isn't.
 
 }

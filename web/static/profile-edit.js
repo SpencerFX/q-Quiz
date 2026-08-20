@@ -6,6 +6,8 @@ window.addEventListener("DOMContentLoaded",function(){
 
     document.getElementById("saveBasics").onclick=saveBasics;
 
+    document.getElementById("saveLeaderboardHandle").onclick=saveLeaderboardHandle;
+
     document.getElementById("uploadResume").onclick=uploadResume;
 
     document.getElementById("uploadAutofillResume").onclick=uploadAndAutofillResume;
@@ -47,6 +49,8 @@ function applyProfile(p){
     document.getElementById("fieldPhone").value=p.phone;
 
     document.getElementById("fieldLocation").value=p.location;
+
+    document.getElementById("fieldLeaderboardHandle").value=p.leaderboardHandle;
 
     document.getElementById("resumeStatus").textContent=
 
@@ -207,6 +211,36 @@ async function saveBasics(){
                 phone:document.getElementById("fieldPhone").value,
 
                 location:document.getElementById("fieldLocation").value
+
+            })
+
+        }
+
+    );
+
+    const p=await response.json();
+
+    if(response.ok) applyProfile(p);
+
+}
+
+
+
+async function saveLeaderboardHandle(){
+
+    const response=await fetch(
+
+        "/api/profile/leaderboard-handle",
+
+        {
+
+            method:"POST",
+
+            headers:{ "Content-Type":"application/json" },
+
+            body:JSON.stringify({
+
+                leaderboardHandle:document.getElementById("fieldLeaderboardHandle").value
 
             })
 

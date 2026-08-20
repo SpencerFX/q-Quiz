@@ -143,7 +143,11 @@ def api_auth_google():
     except ValueError as exc:
         return jsonify({"error": "Could not verify Google sign-in: " + str(exc)}), 401
 
-    handle = payload.get("name") or payload.get("email") or "Google user"
+    # A Leaderboard Handle set on the local profile (/profile/edit)
+    # takes priority over whatever Google calls this account, so the
+    # leaderboard shows the name the profile owner actually chose.
+    leaderboard_handle = profile.get().get("leaderboardHandle", "").strip()
+    handle = leaderboard_handle or payload.get("name") or payload.get("email") or "Google user"
     session["user_handle"] = handle[:40]
     session["user_email"] = payload.get("email")
     session["google_sub"] = payload.get("sub")
@@ -728,6 +732,16 @@ def api_profile_register():
             body.get("phone", ""),
             body.get("location", "")
         )
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
+@app.route("/api/profile/leaderboard-handle", methods=["POST"])
+def api_profile_leaderboard_handle():
+    body = request.get_json(force=True)
+    try:
+        result = profile.set_leaderboard_handle(body.get("leaderboardHandle", "").strip()[:40])
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
     return jsonify(result)

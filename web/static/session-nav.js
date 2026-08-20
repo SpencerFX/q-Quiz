@@ -22,12 +22,8 @@ async function loadSessionNav(){
 
     if(s.loggedIn){
 
-        const pill=document.createElement("span");
-
-        pill.className="sessionPill";
-
-        pill.textContent=s.handle;
-
+        // The signed-in name is shown by the profile pill now (see
+        // profile-nav.js) - no separate handle pill needed here.
         const logout=document.createElement("a");
 
         logout.href="/logout";
@@ -35,8 +31,6 @@ async function loadSessionNav(){
         logout.className="sessionLogout";
 
         logout.textContent="Log out";
-
-        container.appendChild(pill);
 
         container.appendChild(logout);
 
