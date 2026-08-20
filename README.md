@@ -23,6 +23,17 @@ before running `pytest`.
 python scripts/supervisor.py
 ```
 
+or, from a bash shell:
+
+```
+scripts/start.sh                          # defaults: q=5000, web=8000
+scripts/start.sh --q-port 5099 --port 8099 # e.g. to test alongside an already-running instance
+```
+
+`start.sh` is a thin wrapper - it resolves the repo root so it works from
+any cwd, and `--q-port`/`--port` are just a shorthand for setting
+`Q_PORT`/`PORT` below before it execs `scripts/supervisor.py`.
+
 Run from the repo root. This starts both the q server and the
 waitress-served web app (`web/wsgi.py`) as child processes, and restarts
 whichever one exits unexpectedly - closing the gap where a q crash needed
