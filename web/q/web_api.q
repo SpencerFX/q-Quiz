@@ -747,6 +747,42 @@
  };
 
 
+/ Renders one value the way the q console would print it - an aligned
+/ grid (header, dashes, rows) for tables/keyed tables via .Q.s, the
+/ flat parse-syntax via -3! for everything else (scalars, lists,
+/ dicts). \c (console width) is widened for the call and restored
+/ after, so a table isn't cut short with ".." the way the default
+/ 25x80 would. Used both for the per-problem Input:/Expected Output:
+/ text (.web.renderInfoValue below) and for the actual/expected values
+/ shown in a judge*'s per-case verdict - callers that need a table on
+/ its own lines split this on "\n" themselves; this just returns text.
+.web.renderPlainValue:{[v]
+    isTable:(98h=type v) or 99h=type v;
+    oldC:system "c";
+    system "c 50 240";
+    text:$[isTable; .Q.s v; -3!v];
+    system "c ",(string oldC 0)," ",string oldC 1;
+    ssr[text;"\r\n";"\n"]
+ };
+
+
+/ Wraps .web.renderPlainValue's text as "-1 "...";" source lines, one
+/ per row, since each entry becomes its own printed line below and
+/ web/services.py's regex matches one line at a time.
+.web.renderInfoValue:{[label;v]
+    isTable:(98h=type v) or 99h=type v;
+    text:.web.renderPlainValue v;
+    rows:"\n" vs text;
+    rows:rows where 0<count each rows;
+    / A table's grid gets the label on its own line, else the columns
+    / would start indented under "Label: " while the dashes/rows below
+    / don't - a plain (non-table) value stays on the same line as its
+    / label, matching .web.idiomInfoLines' original one-line style.
+    labelled:$[isTable; (enlist label,":"),rows; (enlist label,": ",first rows),1_rows];
+    {"    -1 \"",ssr[x;"\"";"\\\""],"\";"} each labelled
+ };
+
+
 / fundamentals question files use the same ".info:{}" + "-1 "...";"
 / print pattern as hackerRank (parsed the same way by
 / web/services.py), one topic+difficulty file per kind
@@ -755,6 +791,14 @@
 / building the exact namespace, since the auto-generated overloads
 / functions live under .fundamentals.overloads.* while qsql's (a typo
 / in the original scaffold) live under .fundamental.qsql.* - singular.
+/ Each question file also prints its own Input:/Expected Output: lines,
+/ but builds them at print time via "-3!" on the live input/solution
+/ dicts rather than a static string literal, so web/services.py's
+/ regex (which expects a line that's nothing but a quoted literal)
+/ silently drops them - same issue .web.idiomInfoLines has. Rebuilt
+/ here via .web.renderInfoValue instead, so a qsql question whose
+/ input/expected is a table renders as an actual grid rather than
+/ -3!'s flat "+`a`b!(...)" functional notation.
 .web.fundamentalsInfoLines:{[problemName]
     problemName:$[-11h=type problemName; problemName; `$problemName];
     category:confirmFundamentalsCategory problemName;
@@ -769,7 +813,18 @@
     tailLines:(startIdx+1) _ lines;
     endOffset:first where tailLines like "*};*";
     if[null endOffset; endOffset:count tailLines];
-    endOffset#tailLines
+    rawLines:endOffset#tailLines;
+    isDynamic:(rawLines like "*Input: *")|(rawLines like "*Expected Output: *");
+    cleanLines:rawLines where not isDynamic;
+    / input is the dot-apply argument list (see .web.judgeFundamentals),
+    / so a single-arg function's input is a 1-item list - unwrap that
+    / common case to "Input:" rather than a needless "Input 1:".
+    args:(value `$".inputs.",string[kind],".",string difficulty) problemName;
+    expected:(value `$".solutions.",string[kind],".",string difficulty) problemName;
+    n:count args;
+    inputLines:raze {[n;i;a] .web.renderInfoValue[$[n=1;"Input";"Input ",string i+1];a]}[n]'[til n;args];
+    expectedLines:.web.renderInfoValue["Expected Output";expected];
+    cleanLines,inputLines,expectedLines
  };
 
 
@@ -790,8 +845,15 @@
     st:.z.p;
     insert[`resultsFundamentals; (problemName;pass;enlist actualN;enlist expectedN;st;st;kind;difficulty)];
     insert[`.quiz.history; (problemName;actualN;expectedN;pass;`Fundamentals;.web.currentUser)];
+    / actualN/expectedN (above) are the -3!-based canonical forms used
+    / for the pass/fail check and for what's stored in history - the
+    / verdict shown in the console uses .web.renderPlainValue instead,
+    / so a table comes back as an actual grid rather than that flat
+    / "+`a`b!(...)" notation.
     `problem`area`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
-        (problemName;kind;difficulty;pass;enlist 1;enlist pass;enlist actualN;enlist expectedN)
+        (problemName;kind;difficulty;pass;enlist 1;enlist pass;
+            enlist .web.renderPlainValue actual;
+            enlist .web.renderPlainValue expected)
  };
 
 

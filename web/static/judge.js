@@ -19,7 +19,7 @@ window.addEventListener("DOMContentLoaded",function(){
 
         const linkBase=apiBase.replace(/^\/api/,"");
 
-        loadProblemMeta(apiBase,card.dataset.problem);
+        loadProblemMeta(apiBase,linkBase,card.dataset.problem);
 
         loadQuestionInfo(apiBase,card.dataset.problem);
 
@@ -48,6 +48,24 @@ window.addEventListener("DOMContentLoaded",function(){
     }
 
 });
+
+
+
+// "functionalForms" -> "Functional Forms", "adventOfCode" -> "Advent Of Code",
+// "sql" -> "Sql" - a plain lowercase word just gets capitalized. Top-level
+// (not nested in loadProblems) since loadProblemMeta - a separate
+// top-level function - needs it too.
+function formatCategoryLabel(area){
+
+    const words=String(area).replace(/([a-z0-9])([A-Z])/g,"$1 $2").split(/[\s_-]+/);
+
+    return words.map(function(w){
+
+        return w.charAt(0).toUpperCase()+w.slice(1);
+
+    }).join(" ");
+
+}
 
 
 
@@ -94,7 +112,14 @@ async function loadProblems(apiBase,linkBase){
 
     const list=document.getElementById("problemList");
 
-    const state={area:"all",difficulty:"all"};
+    // Lets a category badge link (see loadProblemMeta) land here already
+    // filtered to that area, instead of just dumping the user back at
+    // the unfiltered full list.
+    const requestedArea=new URLSearchParams(window.location.search).get("area");
+
+    const areaIsValid=requestedArea && problems.some(function(p){ return p.area===requestedArea; });
+
+    const state={area:areaIsValid? requestedArea:"all",difficulty:"all"};
 
     function renderList(){
 
@@ -114,6 +139,30 @@ async function loadProblems(apiBase,linkBase){
             row.className="problemRow";
 
             row.href=linkBase+"/"+encodeURIComponent(p.problem);
+
+            const left=document.createElement("div");
+
+            left.className="problemRowLeft";
+
+            const categoryBadge=document.createElement("span");
+
+            categoryBadge.className="problemCategoryBadge";
+
+            const categoryIcon=document.createElement("span");
+
+            categoryIcon.className="problemCategoryIcon";
+
+            categoryIcon.textContent="🏷️";
+
+            const categoryLabel=document.createElement("span");
+
+            categoryLabel.className="problemCategoryLabel";
+
+            categoryLabel.textContent=formatCategoryLabel(p.area);
+
+            categoryBadge.appendChild(categoryIcon);
+
+            categoryBadge.appendChild(categoryLabel);
 
             const nameGroup=document.createElement("span");
 
@@ -135,13 +184,17 @@ async function loadProblems(apiBase,linkBase){
 
             nameGroup.appendChild(name);
 
+            left.appendChild(categoryBadge);
+
+            left.appendChild(nameGroup);
+
             const meta=document.createElement("span");
 
             meta.className="problemMeta";
 
-            meta.textContent=p.area+" / "+p.difficulty;
+            meta.textContent=p.difficulty;
 
-            row.appendChild(nameGroup);
+            row.appendChild(left);
 
             row.appendChild(meta);
 
@@ -165,7 +218,7 @@ async function loadProblems(apiBase,linkBase){
 
             chip.className="filterChip"+(v===state[stateKey]? " filterChipActive":"");
 
-            chip.textContent=v==="all"? "All":v.charAt(0).toUpperCase()+v.slice(1);
+            chip.textContent=v==="all"? "All":formatCategoryLabel(v);
 
             chip.onclick=function(){
 
@@ -241,7 +294,7 @@ async function loadProblems(apiBase,linkBase){
 
 
 
-async function loadProblemMeta(apiBase,problem){
+async function loadProblemMeta(apiBase,linkBase,problem){
 
     const response=await fetch(apiBase);
 
@@ -253,7 +306,38 @@ async function loadProblemMeta(apiBase,problem){
 
         document
             .getElementById("problemMeta")
-            .innerText=match.area+" / "+match.difficulty;
+            .innerText=match.difficulty;
+
+        const card=document.getElementById("problemCard");
+
+        const heading=card.querySelector("h1");
+
+        // A link (not a span) - takes the user back to this section's
+        // challenge list, pre-filtered to this problem's area via the
+        // ?area= query param loadProblems reads on load.
+        const badge=document.createElement("a");
+
+        badge.className="problemCategoryBadge";
+
+        badge.href=linkBase+"?area="+encodeURIComponent(match.area);
+
+        const icon=document.createElement("span");
+
+        icon.className="problemCategoryIcon";
+
+        icon.textContent="🏷️";
+
+        const label=document.createElement("span");
+
+        label.className="problemCategoryLabel";
+
+        label.textContent=formatCategoryLabel(match.area);
+
+        badge.appendChild(icon);
+
+        badge.appendChild(label);
+
+        card.insertBefore(badge,heading);
 
     }
 
@@ -415,9 +499,43 @@ function renderVerdict(verdict,result){
 
         row.className="caseRow";
 
-        row.innerText="Case "+c.case_no+": "+(c.passed? "pass":"fail")
+        // A table renders as a multi-line aligned grid (see
+        // .web.renderPlainValue on the q side) - that doesn't fit on
+        // the compact one-liner every other value uses, so it gets
+        // its own <pre> block instead.
+        const isMultiline=c.actual.indexOf("\n")!==-1||c.expected.indexOf("\n")!==-1;
 
-            +" — actual: "+c.actual+", expected: "+c.expected;
+        if(isMultiline){
+
+            const header=document.createElement("div");
+
+            header.innerText="Case "+c.case_no+": "+(c.passed? "pass":"fail");
+
+            row.appendChild(header);
+
+            const actualBlock=document.createElement("pre");
+
+            actualBlock.className="caseValueBlock";
+
+            actualBlock.innerText="actual:\n"+c.actual;
+
+            row.appendChild(actualBlock);
+
+            const expectedBlock=document.createElement("pre");
+
+            expectedBlock.className="caseValueBlock";
+
+            expectedBlock.innerText="expected:\n"+c.expected;
+
+            row.appendChild(expectedBlock);
+
+        }else{
+
+            row.innerText="Case "+c.case_no+": "+(c.passed? "pass":"fail")
+
+                +" — actual: "+c.actual+", expected: "+c.expected;
+
+        }
 
         verdict.appendChild(row);
 
