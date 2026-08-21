@@ -27,6 +27,7 @@
     .web.setCurrentUser:{[u] .web.currentUser:$[0=count u; `; `$u] };
     .quiz.loadBanks[];
     .quiz.loadBanksSyntax[];
+    .quiz.loadBanksDebug[];
     .quiz.shuffleBank each key .quiz.bank;
     -1 "";
     system "l ./scripts/quiz.q";
@@ -75,6 +76,19 @@
     .quiz.bankSyntaxMedium: raze value each {` sv `.quiz,x,y}[;`medium]each banks;
     .quiz.bankSyntaxHard: raze value each {` sv `.quiz,x,y}[;`hard]each banks;
     .quiz.bankSyntax:.quiz.bankSyntaxEasy,.quiz.bankSyntaxMedium,.quiz.bankSyntaxHard;
+ };
+
+
+.quiz.loadBanksDebug:{
+    listOfDirs:key hsym `$"./banksDebug/";
+    {system"l ./banksDebug/",(string x),"/easy.q"}each listOfDirs;
+    {system"l ./banksDebug/",(string x),"/medium.q"}each listOfDirs;
+    {system"l ./banksDebug/",(string x),"/hard.q"}each listOfDirs;
+    banks:key hsym `$"./banksDebug/";
+    .quiz.bankDebugEasy: raze value each {` sv `.quiz,x,y}[;`easy]each banks;
+    .quiz.bankDebugMedium: raze value each {` sv `.quiz,x,y}[;`medium]each banks;
+    .quiz.bankDebugHard: raze value each {` sv `.quiz,x,y}[;`hard]each banks;
+    .quiz.bankDebug:.quiz.bankDebugEasy,.quiz.bankDebugMedium,.quiz.bankDebugHard;
  };
 
 

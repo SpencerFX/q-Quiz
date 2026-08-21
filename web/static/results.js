@@ -274,6 +274,8 @@ const TYPE_LABELS={
 
     MultipleChoiceSyntax:"Syntax",
 
+    MultipleChoiceDebug:"Debug It",
+
     HackerRank:"HackerRank",
 
     Idioms:"Idioms",
@@ -301,7 +303,7 @@ const TYPE_LABELS={
 // labels themselves mix casing ("leetcode", "qIdioms", "quantRank" vs
 // "Fundamentals", "HackerRank Problems").
 const COMPLETION_ORDER=[
-    "AdventOfCode","DiChallenge","Fundamentals","HackerRank","Leetcode",
+    "AdventOfCode","DiChallenge","MultipleChoiceDebug","Fundamentals","HackerRank","Leetcode",
     "MultipleChoice","MultipleChoiceSyntax","Euler","Idioms","QuantRank"
 ];
 
@@ -310,6 +312,8 @@ const COMPLETION_LABELS={
     MultipleChoice:"Multiple Choice",
 
     MultipleChoiceSyntax:"Multiple Choice - Syntax",
+
+    MultipleChoiceDebug:"Debug It",
 
     Idioms:"qIdioms",
 

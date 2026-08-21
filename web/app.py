@@ -220,7 +220,11 @@ def auth_apple_stub():
 
 @app.route("/quiz")
 def start():
-    mode = "MultipleChoiceSyntax" if request.args.get("mode") == "syntax" else "MultipleChoice"
+    mode_param = request.args.get("mode")
+    mode = {
+        "syntax": "MultipleChoiceSyntax",
+        "debug": "MultipleChoiceDebug"
+    }.get(mode_param, "MultipleChoice")
     quiz.set_mode(mode)
     return render_template("quiz.html")
 

@@ -80,9 +80,9 @@ def test_completion_endpoint_covers_every_section(client):
     types = {r["questionType"] for r in rates}
 
     assert types == {
-        "MultipleChoice", "MultipleChoiceSyntax", "HackerRank", "Idioms",
-        "DiChallenge", "Leetcode", "QuantRank", "Fundamentals", "Euler",
-        "AdventOfCode"
+        "MultipleChoice", "MultipleChoiceSyntax", "MultipleChoiceDebug",
+        "HackerRank", "Idioms", "DiChallenge", "Leetcode", "QuantRank",
+        "Fundamentals", "Euler", "AdventOfCode"
     }
 
     for r in rates:

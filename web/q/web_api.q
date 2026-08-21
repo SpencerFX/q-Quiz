@@ -145,18 +145,21 @@
 .web.mcHistory:{[] select from .quiz.history where questionType=.quiz.currentType};
 
 
-/ Switch which multiple-choice bank is live. MultipleChoiceSyntax
-/ swaps .quiz.bank to the already-loaded .quiz.bankSyntax in place;
-/ MultipleChoice reloads the original banks fresh from disk - both
-/ exactly as specified for this feature, then reshuffle per-question
-/ answer order the same way .quiz.init[] does at boot. Resets
-/ .quiz.current so a stale in-progress question from the bank being
-/ left can't get graded against the new one.
+/ Switch which multiple-choice bank is live. MultipleChoiceSyntax and
+/ MultipleChoiceDebug swap .quiz.bank to the already-loaded
+/ .quiz.bankSyntax/.quiz.bankDebug in place; MultipleChoice reloads
+/ the original banks fresh from disk - both exactly as specified for
+/ this feature, then reshuffle per-question answer order the same way
+/ .quiz.init[] does at boot. Resets .quiz.current so a stale
+/ in-progress question from the bank being left can't get graded
+/ against the new one.
 .web.setQuizMode:{[mode]
     mode:$[-11h=type mode; mode; `$mode];
-    if[not mode in `MultipleChoice`MultipleChoiceSyntax; '"Unknown quiz mode"];
+    if[not mode in `MultipleChoice`MultipleChoiceSyntax`MultipleChoiceDebug; '"Unknown quiz mode"];
     $[mode=`MultipleChoiceSyntax;
         [.quiz.bank:.quiz.bankSyntax; .quiz.shuffleBank each key .quiz.bank];
+    mode=`MultipleChoiceDebug;
+        [.quiz.bank:.quiz.bankDebug; .quiz.shuffleBank each key .quiz.bank];
         [.quiz.loadBanks[]; .quiz.shuffleBank each key .quiz.bank]
     ];
     .quiz.currentType:mode;
@@ -250,10 +253,11 @@
 / which 0^ also cleans up).
 .web.completionRates:{[]
     solvedK:select completed:count distinct question by questionType from .quiz.history where result;
-    totalTypes:`MultipleChoice`MultipleChoiceSyntax`HackerRank`Idioms`DiChallenge`Leetcode`QuantRank`Fundamentals`Euler`AdventOfCode;
+    totalTypes:`MultipleChoice`MultipleChoiceSyntax`MultipleChoiceDebug`HackerRank`Idioms`DiChallenge`Leetcode`QuantRank`Fundamentals`Euler`AdventOfCode;
     totalCounts:(
         count .quiz.bank;
         count .quiz.bankSyntax;
+        count .quiz.bankDebug;
         count .web.listProblems[];
         count .web.listIdioms[];
         count .web.listDiChallenges[];
