@@ -40,6 +40,11 @@ def test_easy_assessment_runs_to_completion(client):
 
 def test_completed_assessment_appears_in_history_with_detail(client):
 
+    # /api/assessment/history (and the per-run detail endpoint) is
+    # scoped to whoever's signed in - empty, and access-denied on
+    # detail, for anonymous requests - so this needs a session.
+    client.post("/login", data={"handle": "AssessmentHistoryTestUser"})
+
     _run_full_assessment(client, "medium")
 
     history = client.get("/api/assessment/history").get_json()

@@ -215,8 +215,19 @@
 
 
 / Full attempt-by-attempt breakdown (both MultipleChoice and HackerRank
-/ rows) with running accuracy, for the results dashboard.
-.web.results:{[] .quiz.results[]};
+/ rows) with running accuracy, for the results dashboard. Scoped to
+/ whoever is currently signed in (.web.currentUser, kept in sync with
+/ the Flask session by web/qclient.py before every request) - empty
+/ when nobody's signed in, rather than dumping every visitor's
+/ combined history. Running stats (runningCorrect/percentCorrect) are
+/ recomputed over just this user's rows, not .quiz.results[]'s global
+/ ones, since "row 3 of everyone's history" isn't a meaningful
+/ position once the rows shown are scoped to one person.
+.web.results:{[]
+    h:$[null .web.currentUser; 0#.quiz.history; select from .quiz.history where user=.web.currentUser];
+    if[0=count h; :h];
+    update runningCorrect:sums result, questionNo:1+til count h, percentCorrect:100f*(sums result)%(1+til count h), category:.quiz.questionCategory question from h
+ };
 
 
 / Correct-answer count per category (questionType), for the profile
@@ -898,7 +909,7 @@
 / lookup has a stable key even if two runs somehow finish in the same
 / nanosecond.
 .assessment.nextRunId:0;
-.assessment.completedRuns:([] runId:`long$(); difficulty:`symbol$(); correct:`long$(); total:`long$(); ts:`timestamp$());
+.assessment.completedRuns:([] runId:`long$(); difficulty:`symbol$(); correct:`long$(); total:`long$(); ts:`timestamp$(); user:`symbol$());
 
 / Per-question breakdown backing each completedRuns row - one row per
 / question in that run, so clicking a run in the Results dashboard can
@@ -939,7 +950,7 @@
 .assessment.recordCompletion:{[]
     runId:.assessment.nextRunId;
     .assessment.nextRunId+:1;
-    insert[`.assessment.completedRuns; (runId;.assessment.difficulty;sum .assessment.passed;count .assessment.passed;.z.p)];
+    insert[`.assessment.completedRuns; (runId;.assessment.difficulty;sum .assessment.passed;count .assessment.passed;.z.p;.web.currentUser)];
     n:count .assessment.passed;
     insert[`.assessment.completedDetails;
         (n#runId;1+til n;.assessment.state`kind;.assessment.state`questionType;.assessment.state`problem;.assessment.passed)];
@@ -1031,15 +1042,24 @@
     .web.assessment.current[]
  };
 
-/ Most-recent-first, for the Results dashboard's assessment history.
-.web.assessmentHistory:{[] `ts xdesc .assessment.completedRuns };
+/ Most-recent-first, for the Results dashboard's assessment history -
+/ scoped to whoever's signed in, same reasoning as .web.results above;
+/ empty when nobody's signed in.
+.web.assessmentHistory:{[]
+    `ts xdesc $[null .web.currentUser; 0#.assessment.completedRuns; select from .assessment.completedRuns where user=.web.currentUser]
+ };
 
 / Per-question breakdown for one completed run, in question order -
 / what the Results dashboard shows when a history row is clicked.
 / runId is cast rather than type-checked since it can arrive as any
-/ IPC integer width depending on the client.
+/ IPC integer width depending on the client. Only returns rows for a
+/ run owned by the current user, so a signed-in visitor can't page
+/ through another user's run details by guessing/iterating runId even
+/ though .web.assessmentHistory no longer lists them.
 .web.assessmentDetail:{[runId]
     rid:`long$runId;
+    ownRun:$[null .web.currentUser; 0b; 0<count select from .assessment.completedRuns where runId=rid, user=.web.currentUser];
+    if[not ownRun; :0#select questionNo,kind,questionType,problem,correct from .assessment.completedDetails];
     `questionNo xasc select questionNo,kind,questionType,problem,correct from .assessment.completedDetails where runId=rid
  };
 
@@ -1308,7 +1328,7 @@
 //
 //====================================================================
 
-.profile.defaultInfo:`name`tagline`email`phone`location`resumeFilename`photoFilename!("";"";"";"";"";"";"");
+.profile.defaultInfo:`name`tagline`email`phone`location`resumeFilename`photoFilename`leaderboardHandle!("";"";"";"";"";"";"";"");
 
 .profile.init:{[]
     .profile.info:@[get; `:./profile/info; {.profile.defaultInfo}];
@@ -1357,6 +1377,17 @@ if[(@[value; `.profile.info; {`NOTSET}])~`NOTSET; .profile.init[]];
 
 .web.profile.setPhoto:{[filename]
     .profile.info[`photoFilename]:filename;
+    .profile.save[];
+    .web.profile.get[]
+ };
+
+/ Distinct from .profile.info's name field - this is what the
+/ Google sign-in flow (web/app.py's api_auth_google) prefers over the
+/ Google account's own display name when set, so the leaderboard shows
+/ whatever name the profile owner has chosen rather than whatever
+/ Google happens to call them.
+.web.profile.setLeaderboardHandle:{[handle]
+    .profile.info[`leaderboardHandle]:handle;
     .profile.save[];
     .web.profile.get[]
  };

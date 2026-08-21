@@ -1807,6 +1807,46 @@ input[type="text"]{
 
 }
 
+.appleButton{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    background:#000;
+
+    color:white;
+
+    border:1px solid #000;
+
+    border-radius:6px;
+
+    padding:12px 20px;
+
+    font-size:15px;
+
+    font-weight:500;
+
+    font-family:Segoe UI;
+
+    cursor:pointer;
+
+    margin-top:12px;
+
+}
+
+.appleButton:hover{
+
+    background:#1a1a1a;
+
+}
+
 .linkedinButton{
 
     display:flex;

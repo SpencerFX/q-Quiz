@@ -296,9 +296,13 @@ const TYPE_LABELS={
 // separate from TYPE_LABELS above since that map's wording ("HackerRank",
 // "Idioms") is already relied on by the other charts on this page and
 // this chart's section names ("HackerRank Problems", "qIdioms") differ.
+// Order is alphabetical by the visible label below (Advent of Code ...
+// quantRank), not the internal type key - case-insensitive, since the
+// labels themselves mix casing ("leetcode", "qIdioms", "quantRank" vs
+// "Fundamentals", "HackerRank Problems").
 const COMPLETION_ORDER=[
-    "MultipleChoice","MultipleChoiceSyntax","Idioms","Fundamentals",
-    "DiChallenge","HackerRank","Leetcode","QuantRank","Euler","AdventOfCode"
+    "AdventOfCode","DiChallenge","Fundamentals","HackerRank","Leetcode",
+    "MultipleChoice","MultipleChoiceSyntax","Euler","Idioms","QuantRank"
 ];
 
 const COMPLETION_LABELS={

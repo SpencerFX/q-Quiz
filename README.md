@@ -23,11 +23,39 @@ before running `pytest`.
 python scripts/supervisor.py
 ```
 
+or, from a bash shell:
+
+```
+scripts/start.sh                          # defaults: q=5000, web=8000
+scripts/start.sh --q-port 5099 --port 8099 # e.g. to test alongside an already-running instance
+```
+
+`start.sh` is a thin wrapper - it resolves the repo root so it works from
+any cwd, and `--q-port`/`--port` are just a shorthand for setting
+`Q_PORT`/`PORT` below before it execs `scripts/supervisor.py`.
+
 Run from the repo root. This starts both the q server and the
 waitress-served web app (`web/wsgi.py`) as child processes, and restarts
 whichever one exits unexpectedly - closing the gap where a q crash needed
 a manual restart. Logs go to `logs/q-server.log` and `logs/web-server.log`
-(gitignored, never committed). Stop with Ctrl+C.
+(gitignored, never committed). Stop with Ctrl+C if it's running attached
+to your terminal.
+
+If it's running detached (eg started with `scripts/start.sh &` or via
+`nohup`), there's no terminal to Ctrl+C - use `scripts/stop.sh` instead:
+
+```
+scripts/stop.sh                  # stop every running q-Quiz instance
+scripts/stop.sh --q-port 5099    # stop only the instance on that q port
+scripts/stop.sh --force          # skip the graceful attempt, kill immediately
+```
+
+It finds the supervisor process, asks it to shut down gracefully first
+(so `.quiz.history` gets one last save via `web/autosave.py`'s on-exit
+hook before anything dies), and falls back to a forceful kill of the
+whole process tree if graceful isn't possible - which in practice is
+the common case on Windows for a supervisor with no console attached,
+where a graceful stop request fails outright rather than timing out.
 
 Config via env vars, all optional:
 

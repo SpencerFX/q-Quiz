@@ -15,6 +15,10 @@ def test_get_question_shape(client):
 
 def test_answer_flow_records_a_result(client):
 
+    # /api/history is scoped to whoever's signed in (empty for
+    # anonymous requests), so this needs a session to see its own row.
+    client.post("/login", data={"handle": "QuizFlowTestUser"})
+
     client.get("/api/question")
 
     response = client.post("/api/answer", json={"answer": "a"})
