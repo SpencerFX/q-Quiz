@@ -10,3 +10,12 @@ python-docx==0.8.11
 google-auth==2.22.0
 waitress==2.0.0
 python-dotenv==0.20.0
+Authlib==1.2.1
+# Pinned below google-auth/Authlib's transitive floor: this app runs on
+# Python 3.6.0 exactly (no patch release), which predates typing.NoReturn
+# (added in 3.6.2) - cryptography versions newer than this one use that
+# annotation at module import time and crash the whole app on startup
+# (not just LinkedIn/Google auth - app.py imports google.auth at the top
+# of the file, so this take down every route). Discovered when `pip
+# install Authlib` silently pulled in cryptography 40.0.2.
+cryptography==36.0.2
