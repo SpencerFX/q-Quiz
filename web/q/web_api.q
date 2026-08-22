@@ -253,7 +253,7 @@
 / which 0^ also cleans up).
 .web.completionRates:{[]
     solvedK:select completed:count distinct question by questionType from .quiz.history where result;
-    totalTypes:`MultipleChoice`MultipleChoiceSyntax`MultipleChoiceDebug`HackerRank`Idioms`DiChallenge`Leetcode`QuantRank`Fundamentals`Euler`AdventOfCode;
+    totalTypes:`MultipleChoice`MultipleChoiceSyntax`MultipleChoiceDebug`HackerRank`Idioms`DiChallenge`Leetcode`QuantRank`Fundamentals`Lisp99`Euler`AdventOfCode;
     totalCounts:(
         count .quiz.bank;
         count .quiz.bankSyntax;
@@ -264,6 +264,7 @@
         count .web.listLeetcode[];
         count .web.listQuantRank[];
         count .web.listFundamentals[];
+        count .web.listLisp99[];
         count .web.listEuler[];
         count .web.listAdventOfCode[]
     );
@@ -874,6 +875,88 @@
 
 / Run only - raw eval, see .web.runRaw above for why.
 .web.runFundamentals:.web.runRaw;
+
+
+//====================================================================
+//
+// Lisp-99 - its own top-level section (lisp99/), not a fundamentals
+// kind - flat like euler (no kind sub-split) but with a real
+// easy/medium/hard difficulty split, resolved via
+// confirmLisp99Difficulty (lisp99/solutions/checker.q, loaded before
+// this file during .quiz.init[]).
+//====================================================================
+
+.web.listLisp99:{[]
+    t:raze {[diff]
+        names:key value `$".inputs.lisp99.",string diff;
+        ([] problem:names; area:count[names]#`lisp99; difficulty:count[names]#diff)
+     } each lisp99Difficulties;
+    update status:.web.problemStatus[`Lisp99;problem] from t
+ };
+
+
+/ lisp99 question files use the same ".info:{}" + "-1 "...";" print
+/ pattern as fundamentals (parsed the same way by web/services.py), one
+/ file per difficulty (lisp99/questions/<difficulty>.q) holding several
+/ questions. Each question file also prints its own Input:/Expected
+/ Output: lines, but builds them at print time via "-3!" on the live
+/ input/solution dicts rather than a static string literal, so
+/ web/services.py's regex silently drops them - rebuilt here via
+/ .web.renderInfoValue instead, same reasoning as
+/ .web.fundamentalsInfoLines above.
+.web.lisp99InfoLines:{[problemName]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    difficulty:confirmLisp99Difficulty problemName;
+    if[null difficulty; '"Unknown problem"];
+    path:`$":lisp99/questions/",string[difficulty],".q";
+    lines:read0 path;
+    marker:".",string[problemName],":{";
+    startIdx:first where lines like "*",marker,"*";
+    if[null startIdx; :()];
+    tailLines:(startIdx+1) _ lines;
+    endOffset:first where tailLines like "*};*";
+    if[null endOffset; endOffset:count tailLines];
+    rawLines:endOffset#tailLines;
+    isDynamic:(rawLines like "*Input: *")|(rawLines like "*Expected Output: *");
+    cleanLines:rawLines where not isDynamic;
+    args:(value `$".inputs.lisp99.",string difficulty) problemName;
+    expected:(value `$".solutions.lisp99.",string difficulty) problemName;
+    n:count args;
+    inputLines:raze {[n;i;a] .web.renderInfoValue[$[n=1;"Input";"Input ",string i+1];a]}[n]'[til n;args];
+    expectedLines:.web.renderInfoValue["Expected Output";expected];
+    cleanLines,inputLines,expectedLines
+ };
+
+
+.web.judgeLisp99:{[problemName;codeStr]
+    problemName:$[-11h=type problemName; problemName; `$problemName];
+    .web.saveCode[`Lisp99;problemName;codeStr];
+    func:@[value; codeStr; {'"Could not parse submission: ",x}];
+    difficulty:confirmLisp99Difficulty problemName;
+    if[null difficulty; '"Unknown problem"];
+    input:(value `$".inputs.lisp99.",string difficulty) problemName;
+    expected:(value `$".solutions.lisp99.",string difficulty) problemName;
+    actual:.[func;input;{"Error with ",x}];
+    actualN:.checker.normaliseLisp99 actual;
+    expectedN:.checker.normaliseLisp99 expected;
+    pass:actualN=expectedN;
+    st:.z.p;
+    insert[`resultsLisp99; (problemName;pass;enlist actualN;enlist expectedN;st;st;difficulty)];
+    insert[`.quiz.history; (problemName;actualN;expectedN;pass;`Lisp99;.web.currentUser)];
+    `problem`area`difficulty`pass`caseNo`casePass`caseActual`caseExpected!
+        (problemName;`lisp99;difficulty;pass;enlist 1;enlist pass;
+            enlist .web.renderPlainValue actual;
+            enlist .web.renderPlainValue expected)
+ };
+
+
+/ Run only - raw eval, see .web.runRaw above for why.
+.web.runLisp99:.web.runRaw;
+
+
+.web.testCases.forLisp99:{[problemName]
+    .web.testCases.notAvailable["Lisp-99 stores each question's expected output as precomputed data, not a callable solving function - there's nothing to benchmark here."]
+ };
 
 
 //====================================================================

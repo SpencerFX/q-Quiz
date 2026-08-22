@@ -288,7 +288,9 @@ const TYPE_LABELS={
 
     Euler:"Project Euler",
 
-    AdventOfCode:"Advent of Code"
+    AdventOfCode:"Advent of Code",
+
+    Lisp99:"Lisp-99"
 
 };
 
@@ -304,7 +306,7 @@ const TYPE_LABELS={
 // "Fundamentals", "HackerRank Problems").
 const COMPLETION_ORDER=[
     "AdventOfCode","DiChallenge","MultipleChoiceDebug","Fundamentals","HackerRank","Leetcode",
-    "MultipleChoice","MultipleChoiceSyntax","Euler","Idioms","QuantRank"
+    "Lisp99","MultipleChoice","MultipleChoiceSyntax","Euler","Idioms","QuantRank"
 ];
 
 const COMPLETION_LABELS={
@@ -329,7 +331,9 @@ const COMPLETION_LABELS={
 
     Euler:"Project Euler",
 
-    AdventOfCode:"Advent of Code"
+    AdventOfCode:"Advent of Code",
+
+    Lisp99:"Lisp-99"
 
 };
 

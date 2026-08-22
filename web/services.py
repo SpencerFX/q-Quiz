@@ -875,6 +875,86 @@ class FundamentalsService:
         return {"info": "\n".join(text_lines), "savedCode": saved_code}
 
 
+class Lisp99Service:
+
+    def __init__(self):
+
+        self.q = QClient()
+
+    def list_problems(self):
+
+        rows = self.q.execute(".web.listLisp99[]")
+
+        return [
+            Problem(
+                problem=_decode(row["problem"]),
+                area=_decode(row["area"]),
+                difficulty=_decode(row["difficulty"]),
+                status=_decode(row["status"])
+            )
+            for row in _rows(rows)
+        ]
+
+    def submit(self, problem, code):
+
+        raw = self.q.execute(".web.judgeLisp99", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        cases = [
+            CaseResult(
+                case_no=int(case_no),
+                passed=bool(passed),
+                actual=_decode(actual),
+                expected=_decode(expected)
+            )
+            for case_no, passed, actual, expected in zip(
+                data["caseNo"],
+                data["casePass"],
+                _decode_list(data["caseActual"]),
+                _decode_list(data["caseExpected"])
+            )
+        ]
+
+        return JudgeResult(
+            problem=_decode(data["problem"]),
+            area=_decode(data["area"]),
+            difficulty=_decode(data["difficulty"]),
+            passed=bool(data["pass"]),
+            cases=cases
+        )
+
+    def run(self, problem, code):
+
+        raw = self.q.execute(".web.runLisp99", problem, code)
+
+        data = {_decode(k): v for k, v in raw.items()}
+
+        return {"problem": _decode(data["problem"]), "output": _decode(data["output"])}
+
+    def test_cases(self, problem):
+
+        return _test_cases(self.q.execute(".web.testCases.forLisp99", problem))
+
+    def get_info(self, problem):
+
+        raw_lines = self.q.execute(".web.lisp99InfoLines", problem)
+
+        text_lines = []
+
+        for raw_line in raw_lines:
+
+            match = _INFO_LINE.match(_decode(raw_line))
+
+            if match:
+
+                text_lines.append(match.group(1).replace('\\"', '"'))
+
+        saved_code = _decode(self.q.execute(".web.getSavedCode", "Lisp99", problem))
+
+        return {"info": "\n".join(text_lines), "savedCode": saved_code}
+
+
 def _decode_entries(table):
 
     return [

@@ -82,7 +82,7 @@ def test_completion_endpoint_covers_every_section(client):
     assert types == {
         "MultipleChoice", "MultipleChoiceSyntax", "MultipleChoiceDebug",
         "HackerRank", "Idioms", "DiChallenge", "Leetcode", "QuantRank",
-        "Fundamentals", "Euler", "AdventOfCode"
+        "Fundamentals", "Lisp99", "Euler", "AdventOfCode"
     }
 
     for r in rates:
