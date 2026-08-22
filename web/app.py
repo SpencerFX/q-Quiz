@@ -18,6 +18,8 @@ from flask import Flask, render_template, request, jsonify, send_from_directory,
 from werkzeug.utils import secure_filename
 from google.auth.transport import requests as google_auth_requests
 from google.oauth2 import id_token as google_id_token
+from authlib.integrations.flask_client import OAuth
+from authlib.integrations.base_client.errors import OAuthError
 
 from services import QuizService, JudgeService, ProfileService, DiChallengeService, LeetcodeService, IdiomService, QuantRankService, JobService, FundamentalsService, LeaderboardService, AssessmentService, EulerService, AdventOfCodeService
 import resume_parser
@@ -41,6 +43,28 @@ app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-only-insecure-secret-ch
 # authorization-code flow, so there's no client secret to manage.
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
 GOOGLE_REQUEST = google_auth_requests.Request()
+
+# LinkedIn OAuth app credentials (both required - unlike Google, LinkedIn
+# has no client-side ID-token flow, so this needs the full authorization
+# code exchange, which needs the secret). From web/.env. Endpoints below
+# are LinkedIn's documented "Sign In with LinkedIn using OpenID Connect"
+# values (https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/sign-in-with-linkedin-v2)
+# rather than server_metadata_url discovery, so registration doesn't
+# depend on an extra outbound fetch succeeding at request time.
+LINKEDIN_CLIENT_ID = os.environ.get("LINKEDIN_CLIENT_ID", "")
+LINKEDIN_CLIENT_SECRET = os.environ.get("LINKEDIN_CLIENT_SECRET", "")
+
+oauth = OAuth(app)
+if LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET:
+    oauth.register(
+        name="linkedin",
+        client_id=LINKEDIN_CLIENT_ID,
+        client_secret=LINKEDIN_CLIENT_SECRET,
+        access_token_url="https://www.linkedin.com/oauth/v2/accessToken",
+        authorize_url="https://www.linkedin.com/oauth/v2/authorization",
+        api_base_url="https://api.linkedin.com/v2/",
+        client_kwargs={"scope": "openid profile email"},
+    )
 
 quiz = QuizService()
 judge = JudgeService()
@@ -125,7 +149,12 @@ def login_page():
     next_target = request.args.get("next", "")
     if session.get("user_handle"):
         return redirect(next_target if _is_safe_redirect_target(next_target) else url_for("index"))
-    return render_template("login.html", google_client_id=GOOGLE_CLIENT_ID, next=next_target)
+    return render_template(
+        "login.html",
+        google_client_id=GOOGLE_CLIENT_ID,
+        linkedin_configured=bool(LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET),
+        next=next_target
+    )
 
 
 @app.route("/login", methods=["POST"])
@@ -143,6 +172,7 @@ def logout():
     session.pop("user_handle", None)
     session.pop("user_email", None)
     session.pop("google_sub", None)
+    session.pop("linkedin_sub", None)
     return redirect(url_for("index"))
 
 
@@ -196,14 +226,63 @@ def api_auth_google():
 
 
 @app.route("/auth/linkedin")
-def auth_linkedin_stub():
-    # Same situation as /auth/google - no LinkedIn OAuth app has been
-    # registered yet, so this just explains the gap instead of the button
-    # doing nothing. Wire up via Authlib once LINKEDIN_CLIENT_ID /
-    # LINKEDIN_CLIENT_SECRET are available (LinkedIn uses OpenID Connect).
-    return jsonify({
-        "error": "LinkedIn sign-in isn't configured yet - set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET to enable it."
-    }), 501
+def auth_linkedin():
+    # If no LinkedIn app is registered, fall back to the same stub
+    # behavior /auth/apple still uses (fetched via login.js, message
+    # shown inline) - login.html only renders the real link below
+    # instead of the stub button once LINKEDIN_CLIENT_ID/SECRET are set,
+    # but this still guards direct hits on the route either way.
+    if not (LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET):
+        return jsonify({
+            "error": "LinkedIn sign-in isn't configured yet - set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET to enable it."
+        }), 501
+
+    next_target = request.args.get("next", "")
+    # Stashed in the session (rather than passed through LinkedIn's own
+    # `state` param, which Authlib already owns for CSRF protection) so
+    # the callback can still honor "sign in first" redirects the same
+    # way Google's flow does via the `next` query param.
+    session["linkedin_next"] = next_target if _is_safe_redirect_target(next_target) else ""
+    redirect_uri = url_for("auth_linkedin_callback", _external=True)
+    return oauth.linkedin.authorize_redirect(redirect_uri)
+
+
+@app.route("/auth/linkedin/callback")
+def auth_linkedin_callback():
+    # Exchanges the authorization code LinkedIn just redirected back with
+    # for an access token (Authlib validates the `state` param against
+    # what authorize_redirect stored in the session, guarding against
+    # CSRF). The userinfo endpoint call below is the actual proof the
+    # access token is genuine - a live, authenticated round trip to
+    # LinkedIn's own API - so there's no separate ID-token signature
+    # verification needed here (unlike Google's flow, which verifies a
+    # JWT it was just handed instead of calling back to Google).
+    #
+    # Both calls can fail for reasons outside our control (LinkedIn app
+    # misconfiguration, the user declining consent, a scope that isn't
+    # provisioned on the app yet) - caught here so that shows up as a
+    # normal "sign-in failed" message on /login instead of an unhandled
+    # 500, same as how Google's flow reports its own failures above.
+    try:
+        token = oauth.linkedin.authorize_access_token()
+        userinfo = oauth.linkedin.get("userinfo", token=token).json()
+    except OAuthError as exc:
+        return render_template(
+            "login.html",
+            google_client_id=GOOGLE_CLIENT_ID,
+            linkedin_configured=bool(LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET),
+            error="LinkedIn sign-in failed: " + (exc.description or exc.error or str(exc)),
+            next=session.pop("linkedin_next", "")
+        ), 401
+
+    leaderboard_handle = profile.get().get("leaderboardHandle", "").strip()
+    handle = leaderboard_handle or userinfo.get("name") or userinfo.get("email") or "LinkedIn user"
+    session["user_handle"] = handle[:40]
+    session["user_email"] = userinfo.get("email")
+    session["linkedin_sub"] = userinfo.get("sub")
+
+    next_target = session.pop("linkedin_next", "")
+    return redirect(next_target if _is_safe_redirect_target(next_target) else url_for("index"))
 
 
 @app.route("/auth/apple")
