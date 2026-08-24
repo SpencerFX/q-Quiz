@@ -20,7 +20,7 @@ const BADGE_ELEMENTS=[
     ["Cl","Chlorine",17],["Ar","Argon",18],["K","Potassium",19],["Ca","Calcium",20]
 ];
 
-// Alphabetical by label, 11 entries -> two 5-item rows plus one on a
+// Alphabetical by label, 12 entries -> two 5-item rows plus two on a
 // third row (see .badgesGrid) - grid wrapping handles that fine.
 const BADGE_CATEGORIES=[
     {key:"AdventOfCode",label:"Advent of Code",color:"#ef4444",milestone:10},
@@ -29,6 +29,7 @@ const BADGE_CATEGORIES=[
     {key:"Fundamentals",label:"Fundamentals",color:"#fb923c",milestone:50},
     {key:"HackerRank",label:"HackerRank",color:"#22c55e",milestone:10},
     {key:"Leetcode",label:"leetcode",color:"#fbbf24",milestone:10},
+    {key:"Lisp99",label:"Lisp-99",color:"#6366f1",milestone:10},
     {key:"MultipleChoiceSyntax",label:"MC - Syntax",color:"#81c784",milestone:50},
     {key:"MultipleChoice",label:"Multiple Choice",color:"#4fc3f7",milestone:50},
     {key:"Euler",label:"Project Euler",color:"#22d3ee",milestone:10},

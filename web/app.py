@@ -21,7 +21,7 @@ from google.oauth2 import id_token as google_id_token
 from authlib.integrations.flask_client import OAuth
 from authlib.integrations.base_client.errors import OAuthError
 
-from services import QuizService, JudgeService, ProfileService, DiChallengeService, LeetcodeService, IdiomService, QuantRankService, JobService, FundamentalsService, LeaderboardService, AssessmentService, EulerService, AdventOfCodeService
+from services import QuizService, JudgeService, ProfileService, DiChallengeService, LeetcodeService, IdiomService, QuantRankService, JobService, FundamentalsService, LeaderboardService, AssessmentService, EulerService, AdventOfCodeService, Lisp99Service
 import resume_parser
 
 app = Flask(__name__)
@@ -79,6 +79,7 @@ leaderboard = LeaderboardService()
 assessment = AssessmentService()
 euler = EulerService()
 adventOfCode = AdventOfCodeService()
+lisp99 = Lisp99Service()
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "uploads")
 ALLOWED_RESUME_EXTENSIONS = {"pdf", "doc", "docx"}
@@ -110,6 +111,7 @@ GATED_PAGE_PREFIXES = (
     "/problems",
     "/leetcode",
     "/euler",
+    "/lisp99",
     "/quantrank",
     "/assessment",
     "/results",
@@ -547,6 +549,59 @@ def api_euler_run(problem):
     code = request.get_json(force=True).get("code", "")
     try:
         result = euler.run(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
+@app.route("/lisp99")
+def lisp99_list():
+    return render_template("lisp99.html")
+
+
+@app.route("/api/lisp99")
+def api_lisp99_list():
+    return jsonify([p.__dict__ for p in lisp99.list_problems()])
+
+
+@app.route("/lisp99/<problem>")
+def lisp99_detail(problem):
+    return render_template("lisp99Problem.html", problem=problem)
+
+
+@app.route("/api/lisp99/<problem>/info")
+def api_lisp99_info(problem):
+    try:
+        info = lisp99.get_info(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(info)
+
+
+@app.route("/api/lisp99/<problem>/testcases")
+def api_lisp99_testcases(problem):
+    try:
+        result = lisp99.test_cases(problem)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(result)
+
+
+@app.route("/api/lisp99/<problem>/submit", methods=["POST"])
+def api_lisp99_submit(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = lisp99.submit(problem, code)
+    except Exception as exc:
+        return jsonify({"error": _error_message(exc)}), 400
+    return jsonify(asdict(result))
+
+
+@app.route("/api/lisp99/<problem>/run", methods=["POST"])
+def api_lisp99_run(problem):
+    code = request.get_json(force=True).get("code", "")
+    try:
+        result = lisp99.run(problem, code)
     except Exception as exc:
         return jsonify({"error": _error_message(exc)}), 400
     return jsonify(result)

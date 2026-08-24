@@ -38,6 +38,7 @@
     system "l ./quantRank/scripts/init.q";
     system "l ./jobs/jobs.q";
     system "l ./fundamentals/scripts/init.q";
+    system "l ./lisp99/scripts/init.q";
     system "l ./euler/scripts/init.q";
     system "l ./adventOfCode/scripts/init.q";
     initHackerRank[];
@@ -46,6 +47,7 @@
     initLeetcode[];
     initQuantRank[];
     initFundamentals[];
+    initLisp99[];
     initEuler[];
     initAdventOfCode[];
     .quiz.loadResults[];
