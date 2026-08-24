@@ -114,21 +114,46 @@
     @[`.quiz.bank; question; :; .quiz.shuffleQuestion[.quiz.bank question]];
  };
 
-.quiz.loadResults:{[]
-    if[`tab in key `:./results; load `:./results/tab];
-    / Older saved files predate the user column - backfill it with null
-    / symbols rather than dropping straight into a 6-column insert schema
-    / mismatch the moment anything new gets recorded. Reads tab but never
-    / assigns to it - q treats any name assigned anywhere in a function
-    / body as local for the whole body, which would otherwise shadow the
-    / global tab that load just populated.
-    upgraded:$[`user in cols tab; tab; update user:(count tab)#` from tab];
-    .quiz.history:upgraded;
+/ Both defaults to ./results/tab, but honor Q_RESULTS_PATH when set so a
+/ q process started for something other than normal dev/prod use (eg
+/ web/tests/conftest.py's isolated test q process) can point at its own
+/ file instead. Without this, every q process launched from this repo's
+/ root - dev, prod, and every past test run alike - has always resolved
+/ the exact same bare relative path, so a live dev/prod .quiz.save[]
+/ call silently leaks real history into what's supposed to be an
+/ isolated test database the next time it boots (found via a
+/ completed>total assertion failure caused by exactly that).
+.quiz.resultsPath:{[]
+    p:getenv `Q_RESULTS_PATH;
+    $[0=count p; `:./results/tab; hsym `$p]
  };
 
-.quiz.save:{{}
-    tab::.quiz.history;
-    save `:./results/tab;
+.quiz.loadResults:{[]
+    / get (not load) - load's return value is only the *symbol name* of
+    / the global variable it populates (matching the file's own base
+    / name), not the loaded data itself, so a naive "tab:load x" here
+    / would just shadow the real loaded table with the symbol `tab`
+    / (count 1, an atom) instead of the actual rows - a genuinely
+    / surprising q gotcha, caught by the completion percentage math
+    / going wrong once this file started routing through a non-default
+    / Q_RESULTS_PATH. get reads the value directly with no such
+    / filename/variable-name coupling, so it works for any path.
+    /
+    / Protected rather than a pre-check for the file's existence: a
+    / fresh Q_RESULTS_PATH (nothing has saved to it yet) or a genuinely
+    / first-ever checkout has no such file, and get throws on that.
+    @[{.quiz.history:.quiz.upgradeResultsSchema get x}; .quiz.resultsPath[]; {}];
+ };
+
+/ Older saved files predate the user column - backfill it with null
+/ symbols rather than dropping straight into a 6-column insert schema
+/ mismatch the moment anything new gets recorded.
+.quiz.upgradeResultsSchema:{[tab]
+    $[`user in cols tab; tab; update user:(count tab)#` from tab]
+ };
+
+.quiz.save:{[]
+    .quiz.resultsPath[] set .quiz.history;
  };
 
 .quiz.init[]

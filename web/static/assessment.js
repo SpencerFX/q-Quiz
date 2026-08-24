@@ -125,6 +125,8 @@ function renderQuestion(data){
 
     document.getElementById("assessmentTypeLabel").innerText=ASMT_TYPE_LABELS[data.questionType]||data.questionType;
 
+    updateProgressBar(data.index,data.total);
+
     const mcView=document.getElementById("mcView");
 
     const codingView=document.getElementById("codingView");
@@ -160,6 +162,24 @@ function renderQuestion(data){
         renderCodingQuestion(data);
 
     }
+
+}
+
+
+
+// data.index is already 1-based (the question currently being shown),
+// so on question 9 of 10 this reads 9/10 and 90% - matching the
+// existing "Question 9 / 10" text above it exactly, just also as a
+// filled bar and percentage.
+function updateProgressBar(index,total){
+
+    const pct=Math.round(100*index/total);
+
+    document.getElementById("assessmentProgressFill").style.width=pct+"%";
+
+    document.getElementById("assessmentProgressRatio").innerText=index+"/"+total;
+
+    document.getElementById("assessmentProgressPct").innerText=pct+"%";
 
 }
 
@@ -349,9 +369,7 @@ function renderSummary(data){
 
     if(runButton) runButton.style.display="none";
 
-    const progress=document.querySelector(".progress");
-
-    if(progress) progress.style.display="none";
+    document.querySelectorAll(".progress").forEach(function(el){ el.style.display="none"; });
 
     const summary=document.getElementById("assessmentSummary");
 

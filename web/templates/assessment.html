@@ -5,6 +5,13 @@
 <h1>{{ difficulty|capitalize }} Assessment</h1>
 <p class="meta progress">Question <span id="assessmentIndex">1</span> / <span id="assessmentTotal">10</span> &middot; <span id="assessmentTypeLabel"></span></p>
 
+<div class="progress assessmentProgressBar">
+<div id="assessmentProgressFill" class="assessmentProgressFill"></div>
+</div>
+<p class="meta progress assessmentProgressLabel">
+<span id="assessmentProgressRatio">1/10</span> &middot; <span id="assessmentProgressPct">10%</span>
+</p>
+
 <div id="mcView">
 <h2 id="questionText">Loading...</h2>
 <div id="answers"></div>

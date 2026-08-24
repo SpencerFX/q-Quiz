@@ -21,7 +21,16 @@
 // silently not persisted - there's no stable identity to key them on.
 //====================================================================
 
-.web.savedCode:([section:`symbol$(); problem:`symbol$(); user:`symbol$()] code:(); ts:`timestamp$());
+/ Guarded rather than a bare top-level assignment: web/qclient.py gives
+/ every Flask service (QuizService, AssessmentService, LeetcodeService,
+/ ...) its own QClient, each with its own connection and its own
+/ "have I loaded web_api.q yet" flag - so this file gets reloaded again
+/ (with full effect on the single shared q process, since q's namespace
+/ isn't connection-scoped) the first time ANY not-yet-used service is
+/ hit in a given wsgi.py worker's lifetime, wiping every saved codepad
+/ mid-session. Same reasoning applies everywhere else in this file a
+/ top-level statement initializes rather than just defines a function.
+if[not `savedCode in key `.web; .web.savedCode:([section:`symbol$(); problem:`symbol$(); user:`symbol$()] code:(); ts:`timestamp$())];
 
 / Called from every section's judge* function below, right alongside
 / the .quiz.history insert each of them already does.
@@ -980,10 +989,20 @@
 
 .assessment.codingTypes:`Idioms`Fundamentals`DiChallenge`HackerRank`Leetcode`QuantRank;
 
-.assessment.state:([] kind:`symbol$(); questionType:`symbol$(); problem:`symbol$());
-.assessment.difficulty:`;
-.assessment.idx:0;
-.assessment.passed:`boolean$();
+/ Guarded (see .web.savedCode's comment above for why): an in-progress
+/ assessment's state living behind a bare top-level assignment meant
+/ any coding question was one info-fetch away from silently wiping it
+/ mid-run - the first time a Flask worker's not-yet-used
+/ LeetcodeService/HackerRank/etc. QClient got hit for that section's
+/ problem info, its connection's own first web_api.q load reset these
+/ right out from under the assessment service's connection, so the
+/ next submit failed with "No assessment in progress". Reached exactly
+/ this way: 8 fine multiple-choice submits, then the first coding
+/ question (a different section, first use this worker) breaks it.
+if[not `state in key `.assessment; .assessment.state:([] kind:`symbol$(); questionType:`symbol$(); problem:`symbol$())];
+if[not `difficulty in key `.assessment; .assessment.difficulty:`];
+if[not `idx in key `.assessment; .assessment.idx:0];
+if[not `passed in key `.assessment; .assessment.passed:`boolean$()];
 
 / One row per completed assessment run, so the Results dashboard can
 / show assessment history separately from the individual question
@@ -994,14 +1013,17 @@
 / its own event instead of just blending into the general history.
 / runId is an explicit counter (not just .z.p) so a per-run detail
 / lookup has a stable key even if two runs somehow finish in the same
-/ nanosecond.
-.assessment.nextRunId:0;
-.assessment.completedRuns:([] runId:`long$(); difficulty:`symbol$(); correct:`long$(); total:`long$(); ts:`timestamp$(); user:`symbol$());
+/ nanosecond. Guarded for the same reason as .assessment.state above -
+/ this one accumulates completed-run history, not just in-flight
+/ progress, so an unguarded reload would silently drop past runs from
+/ the Results dashboard rather than just breaking the current one.
+if[not `nextRunId in key `.assessment; .assessment.nextRunId:0];
+if[not `completedRuns in key `.assessment; .assessment.completedRuns:([] runId:`long$(); difficulty:`symbol$(); correct:`long$(); total:`long$(); ts:`timestamp$(); user:`symbol$())];
 
 / Per-question breakdown backing each completedRuns row - one row per
 / question in that run, so clicking a run in the Results dashboard can
 / show exactly which questions were answered correctly/incorrectly.
-.assessment.completedDetails:([] runId:`long$(); questionNo:`long$(); kind:`symbol$(); questionType:`symbol$(); problem:`symbol$(); correct:`boolean$());
+if[not `completedDetails in key `.assessment; .assessment.completedDetails:([] runId:`long$(); questionNo:`long$(); kind:`symbol$(); questionType:`symbol$(); problem:`symbol$(); correct:`boolean$())];
 
 / The three difficulty-split MC banks merged back into one dict, keyed
 / by question name - built fresh each call (cheap) rather than reusing
