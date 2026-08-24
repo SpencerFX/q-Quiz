@@ -23,7 +23,7 @@
 
 resultsFundamentals: ([] problem:`symbol$(); pass:`boolean$(); actual:(); expected:(); startTime:`timestamp$(); endTime:`timestamp$(); kind:`$(); difficulty:`$());
 
-fundamentalsKinds:`overloads`qsql`joins`adverbs`functionalForms`attributes`protectedEvaluation`metaprogramming`enumerations`dictionaries`qUtils`foreignKeys`controlFlow;
+fundamentalsKinds:`overloads`qsql`joins`adverbs`functionalForms`attributes`protectedEvaluation`metaprogramming`enumerations`dictionaries`qUtils`foreignKeys`controlFlow`temporalTypes;
 fundamentalsDifficulties:`easy`medium`hard;
 
 .checker.normaliseFundamentals:{[x] `$-3!x};
