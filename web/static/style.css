@@ -308,6 +308,44 @@ button{
 
 }
 
+.assessmentProgressBar{
+
+    width:100%;
+
+    height:8px;
+
+    background:#2a2a2a;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+    margin-top:8px;
+
+}
+
+.assessmentProgressFill{
+
+    height:100%;
+
+    width:10%;
+
+    background:#0066ff;
+
+    border-radius:999px;
+
+    transition:width 0.2s ease;
+
+}
+
+.assessmentProgressLabel{
+
+    margin-top:6px;
+
+    font-size:13px;
+
+}
+
 .filterBar{
 
     display:flex;
